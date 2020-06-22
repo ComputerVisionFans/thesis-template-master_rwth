@@ -593,12 +593,12 @@ For biomedical images processing, due to different experimental conditions, such
 \begin{figure}[ht]
 	\begin{center}
 		\begin{subfigure}[b]{0.49\textwidth}
-			\includegraphics[width=\textwidth]{res18.pdf}
+			\includegraphics[width=0.9\textwidth]{res18.pdf}
 			\caption{res18}
 			\label{fig:res18}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.49\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{Ghostres18.pdf}}
+			\reflectbox{\includegraphics[width=0.9\textwidth]{Ghostres18.pdf}}
 			\caption{cellnet}
 			\label{fig:cellnet}
 		\end{subfigure}
@@ -645,7 +645,7 @@ layer & Type    & Filters & Size/Stride           & Input      & Output     & \m
 			\label{fig:res18}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.49\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{ghostmodule.png}}
+			\includegraphics[width=\textwidth]{ghostmodule.png}
 			\caption{The Ghost module}
 			\label{fig:cellnet}
 		\end{subfigure}
@@ -665,7 +665,7 @@ layer & Type    & Filters & Size/Stride           & Input      & Output     & \m
 			\label{fig:res18}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.49\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{stride2 module.png}}
+			\includegraphics[width=\textwidth]{stride2 module.png}
 			\caption{Stride = 2 SE = 0 G-bneck}
 			\label{fig:cellnet}
 		\end{subfigure}
@@ -725,106 +725,83 @@ Ghost Net\cite{b19}                                              & 5.18         
 \centering
 \end{table}
 
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\includegraphics[width=\textwidth]{hd1 (4400).png}
+			
+			\label{fig:res18}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4400) (1).png}}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4550).png}}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4550) (1).png}}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{ss2_8 (142).png}}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{ss2_8 (142) (1).png}}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+		
+		\begin{subfigure}[b]{0.33\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4550)ournetWithcellyolo.jpg}}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4550)resnetWithcellyolo.jpg}}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4550)vggnetWithcellyolo.jpg}}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{The illustration of the necessity of Ghost-Module and AttentionNet. (a)-(f) implying the performances of AttentionNet. After AttentionNet segmentation, artifacts will be removed and only morphological characteristics of the objects stay. The second row are saliency map of cell (d) after ResNet18\cite{b20} (h), our Net (g) and VGG16 net \cite{b23} (i). Leading  STOA  algorithms, such ResNet18 and VGG16 net, are  more focus  these  non  ROI  features,  such  as  the  debris  feature  outside the ROI. Those leading networks pay more attention to those debris information leads to worse classification performance.}
+\end{figure}
 
-\begin{figure*}[htbp]
-
-\subfigure[]{
-\begin{minipage}[t]{0.15\linewidth}
-\centering
-\includegraphics[width=1in]{hd1 (4400).png}
-%\caption{fig2}
-\end{minipage}
-}%
-\subfigure[]{
-\begin{minipage}[t]{0.15\linewidth}
-\centering
-\includegraphics[width=1in]{hd1 (4400) (1).png}
-%\caption{fig2}
-\end{minipage}
-}%
-\subfigure[]{
-\begin{minipage}[t]{0.15\linewidth}
-\centering
-\includegraphics[width=1in]{hd1 (4550).png}
-%\caption{fig2}
-\end{minipage}
-}%
-\subfigure[]{
-\begin{minipage}[t]{0.15\linewidth}
-\centering
-\includegraphics[width=1in]{hd1 (4550) (1).png}
-%\caption{fig2}
-\end{minipage}
-}%
-\subfigure[]{
-\begin{minipage}[t]{0.15\linewidth}
-\centering
-\includegraphics[width=1in]{ss2_8 (142).png}
-%\caption{fig2}
-\end{minipage}
-}%
-\subfigure[]{
-\begin{minipage}[t]{0.15\linewidth}
-\centering
-\includegraphics[width=1in]{ss2_8 (142) (1).png}
-%\caption{fig2}
-\end{minipage}
-}%
-
-\subfigure[]{
-\begin{minipage}[t]{0.33\linewidth}
-\centering
-\includegraphics[width=1.5in]{hd1 (4550)ournetWithcellyolo.jpg} 
-%\caption{fig2}
-\end{minipage}
-}
-\subfigure[]{
-\begin{minipage}[t]{0.33\linewidth}
-\centering
-\includegraphics[width=1.5in]{hd1 (4550)resnetWithcellyolo.jpg}
-%\caption{fig2}
-\end{minipage}
-}
-\subfigure[]{
-\begin{minipage}[t]{0.33\linewidth}
-\centering
-\includegraphics[width=1.5in]{hd1 (4550)vggnetWithcellyolo.jpg}
-%\caption{fig2}
-\end{minipage}
-}
-
-\centering
-\caption{The illustration of the necessity of Ghost-Module and AttentionNet. (a)-(f) implying the performances of AttentionNet. After AttentionNet segmentation, artifacts will be removed and only morphological characteristics of the objects stay. The second row are saliency map of cell (d) after ResNet18\cite{b20} (h), our Net (g) and VGG16 net \cite{b23} (i). Leading  STOA  algorithms, such ResNet18 and VGG16 net, are  more focus  these  non  ROI  features,  such  as  the  debris  feature  outside the ROI. Those leading networks pay more attention to those debris information leads to worse classification performance.}
-\end{figure*}
-
-
-\begin{figure*}[htbp]
-\subfigure[]{
-\begin{minipage}[t]{0.33\linewidth}
-\centering
-\includegraphics[width=2.3in]{Inkedfirst Conv1 of resnet18 with pretrain weights on coviddataset_LI.jpg}
-%\caption{fig1}
-\end{minipage}%
-}%
-\subfigure[]{
-\begin{minipage}[t]{0.33\linewidth}
-\centering
-\includegraphics[width=2.3in]{Inkedfirst Conv1 of resnet18 with pretrain weights on penudataset_LI.jpg}
-%\caption{fig2}
-\end{minipage}
-}%
-\subfigure[]{
-\begin{minipage}[t]{0.33\linewidth}
-\centering
-\includegraphics[width=2.3in]{cellnetnecc3.jpg}
-%\caption{fig2}
-\end{minipage}
-}%
-
-\centering
-\caption{The illustration of the necessity of Ghost-Module and CellNet. There are visualization of feature maps after ResNet18\cite{b20} 1st convolutional layer. Whether it is a Xray image of COVID-19 dataset (a), a cell image segmented by attentation (c), or a CT image from Pneumonia Dataset (b), after the first layer of point-wise convolution there is a large amount of redundant feature maps (see the same color marked). Especially for Sezary Syndrome Dataset, there is no need to operate point-wise convolution one by one after AttentionNet segmentation, because all the valid information is within the circle.}
-\end{figure*}
-
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\includegraphics[width=\textwidth]{Inkedfirst Conv1 of resnet18 with pretrain weights on coviddataset_LI.jpg}
+			
+			\label{fig:res18}
+		\end{subfigure}
+		
+		
+		\begin{subfigure}[b]{0.33\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{Inkedfirst Conv1 of resnet18 with pretrain weights on penudataset_LI.jpg}}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+		
+		
+		\begin{subfigure}[b]{0.33\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{cellnetnecc3.jpg}}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+		
+	\end{center}
+	\caption{The illustration of the necessity of Ghost-Module and CellNet. There are visualization of feature maps after ResNet18\cite{b20} 1st convolutional layer. Whether it is a Xray image of COVID-19 dataset (a), a cell image segmented by attentation (c), or a CT image from Pneumonia Dataset (b), after the first layer of point-wise convolution there is a large amount of redundant feature maps (see the same color marked). Especially for Sezary Syndrome Dataset, there is no need to operate point-wise convolution one by one after AttentionNet segmentation, because all the valid information is within the circle.}
+\end{figure}
 
 \subsubsection{AttentionNet: Automatic $Detector$ and $Segment or$}\label{AA}
 The proposed AttentionNet follows basic structure of YOLOv3-tiny algorithm\cite{b33}, and it attempts to process more efficiently on small target. The attributes of self-detection and labeling, of nearly real-time resolve and of general resource requirements mainly characterize the AttentionNet Network. At the beginning it is  similar to YOLOv3\cite{b33} that the input image is divided into an $M \times M$ grid. Then $B$ bounding boxes and confidence score are defined in each grid cell. Each grid cell predicts $C$ conditional probabilities, denoted as $P(Class_{i}\mid Object_{j})$ for $i$ classes and object $j$. If there is an object $j$ in the grid, then indicated the objectiveness score $P(Object_{j})$  equal to $1$\cite{b18}. Here, we refer the initiatives from YoloV3, the confidence score also represents the accuracy of the box prediction, which is defined as $GIOU_{Ground truth}^{Predition}$. Unlike the originally YOLOv3\cite{b33}, instead of using Intersection‐Over‐Union (IOU), we use $GIOU$ with higher precision, which refers to the generalized intersection area between the predicted bounding box and ground truth box.
@@ -851,20 +828,26 @@ We proposed the GBCIOU function to ideally find general intersected box center w
 To verify the effectiveness of the proposed novel Ghost module and CellNet architecture, we conduct experiments on several benchmark visual datasets, including CIFAR-10\cite{b21}, phenomenon dataset \cite{b38}, and COVID-19 benchmark \cite{b36}\cite{b37}. 
 
 
-
 \subsubsection{CellNet on Visual Benchmarks}
+
+
 
 \begin{figure}[h]
 \centering
-\includegraphics[height=250pt]{Cifar-12-06-2020.png}
+\includegraphics[width=\textwidth]{Cifar-12-06-2020.png}
 \label{fig}
 \centering
 \caption{Comparison of state-of-art methods for training on benchmark CIFAR-10 Dataset. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy ) than both ResNet and GhostNet, it is illustrated by both the standard derivation, namely the stability, and the final converged accuracy.}
 \end{figure}
+CIFAR-10 dataset\cite{b21} consists of 60,000 32 × 32 color images in 10 classes, with 50,000 training images and 10,000 test images. A common data augmentation scheme including random crop\cite{b22} and mirroring\cite{b19} is adopted as well. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy  ) than both ResNet18 and GhostNet, with the least  weights, namely $1/7$ weights than VGG16 \cite{b23}. 
 
+
+
+
+On benchmark Pneumonia Dataset\cite{b38}. The Pneumonia / Normal classification val accuracy of our Net converges into nearly 91.785\% better than GhostNet and ResNet18. In addition, after around 80 epochs the accuracy of our Net converges into nearly 91.785\%, comparing to  Inception V3 after 7,000 epochs reaches 88.0\%\cite{b38}.
 \begin{figure}[h]
 \centering
-\includegraphics[width=250pt]{Pneumonia_TimeSeries-1.png}
+\includegraphics[width=\textwidth]{Pneumonia_TimeSeries-1.png}
 \label{fig}
 \centering
 \caption{ Comparison of state-of-art methods for training on Pneumonia Dataset. Benchmark Pneumonia Dataset contains 5,856 Xray/CT images. Considering the fact that Our Net has only 8 Novel Ghostmodule layers and 2.91 millions of weights, outperforms both ResNet18, GhostNet and InceptionV3 net from Accuracy and Complexity perspective views.}
@@ -872,7 +855,7 @@ To verify the effectiveness of the proposed novel Ghost module and CellNet archi
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=250pt]{COVID-19_TimeSeries-1.png}
+\includegraphics[width=\textwidth]{COVID-19_TimeSeries-1.png}
 \label{fig}
 \centering
 \caption{ Comparison of state-of-art methods for training on COVID-19 Dataset. COVID-19 Dataset contains nearly 2,000 Xray/CT images we sampled from newest publications. Our Net achieves 3rd place classification performance among these state-of-art models while least weights and computational cost. The weights of our models is 2.91 million, comparing to DenseNet121 7.98 millions of weights, MobileNet V2 3.4 millions of weights and 301 millions of FLOPs. Considering the fact of the higher complexity and parameter amount of other SOTA Nets, our Net is very competitive on classification tasks for the biomedical dataset. }
@@ -880,23 +863,19 @@ To verify the effectiveness of the proposed novel Ghost module and CellNet archi
 
 
 \begin{figure}[h]
-\includegraphics[height=290pt]{BarDiagram_Bold.png}
+\includegraphics[width=\textwidth]{BarDiagram_Bold.png}
 \label{fig}
 \centering
 \caption{Graphical summary of composition of COVID-19 Xray/CT images. Based on initial COVID-19 Image Data Collection \cite{b37}, we additionally collected and sorted nearly 2,000 CT/Xray images, with wide range in gender, age, survival condition and country/places from newest publications and CDC public sources\cite{b36}\cite{b37}\cite{b38}. }
 %\caption{Graphical summary of Alex Net\cite{b31}, Squeeze net\cite{b24}, ResNet18\cite{b20}, MobieNetv2\cite{b30}, Our Net, Ghost Net\cite{b19}, DenseNet121\cite{b32}, and Vgg11\cite{b23} performance on COVID-19 dataset. }
 \end{figure}
-
-CIFAR-10 dataset\cite{b21} consists of 60,000 32 × 32 color images in 10 classes, with 50,000 training images and 10,000 test images. A common data augmentation scheme including random crop\cite{b22} and mirroring\cite{b19} is adopted as well. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy  ) than both ResNet18 and GhostNet, with the least  weights, namely $1/7$ weights than VGG16 \cite{b23}. 
-
-
-
-On benchmark Pneumonia Dataset\cite{b38}. The Pneumonia / Normal classification val accuracy of our Net converges into nearly 91.785\% better than GhostNet and ResNet18. In addition, after around 80 epochs the accuracy of our Net converges into nearly 91.785\%, comparing to  Inception V3 after 7,000 epochs reaches 88.0\%\cite{b38}.
-
-
-
-
 The 2019 novel corona virus (COVID-19) brings huge challenge to our life and we are facing an increasingly disrupted challenging time. In order to help the medical scientists, we made this COVID-19 dataset. Based on initial COVID-19 Image Data Collection\cite{b37}, which contains only 123 frontal view X-rays. We additionally collected data from newest publications and  assembled medical images from websites and publications such as European Journal of Radiology\cite{b36}, and collected nearly 1583 healthy Lung CT images as comparative data from recently available resources and publications\cite{b37} \cite{b38}.
+
+
+
+
+
+
 
 
 \subsection*{Conclusion}
