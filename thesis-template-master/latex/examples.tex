@@ -637,50 +637,42 @@ layer & Type    & Filters & Size/Stride           & Input      & Output     & \m
 \end{tabular}}
 \end{table}
 
-
-\begin{figure}[htbp]
-\centering
-\subfigure[The normal Convolutional layer]{
-\begin{minipage}[t]{1\linewidth}
-\centering
-\includegraphics[width=3.5in]{normal conv.png}
-%\caption{fig1}
-\end{minipage}%
-}%
-
-\subfigure[The Ghost module]{
-\begin{minipage}[t]{1\linewidth}
-\centering
-\includegraphics[width=3.5in]{ghostmodule.png}
-%\caption{fig2}
-\end{minipage}
-}%
-\centering
-\caption{The comparison between normal convolutional layer in \cite{b26}\cite{b27}\cite{b28} and ghost module. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[width=\textwidth]{normal conv.png}
+			\caption{The normal Convolutional layer}
+			\label{fig:res18}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{ghostmodule.png}}
+			\caption{The Ghost module}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{The comparison between normal convolutional layer in \cite{b26}\cite{b27}\cite{b28} and ghost module. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
 \end{figure}
+
+
 
 \textbf{Ghostmodule: Is point-wise convolution really indispensable?} Unlike Ghost module applied in GhostNet\cite{b19}, we designed two kind of novel Ghost Modules for feature extraction and adopted the SE layers from Squeeze-and-Excitation Networks \cite{b24} for enhancing useful features and balancing less inhibiting feature map. The first novel Ghost module inside of Gbneck acts as an expansion layer increasing the number of channels, while second Ghost module reduces the number of channels to match the shortcut path. Then the inputs and the outputs of these two Ghost modules are concatenated by shortcut. We adopted batch normalization (BN) and ReLU non-linearity right after each layer as well\cite{b19}, except that ReLU was not used after the second Ghost module as suggested by MobileNetV2\cite{b30}. In each novel Ghost Module, we only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation such as depth-wise convolution or affine transformation and wavelet transformation, as suggested by GhostNet\cite{b19}, here the depth-wise convolution was used.
 
-
-\begin{figure}[htbp]
-\centering
-\subfigure[Stride = 1 SE = 0 G-bneck]{
-\begin{minipage}[t]{0.5\linewidth}
-\centering
-\includegraphics[width=2in]{stride1 module.png}
-%\caption{fig1}
-\end{minipage}%
-}%
-\subfigure[Stride = 2 SE = 0 G-bneck]{
-\begin{minipage}[t]{0.5\linewidth}
-\centering
-\includegraphics[width=2in]{stride2 module.png}
-%\caption{fig2}
-\end{minipage}
-}%
-\centering
-\caption{Two kind of Gbnecks we proposed for feature extraction. where we apply Stride = 1 to keep the output channel of the feature map, Stride = 2 decreases the output channel while extracting information without losing a lot of information. SE = 0 represents not applying SE layer. }
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[width=\textwidth]{stride1 module.png}
+			\caption{Stride = 1 SE = 0 G-bneck}
+			\label{fig:res18}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{stride2 module.png}}
+			\caption{Stride = 2 SE = 0 G-bneck}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{Two kind of Gbnecks we proposed for feature extraction. where we apply Stride = 1 to keep the output channel of the feature map, Stride = 2 decreases the output channel while extracting information without losing a lot of information. SE = 0 represents not applying SE layer.}
 \end{figure}
+
 
 \textbf{Squeeze-and-Excitation(SE Layer): scaling inhibiting vs intrinsic features map.} Squeeze-and-Excitation (SE)\cite{b24} adaptively recalibrates channel-wise feature responses by explicitly modeling inter-dependencies between channels. 
 
