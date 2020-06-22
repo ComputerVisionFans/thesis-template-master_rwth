@@ -1,0 +1,217 @@
+\documentclass[a4paper, 12pt, twoside, openright, bibliography=totoc, USenglish,
+	draft % replace with final for handing in
+]{scrbook}
+
+% variables
+\usepackage{titling}
+\usepackage{etoolbox}
+\makeatletter
+\newcommand{\thesis}{master} % possible values: bachelor, master
+\newbool{uselogo}
+%\booltrue{uselogo} % remove this line if you do NOT want to use the logo (you have to sign the form when you use it)
+\title{Cell Morphology Based Diagnosis of Cancer using Convolutional Neural Networks}
+\author{Qiang Li}
+\date{2020-07-15}
+\newcommand{\matrnumber}{384394}
+\newcommand{\zweitgutachter}{Prof. Dr. Manfred Claassen}
+\makeatother
+
+% language
+\usepackage[ngerman,USenglish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[iso]{isodate}
+
+% math
+\usepackage[sumlimits, intlimits]{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+% fixme notes
+\usepackage{fixme}
+\fxsetup{theme=color}
+
+% colors
+\usepackage[table]{xcolor}
+
+% citations
+\usepackage{cite}
+
+%page geometry (for nicer margins on the title page)
+\usepackage[a4paper, twoside, inner=3.5cm, outer=3cm, bottom=4cm]{geometry}
+
+% figures and tables
+\usepackage[final]{graphicx}
+\graphicspath{{./images/}}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\addtolength{\abovecaptionskip}{-2mm}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\setcounter{dbltopnumber}{2}
+\renewcommand{\dbltopfraction}{0.9}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\dblfloatpagefraction}{0.95}
+
+% chapter heading style
+\usepackage[Bjornstrup]{fncychap}
+\colorlet{chapbgcolor}{gray!30}
+\colorlet{chapnumcolor}{gray}
+
+% algorithms
+\usepackage{algpseudocode}
+\usepackage[final]{listings}
+\lstloadlanguages{[ISO]C++,bash,Python}
+\lstset{
+	numbers = left,
+	numberstyle = \tiny,
+	captionpos = b,
+	breaklines = true,
+	breakatwhitespace = true,
+	tabsize = 10,
+	frame = single,
+	float,
+}
+
+% tikz
+\usepackage{tikz}
+\usetikzlibrary{
+	arrows,
+	shapes.misc,
+	shapes.symbols,
+	calc,
+	decorations.text,
+	backgrounds,
+	decorations.pathreplacing,
+	shapes.geometric,
+	positioning,
+	decorations,
+	decorations.markings
+}
+
+\usepackage{enumitem}
+\usepackage[subfigure]{tocloft}
+\usepackage{multirow}
+
+% hyperref
+\usepackage[final]{hyperref}
+\hypersetup{
+	pdfauthor={\theauthor},
+	pdftitle={\thetitle},
+	colorlinks,
+	linkcolor=black,
+	citecolor=black,
+	a4paper=true,
+	plainpages=false,
+	breaklinks=true,
+}
+
+% headers and footers
+\usepackage{fancyhdr}
+\fancyhf{}
+\fancyhead[RO, LE]{\nouppercase{\leftmark}}
+\fancyhead[RE, LO]{\nouppercase{\rightmark}}
+\fancyfoot[RO, LE]{\thepage}
+\fancypagestyle{fancytitle}{
+	\fancyhf{}
+	\begin{tikzpicture}[overlay, remember picture]
+		\node[anchor=north east, xshift=-1mm, yshift=-1.5mm] at (current page.north east){\includegraphics[width=0.333\paperwidth]{./logo/ETHlogo_13.pdf}
+		\includegraphics[width=0.54\paperwidth]{./logo/logo.pdf}
+		
+		};
+	\end{tikzpicture}
+	\renewcommand{\headrulewidth}{0pt}
+	\setlength{\headheight}{60pt}
+	\ifoptiondraft{\fancyhead[C]{\draftimage}}
+}
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyfoot[R]{\thepage}%
+	\renewcommand{\headrulewidth}{0pt}
+	\ifoptiondraft{\fancyhead[C]{\draftimage}}
+}
+\fancypagestyle{empty}{
+	\fancyhf{}
+	\renewcommand{\headrulewidth}{0pt}
+	\ifoptiondraft{\fancyhead[C]{\draftimage}}
+}
+
+% draft sign
+%\newcommand{\draftimage}{
+%	\begin{tikzpicture}[remember picture, overlay]%
+%		\node[scale=8,rotate=45] at (current page.center) {\LARGE\textcolor{lightgray!15}{DRAFT}};%
+%	\end{tikzpicture}%
+%}
+\usepackage{ifdraft}
+\ifoptiondraft{\fancyhead[C]{\draftimage}}
+
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
+
+% latex optimization parameters
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+
+% references and abbreviations
+\newcommand{\refsec}[1]{Section~\ref{sec:#1}}
+\newcommand{\refchap}[1]{Chapter~\ref{chp:#1}}
+\newcommand{\refpart}[1]{Part~\ref{part:#1}}
+\newcommand{\refeq}[1]{Equation~\ref{eq:#1}}
+\newcommand{\reffig}[1]{Figure~\ref{fig:#1}}
+\newcommand{\reftab}[1]{Table~\ref{tab:#1}}
+
+% math
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+\newcommand{\norm}[1]{\ensuremath{\lVert{#1}\rVert}}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
+% abbreviations
+\usepackage{xspace}
+\newcommand*{\eg}{e.g.\@\xspace}
+\newcommand*{\Eg}{E.g.\@\xspace}
+\newcommand*{\ie}{i.e.\@\xspace}
+\newcommand*{\etc}{etc.\@\xspace}
+\newcommand*{\cf}{cf.\@\xspace}
+\newcommand*{\vs}{vs.\@\xspace}
+
+\begin{document}
+	\selectlanguage{USenglish}
+	\pagestyle{fancy}
+
+	% titlepage
+	\frontmatter
+	\input{titlepage}
+	\clearemptydoublepage
+	\listoffixmes
+	\clearemptydoublepage
+
+	% abstract and toc
+	\include{assertion}
+	\clearemptydoublepage
+	\tableofcontents
+	\clearemptydoublepage
+
+	% main content
+	\mainmatter
+
+	% here you should include all your content
+	\include{latex/examples}
+	
+
+	% bibliography and appendix
+	\backmatter
+	\bibliographystyle{alpha}
+	\bibliography{abbrev,thesis}
+	\nocite{*}
+
+\end{document}
+

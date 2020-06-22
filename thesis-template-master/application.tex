@@ -1,0 +1,131 @@
+\documentclass[a4paper, 13pt]{scrartcl}
+\usepackage[left=2cm, top=2.8cm,bottom=0cm,head=1cm, foot=0cm,headsep=1.2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tabularx}
+
+% variables
+\usepackage{titling}
+\makeatletter
+\newcommand{\course}{Master Informatik}
+\newcommand{\degree}{Master Informatik}
+\newcommand{\matrnumber}{384394}
+\author{Qiang, Li}
+\newcommand{\telephone}{}
+\date{2020-07-15}
+\makeatother
+
+% language
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+% \usepackage[iso]{isodate}
+
+\setlength{\parindent}{0pt}
+\usepackage{fancyhdr}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[RO]{\includegraphics[height=1.5cm]{images/logo/rwth.pdf}}
+\fancyhead[LO]{\large Zentrales Prüfungsamt}
+
+\begin{document}
+	\sffamily
+	\pagestyle{fancy}
+
+	\begin{center}
+		\LARGE\bfseries
+			\underline{Cell Morphology Based Diagnosis of Cancer}
+			\underline{Using Convolutional Neural Networks}
+	\end{center}
+
+	\vspace{1cm}
+
+	\begin{tabularx}{\textwidth}{@{}l *1{>{\centering\arraybackslash}X}@{}}
+		Studiengang: & {\bfseries\course}\\
+		\cline{2-2}
+		& \\[0.1cm]
+		Abschluss: & {\bfseries\degree}\\
+		\cline{2-2}
+	\end{tabularx}
+
+	\vspace{0.5cm}
+
+	\begin{minipage}[t]{0.4\textwidth}
+		\begin{tabularx}{0.8\textwidth}{*1{>{\centering\arraybackslash}X}@{}}
+			\bfseries\matrnumber\\
+			\cline{1-1}
+			\multicolumn{1}{l}{Matrikelnummer}
+		\end{tabularx}
+	\end{minipage}
+	\begin{minipage}[t]{0.59\textwidth}
+		\begin{tabularx}{\textwidth}{*1{>{\centering\arraybackslash}X}@{}}
+			\bfseries\theauthor\\
+			\cline{1-1}
+			\multicolumn{1}{l}{Name, Vorname}
+		\end{tabularx}
+	\end{minipage}
+
+	\vspace{0.5cm}
+
+	\begin{minipage}[t]{0.4\textwidth}
+		\begin{tabularx}{0.8\textwidth}{*1{>{\centering\arraybackslash}X}@{}}
+			\telephone\\
+			\cline{1-1}
+			\multicolumn{1}{l}{Telefonnr. für Rückfragen}
+		\end{tabularx}
+	\end{minipage}
+
+	\vspace{0.5cm}
+
+	\begin{tabularx}{\textwidth}{@{}l *1{>{\centering\arraybackslash}X}@{}}
+		Bezeichnung der Prüfungsarbeit: & {\bfseries Abschlussarbeit}\\
+		\cline{2-2}
+	\end{tabularx}
+	{\small (z.B. Hausarbeit, Projektarbeit, Abschlussarbeit)}
+
+	\vspace{0.5cm}
+
+	Name der Institution, deren Logo verwendet werden soll:\\[0.2cm]
+	\begin{tabularx}{\textwidth}{*1{>{\centering\arraybackslash}X}}
+		{\bfseries Visual Computing Institute}\\
+		\cline{1-1}
+	\end{tabularx}
+
+	\vspace{0.2cm}
+
+	Mir ist bekannt, dass:
+	\begin{itemize}
+		\item[-] ich das kombinierte Logo nur verwenden darf, wenn es von der gewünschten Institution für die Nutzung auf Prüfungsarbeiten freigegeben ist
+		\item[-] ich das kombinierte Logo selbständig und zeitnah bei der gewünschten Institution anfordern muss
+		\item[-] das Logo nicht verändert, beschnitten oder aus der Logosystematik losgelöst werden darf
+		\item[-] das RWTH Aachen University-Logo eine eingetragene und geschützte Wortmarke ist und ein Verstoß gegen die Vorgaben zur Verwendung des Logos Rechtsfolgen hat
+		\item[-] das kombinierte Logo nur für die hier angegebene Arbeit verwendet werden darf
+		\item[-] das kombinierte Logo nur mit dem Zusatz \glqq Diese Arbeit wurde vorgelegt am [Name Institution]\grqq angebracht werden darf
+		\item[-] das kombinierte Logo nur rechts oben auf dem Deckblatt angebracht und in keiner Art verändert werden darf
+	\end{itemize}
+
+	Diese und weitere Informationen (inkl. Anwendungsbeispiel) kann ich auf der \textcolor{blue}{\underline{Webseite des ZPA}} jederzeit nachlesen.
+
+	\vspace{1cm}
+
+	\begin{minipage}[t]{0.4\textwidth}
+		\begin{tabularx}{0.8\textwidth}{*1{>{\centering\arraybackslash}X}@{}}
+			\bfseries\thedate\\
+			\cline{1-1}
+			\multicolumn{1}{l}{Datum}
+		\end{tabularx}
+	\end{minipage}
+	\begin{minipage}[t]{0.59\textwidth}
+		\begin{tabularx}{\textwidth}{*1{>{\centering\arraybackslash}X}@{}}
+			\\
+			\cline{1-1}
+			\multicolumn{1}{l}{Unterschrift}
+		\end{tabularx}
+	\end{minipage}
+
+	\vspace{0.5cm}
+
+	\begin{center}
+		\scriptsize Diese Bescheinigung ist zu Beginn der schriftlichen Prüfungsarbeit beim ZPA einzureichen.
+	\end{center}
+\end{document}
+

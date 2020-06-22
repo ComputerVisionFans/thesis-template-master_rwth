@@ -1,0 +1,955 @@
+\chapter{Introduction}
+\label{sec:Introduction}
+
+\label{sub:figures}
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\includegraphics[width=\textwidth]{(1095).png}
+			\caption{Debris}
+			\label{fig:Debris}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{(635).png}}
+			\caption{Out of Focus}
+			\label{fig:Out of Focus}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{(1672).png}}
+			\caption{Lighting Artifacts}
+			\label{fig:Lighting Artifacts}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{(1112).png}}
+			\caption{Outside FOV}
+			\label{fig:Outside FOV}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{(1684).png}}
+			\caption{Contaminated}
+			\label{fig:Contaminated}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{hd3 (56).png}}
+			\caption{Good Cell}
+			\label{fig:Good Cell}
+		\end{subfigure}
+	\end{center}
+	\caption{Six Typical Cell images on original Sezary Syndrome data set. Only Good Cell can provide useful Morphology characteristics for further classification.}
+	\label{fig:lennas}
+\end{figure}
+Sezary Syndrom is an aggressive form of cutaneous T-cell lymphoma that is characterized by presence of tumor T-cells with abnormal nucleus morphology in the peripheral blood. The easy and precise detection of malignant cells in the blood of patients with Sezary Syndrome is of important diagnostic, prognostic and therapeutic value, and is essential for disease monitoring under treatment\cite{b6}\cite{b7}. The severe limitations of manual microscopic identification of tumor T-cells have led to the implementation of flow cytometry-based diagnostic assays. Currently, the loss of cell surface markers, such as CD26, CD27 and CD7, on malignant T lymphocytes remains one of the most consistent features and is routinely used in the diagnostic workup \cite{b12}, although their specificity and especially sensitivity, must be interpreted with caution \cite{b11}. We plan to circumvent the challenges involving the definition of molecular diagnostic markers and rather aim at re-surging morphology-based diagnosis of hematological malignancies through an automated procedure, integrating imaging flow cytometry and deep learning as a route to, ultra-high throughput and sensitive diagnosis.
+ 
+\label{sub:figures}
+\begin{figure}[ht]
+	\begin{center}
+	\includegraphics[width=\textwidth]{thesis-template-master/images/general workflow2.pdf}
+	\label{fig:lenna}
+	\end{center}
+	\caption{General Workflow of Proposed Project. After Image Flow Cytometry (Morphological identification of tumor T-cells in the blood), those generated images can be categorized into 6 typical classes: lighting artifacts, out of focus cell, debris, contaminated cell, outside FOV cells  and multiple cell concatenated together. Using AttentionNet as a automatic detector and segment-or, we can filter out most of the artifacts in the images and only keep the morphological characteristics of the cell for CellNet classification. CellNet only has 8 novel Ghost module layers. CellNet software includes a total of 5 interfaces, 25 buttons, 10 user prompt functions and inherits 12 algorithms with the integration of 4 data sets.}
+	\label{fig:lennas}
+\end{figure}
+
+
+
+In the first step, CellYolo approach has been developed to automatically annotate and segment cell types to single-cell images obtained from imaging flow cytometry experiments. These approach is based on deep learning paradigms that have emerged as a disruptive alternative to engineering-based techniques, which easily lead to a large amount of impure labelled data, and requires more resources and time. CellYolo as an efficient and accurate object detector emphasizing on small target, inherited the characteristics of the real-time detection of the YOLO network\cite{b33}, and at the same time avoided the low accuracy of the YOLO network in detecting small objects. Inspired from the YOLOv3-tiny network ,the K Means++ algorithm is an efficient approach of data pre-processing\cite{b18}. Experimental results demonstrate that CellYolo is not only a cost efficient solution for practical application( Labeling/Segmenting each image takes only 0.25 seconds in Intel CPU), but also an effective way of improving accuracy of object classification. We reproduced and integrated nearly 20 classic computer vision algorithms and test the performance with/without CellYolo preprocessing. With help of CellYolo preprocessing, the improvement based on state-of-the art algorithms in terms of Top-1 val-acc has been verified.
+
+Once segmented, we proposed CellNet for Sezary Syndrom Cell / Healthy Cell classification. We applied similar Residual layer to forward and enable deeper neural network and follows the basic architecture of ResNet18 and GhostNet for its superiority \cite{b19}\cite{b20}. Replaced all the ResNet18 \cite{b20} point-wise convolutional layers (in total, 18 layers ) with Ghost Bottleneck \cite{b19}. In additional, we adopted the SE layers from Squeeze-and-Excitation Networks \cite{b24} to enhance useful features, scaling less inhibiting features map. In each ghost module, we first take pointwise conv to get a few intrinsic feature maps, then we utilized the linear cheap transformation such as depth-wise conv or affine transformation and wavelet transformation, as suggested by GhostNet\cite{b19}, here the depthwise conv was used.
+Despite its simplicity (only 8 layers ghost module) and lower parameters(1/4 weights than ResNet18\cite{b20}, 1/2 weights than GhostNet\cite{b19}), CellNet establishes a new state-of-the-art on Sezary Syndrome Dataset (95.638\% Top-1 accuracy) and CIFar10 ( 90.051\% Top-1 accuracy)\cite{b21}. Moreover, the same method is also very competitive against recent leading Supervised approaches on Pneumonia Dataset (91.785\% Top -1 accuracy), where Inception V3 adopted after 7000 epochs reaches only 88.0\%\cite{b38}.
+
+The remaining sections of this paper are organized as follows: Section 2 outlines some of the most relevant  prior work in medical image classification and segmentation including a short introduction about YOLOv3 \cite{b33} algorithm, the most important intuition of Residual learning, and recently invention of Ghost module.
+Section 3 introduces our proposal. Section 4 presents experimental verification  and visualization on different benchmark dataset to validate the effectiveness of the proposed models and illustrates several ablative studies.Finally, conclusions are summarized in Section 5.
+
+Our contributions. We proposes a unifying approach that is capable of (1) imaging single-cell morphology of thousands of peripheral blood cells and (2) data-driven learning of morphological characteristics, which are indicative of the presence of the disease.
+Inspired by leading SOTA model, such as Deep Residual Learning\cite{b20} and Ghosts Net\cite{b19}, we proposed CellNet. Instead of stacking lots of point-wise convolutional layers and takes huge amount of convolutional manipulations, we can avoid the redundant feature maps by taking cheap operation. CellNet is originally designed for Sezary Syndrome Dataset and we provide comprehensive empirical evidence showing that CellNet has 1/4 weights than ResNet18 \cite{b20} and best classification performances on 
+several other benchmarks such as CIFar10 \cite{b21} (92.451\% Top-1 accuracy), Pneumonia Dataset\cite{b38} (91.785\% Top-1 accuracy) and Sezary Syndrome Dataset (95.638\% Top-1 accuracy).
+In addition, we purposed AttentionNet Network as an automated data pro-processing tool which provides a new intuition for object recognition, eliminating noise artifacts out of the image precisely can effectively improve the classification performance of many SOTA networks. Instead of manually labeling a large amount of data after Image flow cytometry and PBMC samples \cite{b12}, it is possible to automatically label an object with an accuracy of 88.64 \% in 0.25 seconds by using AttentionNet. 
+
+We also produced the first COVID-19 Chest Xray/CT Dataset containing nearly 2,000 Xray/CT images (nearly 1,500 Healthy Xray/CT images and nearly 500 COVID-19 infected Xray/CT images). Experiments conducted on COVID-19 Datasets also demonstrated that the proposed CellNet is an impressive alternative of current baseline models, and our CellNet (94.719\% in Top-1 accuracy) outperforms the GhostNet\cite{b19} (92.739\%  in Top -1 accuracy) and other leading models. In addition, we developed a software application for potential diagnosis, which integrated with 12 leading SOTA models, including our CellNet. All code is available at \textit{https://github.com/Johnny-liqiang/CellNetUML}.
+
+
+
+%3D data representations have been studied independently in their main field of application so far. In this thesis, however, we explore the potential of combining geodesic and Euclidean convolutions on point clouds and meshes simultaneously in the task of 3D semantic scene segmentation. In Figure 1.2, we illustrate our intuition that geodesic and Euclidean convolutions focus on different aspects of feature learning. Geodesic convolutions define proximity in terms of mesh neighbors reach￾able within  hops on the mesh. When applying convolutions on this neighborhood, we explicitly learn features focusing on the surface structure of the scene. For instance,in Figure 1.2a, the geodesic receptive field of the green center point just comprises vertices of the geodesically close chair surface. It therefore neglects geodesically remote but spatially close vertices of the table. Hence, we assume that geodesic convolutions are more likely to learn feature representations for object shapes.
+
+%Contrastingly, Euclidean convolutions focus on the Euclidean proximity of vertices in terms of nn or radius neighborhoods in 3D space. They enable an information flow between geodesically disconnected parts of the scene and therefore, we assume that they learn the interaction between objects. For example, in Figure 1.2b, the convolution does not generate features only based on vertices of the chair but also based on the geodesically remote table. We assume that this contextual information helps to distinguish shape-wise similar classes such as chair and armchair. Concludingly, we pose the question if a combination of geodesic and Euclidean convolutions brings a significant benefit for the task of 3D scene segmentation. For this purpose, we have developed a simple yet effective multi-scale architecture called DualConvNet which combines Euclidean and geodesic convolutions in a parallel manner over multiple scales. Special provisions have been taken to guarantee the modularity of the architecture such that all effects are measurable in order to answer the research question in the ablation study experimentally.
+
+%Our approach is mesh-centric in that sense that it consumes meshes as a half-edge data structure as well as defining (un-)pooling operations in terms of mesh simplification algorithms. This design decision is necessary to ensure a mesh structure in deeper network layers such that geodesic convolutions are well-defined. We therefore extend vertex clustering [RB93] and Quadric Error Metrics (QEM) [GH97] as two well-established algorithms from the geometry processing domain such that they can pool and unpool vertex sets from consecutive hierarchy levels. Pooling Trace Maps constitute this extension which comprises a look-up dictionary approach for obtaining pooled representatives in constant time. In order to make QEM pooling applicable for large-scale meshes, we finally present a novel sampling strategy for radius neighborhoods called Random Edge Sampling (RES) which outputs a sample set which guarantees an upper limit of a predefined expected sample size. In the ablation study, we take a closer look at the properties of RES.
+
+%We empirically evaluate our proposed DualConvNet architecture on three publicly available benchmarks for 3D scene segmentation. We achieve competitive results on the ScanNet v2 [DCS+17], as well as the Stanford Large-Scale 3D Indoor Spaces Dataset (S3DIS) [ASZ+16]. Among graph convolutional approaches, we define a new stateof-the-art on both datasets. Moreover, on the recently published Matterport3D benchmark [CDF+17], we can report overall state-of-the-art results. We summarize the main contributions of this thesis as follows: 1 DualConvNet - our novel family of multiscale convolutional architectures - combines Euclidean and geodesic features for 3D semantic scene segmentation. 2 For creating mesh-centric multi-scale architectures, we extend two well-established mesh simplification algorithms as means of (un-)pooling operations. 3 Random Edge Sampling (RES) is a novel sampling method for sampling neighborhoods which guarantees an upper limit for the predefined expected size.
+%Reducing the size of the neighborhood allows us to train networks with substantially fewer neighborhood sizes. However, we infer on test examples with larger sample sizes for better neighborhood approximations. 4 We conclude our work with a thorough ablation study which experimentally proves our claim that Euclidean and geodesic convolutions give a consistent benefit, independent of the pooling method and the notion of the neighborhood used in the architecture.
+
+
+
+\chapter{Related Work}
+\label{sec:examples}
+This chapter will demonstrate some fun \LaTeX\ stuff.
+
+\subsection[Awesome Figures in the TOC]{Awesome Figures} % (fold)
+
+\label{sub:figures}
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[width=\textwidth]{lenna.png}
+			\caption{Lenna}
+			\label{fig:lenna}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{lenna.png}}
+			\caption{Lenna facing left}
+			\label{fig:lenna_facing_left}
+		\end{subfigure}
+	\end{center}
+	\caption{The famous Lenna image used in Computer Vision with subcaptions and a global caption.}
+	\label{fig:lennas}
+\end{figure}
+The figure can be referenced in the text \eg\reffig{lennas}.
+Also the subfigures can be referenced \eg\reffig{lenna}, \reffig{lenna_facing_left}.
+% subsection figures (end)
+
+\subsection{Citations} % (fold)
+\label{sub:citations}
+You can cite books from your bibliography \texttt{thesis.bib} (\eg \cite{cochrane}).
+Abbreviations from \texttt{abbrev.bib} help in writing the entries.
+% subsection citations (end)
+
+\subsection{FixMe warnings}
+\label{sub:fixme}
+You can add warnings\fxwarning{WARNING} or notifications\fxnote{Note} to your text.
+This will help you keep an overview on the places in the text you have to work on.
+
+\section{Lorem}
+\label{sec:lorem}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a nibh vulputate sapien condimentum vestibulum. Pellentesque tortor orci, aliquam eget odio a, aliquam tristique ante. Nulla tincidunt augue nec eros fringilla pretium. In ultrices fermentum erat quis imperdiet. Integer diam massa, egestas at nunc eu, aliquam placerat turpis. Suspendisse potenti. Nam luctus euismod nisl et volutpat. Sed at turpis ex. In facilisis quam neque, vitae lobortis felis fringilla quis. Phasellus porttitor leo eget massa efficitur, vel commodo diam venenatis. Vestibulum fringilla neque sed laoreet aliquam. Nulla sodales sodales velit ac fermentum.
+
+In finibus pulvinar rhoncus. Mauris facilisis sit amet diam vel fermentum. Praesent laoreet dolor quis aliquet scelerisque. Integer condimentum, tortor dapibus vestibulum tristique, dui mauris posuere lectus, sed porttitor nisi dolor et ipsum. Nullam dignissim tortor ut mauris porta, ut gravida nisl fermentum. Morbi mattis egestas libero, quis elementum orci ornare nec. Morbi ultrices dolor eget arcu hendrerit ullamcorper. Nulla dui augue, molestie ac lobortis nec, pulvinar vitae quam. Cras neque nulla, pulvinar non vehicula quis, tincidunt id quam.
+
+Etiam massa felis, tincidunt vel tincidunt ut, commodo id ipsum. Fusce blandit metus eget egestas mollis. Suspendisse interdum sem pellentesque ligula finibus, ac pretium metus lobortis. Integer id convallis felis, quis volutpat sapien. Phasellus elementum fermentum augue in mattis. Mauris pretium ipsum ornare augue sollicitudin hendrerit. Proin imperdiet interdum pretium. Nam in fringilla nisi, nec sollicitudin lacus. Pellentesque semper sapien vitae nulla scelerisque, ac convallis tortor porttitor. Fusce dolor tellus, porta vel magna vel, gravida ultrices eros. Integer sit amet nisl posuere, consectetur ante et, vulputate nulla. In a fringilla nisl.
+
+Praesent vitae metus interdum, eleifend odio et, vehicula arcu. Suspendisse vulputate viverra enim ut convallis. Nunc nec gravida orci, suscipit interdum lacus. Morbi varius urna a dolor convallis, nec pulvinar massa maximus. Donec sed est ac odio scelerisque fringilla. Proin ac purus nec dolor porttitor tempor et sed dui. Vivamus arcu velit, vulputate sed fringilla dignissim, porta volutpat ipsum. Donec at venenatis lacus.
+
+Vestibulum hendrerit, justo at laoreet dapibus, tortor orci placerat nunc, sed sodales massa quam eget dui. Pellentesque a ipsum non quam sodales pellentesque non eget sem. Pellentesque dignissim accumsan congue. Etiam nec odio at ipsum mollis lobortis. Nam tempus suscipit posuere. In mollis lacus in nulla lobortis sagittis id vitae lorem. Maecenas id libero sit amet lacus porta porta. Nam eu justo a enim efficitur commodo at et turpis. Vestibulum efficitur, elit eget vestibulum sollicitudin, ipsum massa luctus nunc, ut lobortis nisi magna ac velit. Morbi finibus elit a sagittis mattis. Duis ac scelerisque libero. Aliquam aliquam dui urna, quis pulvinar risus rutrum vitae. Curabitur quis lorem tristique, consequat magna vitae, tincidunt diam. Nam viverra velit nec leo mattis, eu mollis tellus imperdiet. Vestibulum nibh nulla, porta eget venenatis non, commodo pulvinar ex.
+% section lorem (end)
+
+\section{Ipsum}
+\label{sec:ipsum}
+Mauris ultrices commodo risus, mollis congue dui scelerisque elementum. Nam ac dictum augue. Vestibulum convallis vel dui et porttitor. Aenean a commodo justo. Integer condimentum pulvinar massa, eu venenatis metus bibendum aliquam. Aenean ac tristique nisl, ut maximus tortor. Duis venenatis ultricies tellus, non dignissim metus feugiat vel. Curabitur a lorem ligula. Nunc commodo erat id mauris condimentum euismod. Etiam vel sodales augue. Donec id tincidunt tellus. Pellentesque tempus ultricies lobortis. Vestibulum magna velit, iaculis rhoncus aliquet sed, congue vitae risus. Suspendisse iaculis, nibh at imperdiet tincidunt, mi metus pharetra tortor, quis posuere est ante id ex.
+
+\subsection{Dolor sit} % (fold)
+\label{sub:dolor_sit}
+Fusce a tortor sit amet quam suscipit commodo non eget massa. Vestibulum semper accumsan tristique. Aenean posuere laoreet sollicitudin. Vivamus nec ligula et nunc ornare pellentesque. Aenean vulputate vestibulum risus facilisis condimentum. Morbi ac ex magna. In feugiat ligula in nisi tincidunt malesuada. Morbi convallis nunc id nisi ultrices venenatis. Donec in felis vel lectus lobortis malesuada. Morbi ut neque nulla. Quisque augue nibh, tempor in elit at, convallis gravida enim. Integer iaculis nibh eget commodo mollis. Vivamus at viverra eros. Pellentesque eu elit velit. Nunc nec ligula diam.
+
+Suspendisse tempus id neque vel ultricies. Vivamus efficitur dui non enim vehicula, sed faucibus massa consectetur. Aenean lacinia sapien quis pellentesque auctor. Vestibulum auctor dui a orci imperdiet, vitae posuere sapien vulputate. In eget augue quis erat rhoncus dignissim ut nec felis. Ut dignissim, ligula a porta sollicitudin, erat enim maximus sapien, vitae vehicula ligula eros sed mauris. Maecenas vehicula, mauris nec sagittis pellentesque, mauris turpis volutpat sapien, vitae mattis magna enim sit amet ligula.
+
+Duis sem elit, egestas eleifend auctor quis, elementum nec nisi. Sed sed ipsum ac mi rutrum pretium. Maecenas a pulvinar eros. Integer eget pretium arcu, at egestas ante. Donec neque magna, pellentesque in justo et, convallis congue enim. Etiam et quam sit amet mi ullamcorper pretium vitae id ligula. Maecenas ac ligula justo. Curabitur gravida nunc tincidunt auctor rhoncus. Donec sit amet ante ipsum. In quis ullamcorper ex. Cras ac ullamcorper orci, et aliquet enim. Nam in elit sit amet tortor finibus interdum.
+
+Sed ac facilisis augue. Cras nec nisl consequat, gravida tortor vitae, tincidunt nisi. Duis posuere eu orci at luctus. Morbi nec malesuada arcu. Aliquam erat volutpat. Maecenas pharetra in nisi sed molestie. Cras id urna eu nunc ullamcorper volutpat a sit amet elit. Donec tincidunt laoreet ipsum, a sagittis tellus laoreet sodales. Aliquam in ultricies sapien, semper tempus nisl. Pellentesque lectus nisi, tempus ut fermentum quis, pulvinar ac velit.
+
+Duis laoreet pellentesque libero, egestas mattis ante maximus id. Donec convallis felis vel neque placerat ornare. Curabitur id iaculis lectus. Duis vitae tristique lectus. Sed maximus aliquet nisl, quis bibendum sem. Vestibulum ut ipsum a risus fermentum dapibus tincidunt semper lorem. Proin ante ante, euismod sed turpis eu, dictum bibendum ipsum. Praesent fermentum volutpat metus, quis fringilla arcu fermentum eget. Suspendisse quis condimentum sapien, ut sollicitudin metus. Ut in volutpat enim. Phasellus sapien est, varius in condimentum et, auctor et augue. Donec mattis malesuada leo, vitae pellentesque metus ornare vel. Pellentesque massa nulla, aliquet nec metus et, auctor porta lacus. Fusce ac ex faucibus, placerat nibh ac, fermentum leo. Curabitur interdum fermentum lacus, quis mollis erat suscipit nec. Vestibulum vel pellentesque ipsum, sit amet ultrices quam.
+
+Proin vestibulum nec risus ut porttitor. Pellentesque porta ipsum elit, quis lacinia quam vehicula eu. Nulla consectetur nulla ac euismod tincidunt. Curabitur quis auctor neque, eget viverra nibh. Vivamus porttitor aliquam leo id iaculis. Cras sed dapibus quam. Mauris ullamcorper lacus ut porta sollicitudin. Proin accumsan finibus dolor, eu suscipit massa interdum non. Maecenas lobortis sit amet leo in fringilla.
+% subsection dolor_sit (end)
+
+\subsection{Amet} % (fold)
+\label{sub:amet}
+Nulla nec accumsan risus. Mauris consectetur ex vel tempus posuere. Quisque sit amet placerat risus, vitae suscipit massa. Maecenas molestie scelerisque ipsum, ac porta purus dapibus ut. Phasellus rhoncus sit amet lorem nec vulputate. Sed quis erat erat. In congue at nisi in tristique. Pellentesque auctor, nunc ut hendrerit laoreet, neque urna sagittis orci, sit amet accumsan nisi velit et diam. Phasellus sit amet posuere mauris. In hac habitasse platea dictumst. Quisque eget consectetur lectus. Nam finibus porttitor augue, sed fermentum augue vehicula id. Pellentesque convallis auctor condimentum. Donec at pharetra ipsum, id consequat turpis.
+
+Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut semper urna ac imperdiet imperdiet. Duis aliquam enim vel dolor euismod, vel posuere enim cursus. Sed tristique dui vitae lacus facilisis gravida. Donec quis nisl sed mi iaculis placerat. Integer dictum elit quis enim venenatis, eu egestas odio porttitor. Proin ac ipsum semper, tincidunt lectus vitae, elementum nibh. Nunc facilisis scelerisque nibh, eget tincidunt tellus rhoncus non. Etiam luctus tellus a eros dignissim, nec mollis lacus elementum. Fusce tincidunt porta efficitur. Aenean id volutpat sapien, vel fermentum augue. Cras sed dapibus risus. Etiam mi felis, blandit sed rutrum ut, rhoncus sit amet nisi. In quis sem finibus, posuere tortor sit amet, lacinia enim. Proin nibh neque, commodo luctus sagittis in, luctus non diam. Donec semper commodo nunc, et laoreet risus feugiat eget.
+
+Phasellus pulvinar tellus id libero mattis, quis sollicitudin arcu hendrerit. Quisque nec posuere mi, nec luctus magna. Ut consectetur ante vel velit congue, ac vulputate turpis molestie. Maecenas quis diam dolor. Pellentesque rhoncus porta condimentum. Aliquam malesuada leo quis placerat posuere. Duis maximus mauris hendrerit lacus viverra auctor. Morbi in urna libero. Donec dictum, justo a tincidunt dictum, enim mauris condimentum erat, non lobortis ex risus sed sapien. Sed ac sapien luctus, vehicula justo lobortis, congue orci. Praesent ultricies turpis vel ex pretium placerat.
+
+Maecenas ultricies dolor eget lorem vestibulum sodales. Nam tortor elit, bibendum malesuada ante et, pharetra mollis tellus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis ligula nisi, blandit eget condimentum ut, facilisis et urna. Nunc sed velit a urna mattis malesuada. Etiam convallis quam libero, quis maximus metus lacinia non. Donec cursus, justo feugiat scelerisque pretium, leo felis lacinia nulla, vel pharetra mi sem id risus. Aliquam eu metus ac dolor varius ultrices. Nulla faucibus lorem sit amet libero aliquam ullamcorper. Nulla eu quam vulputate, volutpat sapien in, tincidunt neque. Nullam sapien erat, iaculis sed orci vel, porta efficitur lorem. Phasellus a nibh sagittis, iaculis erat ut, egestas risus. Nulla diam massa, dictum at vehicula quis, malesuada sed mi. Morbi vitae dolor quam. Ut bibendum rutrum felis, quis dignissim felis interdum nec.
+
+In vitae faucibus erat, at tristique nisi. Mauris eget sodales lacus, eget mattis ipsum. Integer at iaculis purus. Quisque non elementum orci. Nulla non orci convallis, convallis orci et, rhoncus felis. Fusce nec velit enim. Nam imperdiet et sem vitae gravida. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris placerat maximus aliquet. Donec sagittis augue rutrum consequat egestas.
+
+Vestibulum faucibus, ante tincidunt porttitor malesuada, arcu eros mollis elit, id gravida ante mauris in nisl. Morbi eros sem, ultrices vel leo a, efficitur scelerisque mi. Sed posuere sit amet erat quis facilisis. Vivamus posuere sem ut orci sodales aliquam. Nulla facilisi. Etiam pulvinar finibus augue, vel interdum purus placerat sit amet. Morbi placerat interdum aliquet. Nulla fermentum urna at hendrerit tempus. Vestibulum vitae ultrices dolor.
+
+Duis fringilla mauris ut efficitur egestas. Praesent quis sapien risus. Nulla quis quam nec nulla semper viverra quis vel lorem. Donec commodo faucibus magna eget vestibulum. In hac habitasse platea dictumst. Fusce ullamcorper odio nulla, nec egestas enim efficitur et. Donec pharetra ipsum libero, nec mollis quam posuere nec. Aliquam vitae egestas arcu. Quisque interdum rutrum neque convallis convallis. Nulla non consequat quam. Pellentesque et nisi dictum, posuere nibh vel, eleifend turpis. Praesent tincidunt sodales leo ac efficitur. Phasellus arcu ipsum, molestie ac orci vitae, euismod sodales metus.
+
+Duis est lectus, vestibulum at arcu sed, suscipit pellentesque nisi. Nulla arcu ante, feugiat nec diam ac, auctor ullamcorper nibh. Praesent a arcu sed massa vestibulum condimentum. Etiam gravida at massa in ullamcorper. Aenean finibus, metus et consectetur viverra, augue eros finibus purus, eget sollicitudin erat purus feugiat sapien. Morbi mattis orci sit amet sem semper, non fringilla quam dignissim. Fusce aliquam dolor et lectus pellentesque lobortis. 
+% subsection amet (end)
+% section ipsum (end)
+% section examples (end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\chapter{Methodology}
+\label{sec:Methodology}
+This paper proposes a unifying approach that is capable of (1) imaging single-cell morphology of hundreds of thousands of peripheral blood cells and (2) data-driven learning of characteristic mythologies (possibly of rare cell subsets) indicative of the presence of the disease.
+
+As we originally designed the unifying approach for Sezary Syndrome, which is an aggressive cutaneous T cell lymphoma that is characterized by presence of tumor T cells with abnormal nucleus morphology in the peripheral blood. Morphological identification of tumor T cells in the blood is currently still the gold standard.
+After Image Flow Cytometry there are huge amount of cell images produced from patient as well as healthy data set for comparison. Due to different experimental conditions, such as lighting conditions and different experimental objects, noise deviations are likely to appear on the sampled cell images, moreover, these deviations do not appear in the better quality and pure evaluation data set which leads to higher false negative.
+\subsection[Awesome Figures in the TOC]{Awesome Figures} % (fold)
+
+\label{sub:figures}
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[width=\textwidth]{lenna.png}
+			\caption{Lenna}
+			\label{fig:lenna}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{lenna.png}}
+			\caption{Lenna facing left}
+			\label{fig:lenna_facing_left}
+		\end{subfigure}
+	\end{center}
+	\caption{The famous Lenna image used in Computer Vision with subcaptions and a global caption.}
+	\label{fig:lennas}
+\end{figure}
+The figure can be referenced in the text \eg\reffig{lennas}.
+Also the subfigures can be referenced \eg\reffig{lenna}, \reffig{lenna_facing_left}.
+% subsection figures (end)
+
+\subsection{Citations} % (fold)
+\label{sub:citations}
+You can cite books from your bibliography \texttt{thesis.bib} (\eg \cite{cochrane}).
+Abbreviations from \texttt{abbrev.bib} help in writing the entries.
+% subsection citations (end)
+
+\subsection{FixMe warnings}
+\label{sub:fixme}
+You can add warnings\fxwarning{WARNING} or notifications\fxnote{Note} to your text.
+This will help you keep an overview on the places in the text you have to work on.
+
+\section{AttentionNet}
+\label{sec:lorem}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a nibh vulputate sapien condimentum vestibulum. Pellentesque tortor orci, aliquam eget odio a, aliquam tristique ante. Nulla tincidunt augue nec eros fringilla pretium. In ultrices fermentum erat quis imperdiet. Integer diam massa, egestas at nunc eu, aliquam placerat turpis. Suspendisse potenti. Nam luctus euismod nisl et volutpat. Sed at turpis ex. In facilisis quam neque, vitae lobortis felis fringilla quis. Phasellus porttitor leo eget massa efficitur, vel commodo diam venenatis. Vestibulum fringilla neque sed laoreet aliquam. Nulla sodales sodales velit ac fermentum.
+
+In finibus pulvinar rhoncus. Mauris facilisis sit amet diam vel fermentum. Praesent laoreet dolor quis aliquet scelerisque. Integer condimentum, tortor dapibus vestibulum tristique, dui mauris posuere lectus, sed porttitor nisi dolor et ipsum. Nullam dignissim tortor ut mauris porta, ut gravida nisl fermentum. Morbi mattis egestas libero, quis elementum orci ornare nec. Morbi ultrices dolor eget arcu hendrerit ullamcorper. Nulla dui augue, molestie ac lobortis nec, pulvinar vitae quam. Cras neque nulla, pulvinar non vehicula quis, tincidunt id quam.
+
+Etiam massa felis, tincidunt vel tincidunt ut, commodo id ipsum. Fusce blandit metus eget egestas mollis. Suspendisse interdum sem pellentesque ligula finibus, ac pretium metus lobortis. Integer id convallis felis, quis volutpat sapien. Phasellus elementum fermentum augue in mattis. Mauris pretium ipsum ornare augue sollicitudin hendrerit. Proin imperdiet interdum pretium. Nam in fringilla nisi, nec sollicitudin lacus. Pellentesque semper sapien vitae nulla scelerisque, ac convallis tortor porttitor. Fusce dolor tellus, porta vel magna vel, gravida ultrices eros. Integer sit amet nisl posuere, consectetur ante et, vulputate nulla. In a fringilla nisl.
+
+Praesent vitae metus interdum, eleifend odio et, vehicula arcu. Suspendisse vulputate viverra enim ut convallis. Nunc nec gravida orci, suscipit interdum lacus. Morbi varius urna a dolor convallis, nec pulvinar massa maximus. Donec sed est ac odio scelerisque fringilla. Proin ac purus nec dolor porttitor tempor et sed dui. Vivamus arcu velit, vulputate sed fringilla dignissim, porta volutpat ipsum. Donec at venenatis lacus.
+
+Vestibulum hendrerit, justo at laoreet dapibus, tortor orci placerat nunc, sed sodales massa quam eget dui. Pellentesque a ipsum non quam sodales pellentesque non eget sem. Pellentesque dignissim accumsan congue. Etiam nec odio at ipsum mollis lobortis. Nam tempus suscipit posuere. In mollis lacus in nulla lobortis sagittis id vitae lorem. Maecenas id libero sit amet lacus porta porta. Nam eu justo a enim efficitur commodo at et turpis. Vestibulum efficitur, elit eget vestibulum sollicitudin, ipsum massa luctus nunc, ut lobortis nisi magna ac velit. Morbi finibus elit a sagittis mattis. Duis ac scelerisque libero. Aliquam aliquam dui urna, quis pulvinar risus rutrum vitae. Curabitur quis lorem tristique, consequat magna vitae, tincidunt diam. Nam viverra velit nec leo mattis, eu mollis tellus imperdiet. Vestibulum nibh nulla, porta eget venenatis non, commodo pulvinar ex.
+% section lorem (end)
+
+\section{CellNet}
+\label{sec:ipsum}
+Mauris ultrices commodo risus, mollis congue dui scelerisque elementum. Nam ac dictum augue. Vestibulum convallis vel dui et porttitor. Aenean a commodo justo. Integer condimentum pulvinar massa, eu venenatis metus bibendum aliquam. Aenean ac tristique nisl, ut maximus tortor. Duis venenatis ultricies tellus, non dignissim metus feugiat vel. Curabitur a lorem ligula. Nunc commodo erat id mauris condimentum euismod. Etiam vel sodales augue. Donec id tincidunt tellus. Pellentesque tempus ultricies lobortis. Vestibulum magna velit, iaculis rhoncus aliquet sed, congue vitae risus. Suspendisse iaculis, nibh at imperdiet tincidunt, mi metus pharetra tortor, quis posuere est ante id ex.
+
+\subsection{Network Architecture} % (fold)
+\label{sub:Network Architecture_2}
+Fusce a tortor sit amet quam suscipit commodo non eget massa. Vestibulum semper accumsan tristique. Aenean posuere laoreet sollicitudin. Vivamus nec ligula et nunc ornare pellentesque. Aenean vulputate vestibulum risus facilisis condimentum. Morbi ac ex magna. In feugiat ligula in nisi tincidunt malesuada. Morbi convallis nunc id nisi ultrices venenatis. Donec in felis vel lectus lobortis malesuada. Morbi ut neque nulla. Quisque augue nibh, tempor in elit at, convallis gravida enim. Integer iaculis nibh eget commodo mollis. Vivamus at viverra eros. Pellentesque eu elit velit. Nunc nec ligula diam.
+
+Suspendisse tempus id neque vel ultricies. Vivamus efficitur dui non enim vehicula, sed faucibus massa consectetur. Aenean lacinia sapien quis pellentesque auctor. Vestibulum auctor dui a orci imperdiet, vitae posuere sapien vulputate. In eget augue quis erat rhoncus dignissim ut nec felis. Ut dignissim, ligula a porta sollicitudin, erat enim maximus sapien, vitae vehicula ligula eros sed mauris. Maecenas vehicula, mauris nec sagittis pellentesque, mauris turpis volutpat sapien, vitae mattis magna enim sit amet ligula.
+
+Duis sem elit, egestas eleifend auctor quis, elementum nec nisi. Sed sed ipsum ac mi rutrum pretium. Maecenas a pulvinar eros. Integer eget pretium arcu, at egestas ante. Donec neque magna, pellentesque in justo et, convallis congue enim. Etiam et quam sit amet mi ullamcorper pretium vitae id ligula. Maecenas ac ligula justo. Curabitur gravida nunc tincidunt auctor rhoncus. Donec sit amet ante ipsum. In quis ullamcorper ex. Cras ac ullamcorper orci, et aliquet enim. Nam in elit sit amet tortor finibus interdum.
+
+Sed ac facilisis augue. Cras nec nisl consequat, gravida tortor vitae, tincidunt nisi. Duis posuere eu orci at luctus. Morbi nec malesuada arcu. Aliquam erat volutpat. Maecenas pharetra in nisi sed molestie. Cras id urna eu nunc ullamcorper volutpat a sit amet elit. Donec tincidunt laoreet ipsum, a sagittis tellus laoreet sodales. Aliquam in ultricies sapien, semper tempus nisl. Pellentesque lectus nisi, tempus ut fermentum quis, pulvinar ac velit.
+
+Duis laoreet pellentesque libero, egestas mattis ante maximus id. Donec convallis felis vel neque placerat ornare. Curabitur id iaculis lectus. Duis vitae tristique lectus. Sed maximus aliquet nisl, quis bibendum sem. Vestibulum ut ipsum a risus fermentum dapibus tincidunt semper lorem. Proin ante ante, euismod sed turpis eu, dictum bibendum ipsum. Praesent fermentum volutpat metus, quis fringilla arcu fermentum eget. Suspendisse quis condimentum sapien, ut sollicitudin metus. Ut in volutpat enim. Phasellus sapien est, varius in condimentum et, auctor et augue. Donec mattis malesuada leo, vitae pellentesque metus ornare vel. Pellentesque massa nulla, aliquet nec metus et, auctor porta lacus. Fusce ac ex faucibus, placerat nibh ac, fermentum leo. Curabitur interdum fermentum lacus, quis mollis erat suscipit nec. Vestibulum vel pellentesque ipsum, sit amet ultrices quam.
+
+Proin vestibulum nec risus ut porttitor. Pellentesque porta ipsum elit, quis lacinia quam vehicula eu. Nulla consectetur nulla ac euismod tincidunt. Curabitur quis auctor neque, eget viverra nibh. Vivamus porttitor aliquam leo id iaculis. Cras sed dapibus quam. Mauris ullamcorper lacus ut porta sollicitudin. Proin accumsan finibus dolor, eu suscipit massa interdum non. Maecenas lobortis sit amet leo in fringilla.
+% subsection dolor_sit (end)
+
+\subsection{Novel Ghostmodule} % (fold)
+\label{sub:amet}
+Nulla nec accumsan risus. Mauris consectetur ex vel tempus posuere. Quisque sit amet placerat risus, vitae suscipit massa. Maecenas molestie scelerisque ipsum, ac porta purus dapibus ut. Phasellus rhoncus sit amet lorem nec vulputate. Sed quis erat erat. In congue at nisi in tristique. Pellentesque auctor, nunc ut hendrerit laoreet, neque urna sagittis orci, sit amet accumsan nisi velit et diam. Phasellus sit amet posuere mauris. In hac habitasse platea dictumst. Quisque eget consectetur lectus. Nam finibus porttitor augue, sed fermentum augue vehicula id. Pellentesque convallis auctor condimentum. Donec at pharetra ipsum, id consequat turpis.
+
+Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut semper urna ac imperdiet imperdiet. Duis aliquam enim vel dolor euismod, vel posuere enim cursus. Sed tristique dui vitae lacus facilisis gravida. Donec quis nisl sed mi iaculis placerat. Integer dictum elit quis enim venenatis, eu egestas odio porttitor. Proin ac ipsum semper, tincidunt lectus vitae, elementum nibh. Nunc facilisis scelerisque nibh, eget tincidunt tellus rhoncus non. Etiam luctus tellus a eros dignissim, nec mollis lacus elementum. Fusce tincidunt porta efficitur. Aenean id volutpat sapien, vel fermentum augue. Cras sed dapibus risus. Etiam mi felis, blandit sed rutrum ut, rhoncus sit amet nisi. In quis sem finibus, posuere tortor sit amet, lacinia enim. Proin nibh neque, commodo luctus sagittis in, luctus non diam. Donec semper commodo nunc, et laoreet risus feugiat eget.
+
+Phasellus pulvinar tellus id libero mattis, quis sollicitudin arcu hendrerit. Quisque nec posuere mi, nec luctus magna. Ut consectetur ante vel velit congue, ac vulputate turpis molestie. Maecenas quis diam dolor. Pellentesque rhoncus porta condimentum. Aliquam malesuada leo quis placerat posuere. Duis maximus mauris hendrerit lacus viverra auctor. Morbi in urna libero. Donec dictum, justo a tincidunt dictum, enim mauris condimentum erat, non lobortis ex risus sed sapien. Sed ac sapien luctus, vehicula justo lobortis, congue orci. Praesent ultricies turpis vel ex pretium placerat.
+
+Maecenas ultricies dolor eget lorem vestibulum sodales. Nam tortor elit, bibendum malesuada ante et, pharetra mollis tellus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis ligula nisi, blandit eget condimentum ut, facilisis et urna. Nunc sed velit a urna mattis malesuada. Etiam convallis quam libero, quis maximus metus lacinia non. Donec cursus, justo feugiat scelerisque pretium, leo felis lacinia nulla, vel pharetra mi sem id risus. Aliquam eu metus ac dolor varius ultrices. Nulla faucibus lorem sit amet libero aliquam ullamcorper. Nulla eu quam vulputate, volutpat sapien in, tincidunt neque. Nullam sapien erat, iaculis sed orci vel, porta efficitur lorem. Phasellus a nibh sagittis, iaculis erat ut, egestas risus. Nulla diam massa, dictum at vehicula quis, malesuada sed mi. Morbi vitae dolor quam. Ut bibendum rutrum felis, quis dignissim felis interdum nec.
+
+In vitae faucibus erat, at tristique nisi. Mauris eget sodales lacus, eget mattis ipsum. Integer at iaculis purus. Quisque non elementum orci. Nulla non orci convallis, convallis orci et, rhoncus felis. Fusce nec velit enim. Nam imperdiet et sem vitae gravida. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris placerat maximus aliquet. Donec sagittis augue rutrum consequat egestas.
+
+Vestibulum faucibus, ante tincidunt porttitor malesuada, arcu eros mollis elit, id gravida ante mauris in nisl. Morbi eros sem, ultrices vel leo a, efficitur scelerisque mi. Sed posuere sit amet erat quis facilisis. Vivamus posuere sem ut orci sodales aliquam. Nulla facilisi. Etiam pulvinar finibus augue, vel interdum purus placerat sit amet. Morbi placerat interdum aliquet. Nulla fermentum urna at hendrerit tempus. Vestibulum vitae ultrices dolor.
+
+Duis fringilla mauris ut efficitur egestas. Praesent quis sapien risus. Nulla quis quam nec nulla semper viverra quis vel lorem. Donec commodo faucibus magna eget vestibulum. In hac habitasse platea dictumst. Fusce ullamcorper odio nulla, nec egestas enim efficitur et. Donec pharetra ipsum libero, nec mollis quam posuere nec. Aliquam vitae egestas arcu. Quisque interdum rutrum neque convallis convallis. Nulla non consequat quam. Pellentesque et nisi dictum, posuere nibh vel, eleifend turpis. Praesent tincidunt sodales leo ac efficitur. Phasellus arcu ipsum, molestie ac orci vitae, euismod sodales metus.
+
+Duis est lectus, vestibulum at arcu sed, suscipit pellentesque nisi. Nulla arcu ante, feugiat nec diam ac, auctor ullamcorper nibh. Praesent a arcu sed massa vestibulum condimentum. Etiam gravida at massa in ullamcorper. Aenean finibus, metus et consectetur viverra, augue eros finibus purus, eget sollicitudin erat purus feugiat sapien. Morbi mattis orci sit amet sem semper, non fringilla quam dignissim. Fusce aliquam dolor et lectus pellentesque lobortis. 
+
+\subsection{Squeeze-and-Excitation (SE Layer)} % (fold)
+\label{sub:amet}
+Nulla nec accumsan risus. Mauris consectetur ex vel tempus posuere. Quisque sit amet placerat risus, vitae suscipit massa. Maecenas molestie scelerisque ipsum, ac porta purus dapibus ut. Phasellus rhoncus sit amet lorem nec vulputate. Sed quis erat erat. In congue at nisi in tristique. Pellentesque auctor, nunc ut hendrerit laoreet, neque urna sagittis orci, sit amet accumsan nisi velit et diam. Phasellus sit amet posuere mauris. In hac habitasse platea dictumst. Quisque eget consectetur lectus. Nam finibus porttitor augue, sed fermentum augue vehicula id. Pellentesque convallis auctor condimentum. Donec at pharetra ipsum, id consequat turpis.
+
+Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut semper urna ac imperdiet imperdiet. Duis aliquam enim vel dolor euismod, vel posuere enim cursus. Sed tristique dui vitae lacus facilisis gravida. Donec quis nisl sed mi iaculis placerat. Integer dictum elit quis enim venenatis, eu egestas odio porttitor. Proin ac ipsum semper, tincidunt lectus vitae, elementum nibh. Nunc facilisis scelerisque nibh, eget tincidunt tellus rhoncus non. Etiam luctus tellus a eros dignissim, nec mollis lacus elementum. Fusce tincidunt porta efficitur. Aenean id volutpat sapien, vel fermentum augue. Cras sed dapibus risus. Etiam mi felis, blandit sed rutrum ut, rhoncus sit amet nisi. In quis sem finibus, posuere tortor sit amet, lacinia enim. Proin nibh neque, commodo luctus sagittis in, luctus non diam. Donec semper commodo nunc, et laoreet risus feugiat eget.
+
+Phasellus pulvinar tellus id libero mattis, quis sollicitudin arcu hendrerit. Quisque nec posuere mi, nec luctus magna. Ut consectetur ante vel velit congue, ac vulputate turpis molestie. Maecenas quis diam dolor. Pellentesque rhoncus porta condimentum. Aliquam malesuada leo quis placerat posuere. Duis maximus mauris hendrerit lacus viverra auctor. Morbi in urna libero. Donec dictum, justo a tincidunt dictum, enim mauris condimentum erat, non lobortis ex risus sed sapien. Sed ac sapien luctus, vehicula justo lobortis, congue orci. Praesent ultricies turpis vel ex pretium placerat.
+
+Maecenas ultricies dolor eget lorem vestibulum sodales. Nam tortor elit, bibendum malesuada ante et, pharetra mollis tellus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis ligula nisi, blandit eget condimentum ut, facilisis et urna. Nunc sed velit a urna mattis malesuada. Etiam convallis quam libero, quis maximus metus lacinia non. Donec cursus, justo feugiat scelerisque pretium, leo felis lacinia nulla, vel pharetra mi sem id risus. Aliquam eu metus ac dolor varius ultrices. Nulla faucibus lorem sit amet libero aliquam ullamcorper. Nulla eu quam vulputate, volutpat sapien in, tincidunt neque. Nullam sapien erat, iaculis sed orci vel, porta efficitur lorem. Phasellus a nibh sagittis, iaculis erat ut, egestas risus. Nulla diam massa, dictum at vehicula quis, malesuada sed mi. Morbi vitae dolor quam. Ut bibendum rutrum felis, quis dignissim felis interdum nec.
+
+In vitae faucibus erat, at tristique nisi. Mauris eget sodales lacus, eget mattis ipsum. Integer at iaculis purus. Quisque non elementum orci. Nulla non orci convallis, convallis orci et, rhoncus felis. Fusce nec velit enim. Nam imperdiet et sem vitae gravida. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris placerat maximus aliquet. Donec sagittis augue rutrum consequat egestas.
+% subsection amet (end)
+% section ipsum (end)
+% section examples (end)
+
+
+\chapter{Experiments}
+\label{sec:examples}
+This paper proposes a unifying approach that is capable of (1) imaging single-cell morphology of hundreds of thousands of peripheral blood cells and (2) data-driven learning of characteristic mythologies (possibly of rare cell subsets) indicative of the presence of the disease.
+
+As we originally designed the unifying approach for Sezary Syndrome, which is an aggressive cutaneous T cell lymphoma that is characterized by presence of tumor T cells with abnormal nucleus morphology in the peripheral blood. Morphological identification of tumor T cells in the blood is currently still the gold standard.
+After Image Flow Cytometry there are huge amount of cell images produced from patient as well as healthy data set for comparison. Due to different experimental conditions, such as lighting conditions and different experimental objects, noise deviations are likely to appear on the sampled cell images, moreover, these deviations do not appear in the better quality and pure evaluation data set which leads to higher false negative.
+\subsection[Awesome Figures in the TOC]{Awesome Figures} % (fold)
+\label{sub:figures}
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[width=\textwidth]{lenna.png}
+			\caption{Lenna}
+			\label{fig:lenna}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{lenna.png}}
+			\caption{Lenna facing left}
+			\label{fig:lenna_facing_left}
+		\end{subfigure}
+	\end{center}
+	\caption{The famous Lenna image used in Computer Vision with subcaptions and a global caption.}
+	\label{fig:lennas}
+\end{figure}
+The figure can be referenced in the text \eg\reffig{lennas}.
+Also the subfigures can be referenced \eg\reffig{lenna}, \reffig{lenna_facing_left}.
+% subsection figures (end)
+
+\subsection{Citations} % (fold)
+\label{sub:citations}
+You can cite books from your bibliography \texttt{thesis.bib} (\eg \cite{cochrane}).
+Abbreviations from \texttt{abbrev.bib} help in writing the entries.
+% subsection citations (end)
+
+\subsection{FixMe warnings}
+\label{sub:fixme}
+You can add warnings\fxwarning{WARNING} or notifications\fxnote{Note} to your text.
+This will help you keep an overview on the places in the text you have to work on.
+
+\section{Sezary Sydrome Dataset}
+\label{sec:lorem}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a nibh vulputate sapien condimentum vestibulum. Pellentesque tortor orci, aliquam eget odio a, aliquam tristique ante. Nulla tincidunt augue nec eros fringilla pretium. In ultrices fermentum erat quis imperdiet. Integer diam massa, egestas at nunc eu, aliquam placerat turpis. Suspendisse potenti. Nam luctus euismod nisl et volutpat. Sed at turpis ex. In facilisis quam neque, vitae lobortis felis fringilla quis. Phasellus porttitor leo eget massa efficitur, vel commodo diam venenatis. Vestibulum fringilla neque sed laoreet aliquam. Nulla sodales sodales velit ac fermentum.
+
+In finibus pulvinar rhoncus. Mauris facilisis sit amet diam vel fermentum. Praesent laoreet dolor quis aliquet scelerisque. Integer condimentum, tortor dapibus vestibulum tristique, dui mauris posuere lectus, sed porttitor nisi dolor et ipsum. Nullam dignissim tortor ut mauris porta, ut gravida nisl fermentum. Morbi mattis egestas libero, quis elementum orci ornare nec. Morbi ultrices dolor eget arcu hendrerit ullamcorper. Nulla dui augue, molestie ac lobortis nec, pulvinar vitae quam. Cras neque nulla, pulvinar non vehicula quis, tincidunt id quam.
+
+Etiam massa felis, tincidunt vel tincidunt ut, commodo id ipsum. Fusce blandit metus eget egestas mollis. Suspendisse interdum sem pellentesque ligula finibus, ac pretium metus lobortis. Integer id convallis felis, quis volutpat sapien. Phasellus elementum fermentum augue in mattis. Mauris pretium ipsum ornare augue sollicitudin hendrerit. Proin imperdiet interdum pretium. Nam in fringilla nisi, nec sollicitudin lacus. Pellentesque semper sapien vitae nulla scelerisque, ac convallis tortor porttitor. Fusce dolor tellus, porta vel magna vel, gravida ultrices eros. Integer sit amet nisl posuere, consectetur ante et, vulputate nulla. In a fringilla nisl.
+
+Praesent vitae metus interdum, eleifend odio et, vehicula arcu. Suspendisse vulputate viverra enim ut convallis. Nunc nec gravida orci, suscipit interdum lacus. Morbi varius urna a dolor convallis, nec pulvinar massa maximus. Donec sed est ac odio scelerisque fringilla. Proin ac purus nec dolor porttitor tempor et sed dui. Vivamus arcu velit, vulputate sed fringilla dignissim, porta volutpat ipsum. Donec at venenatis lacus.
+
+Vestibulum hendrerit, justo at laoreet dapibus, tortor orci placerat nunc, sed sodales massa quam eget dui. Pellentesque a ipsum non quam sodales pellentesque non eget sem. Pellentesque dignissim accumsan congue. Etiam nec odio at ipsum mollis lobortis. Nam tempus suscipit posuere. In mollis lacus in nulla lobortis sagittis id vitae lorem. Maecenas id libero sit amet lacus porta porta. Nam eu justo a enim efficitur commodo at et turpis. Vestibulum efficitur, elit eget vestibulum sollicitudin, ipsum massa luctus nunc, ut lobortis nisi magna ac velit. Morbi finibus elit a sagittis mattis. Duis ac scelerisque libero. Aliquam aliquam dui urna, quis pulvinar risus rutrum vitae. Curabitur quis lorem tristique, consequat magna vitae, tincidunt diam. Nam viverra velit nec leo mattis, eu mollis tellus imperdiet. Vestibulum nibh nulla, porta eget venenatis non, commodo pulvinar ex.
+% section lorem (end)
+
+\section{Pneumonia Dataset}
+\label{sec:ipsum}
+Mauris ultrices commodo risus, mollis congue dui scelerisque elementum. Nam ac dictum augue. Vestibulum convallis vel dui et porttitor. Aenean a commodo justo. Integer condimentum pulvinar massa, eu venenatis metus bibendum aliquam. Aenean ac tristique nisl, ut maximus tortor. Duis venenatis ultricies tellus, non dignissim metus feugiat vel. Curabitur a lorem ligula. Nunc commodo erat id mauris condimentum euismod. Etiam vel sodales augue. Donec id tincidunt tellus. Pellentesque tempus ultricies lobortis. Vestibulum magna velit, iaculis rhoncus aliquet sed, congue vitae risus. Suspendisse iaculis, nibh at imperdiet tincidunt, mi metus pharetra tortor, quis posuere est ante id ex.
+
+\subsection{Dolor sit} % (fold)
+\label{sub:dolor_sit}
+Fusce a tortor sit amet quam suscipit commodo non eget massa. Vestibulum semper accumsan tristique. Aenean posuere laoreet sollicitudin. Vivamus nec ligula et nunc ornare pellentesque. Aenean vulputate vestibulum risus facilisis condimentum. Morbi ac ex magna. In feugiat ligula in nisi tincidunt malesuada. Morbi convallis nunc id nisi ultrices venenatis. Donec in felis vel lectus lobortis malesuada. Morbi ut neque nulla. Quisque augue nibh, tempor in elit at, convallis gravida enim. Integer iaculis nibh eget commodo mollis. Vivamus at viverra eros. Pellentesque eu elit velit. Nunc nec ligula diam.
+
+Suspendisse tempus id neque vel ultricies. Vivamus efficitur dui non enim vehicula, sed faucibus massa consectetur. Aenean lacinia sapien quis pellentesque auctor. Vestibulum auctor dui a orci imperdiet, vitae posuere sapien vulputate. In eget augue quis erat rhoncus dignissim ut nec felis. Ut dignissim, ligula a porta sollicitudin, erat enim maximus sapien, vitae vehicula ligula eros sed mauris. Maecenas vehicula, mauris nec sagittis pellentesque, mauris turpis volutpat sapien, vitae mattis magna enim sit amet ligula.
+
+Duis sem elit, egestas eleifend auctor quis, elementum nec nisi. Sed sed ipsum ac mi rutrum pretium. Maecenas a pulvinar eros. Integer eget pretium arcu, at egestas ante. Donec neque magna, pellentesque in justo et, convallis congue enim. Etiam et quam sit amet mi ullamcorper pretium vitae id ligula. Maecenas ac ligula justo. Curabitur gravida nunc tincidunt auctor rhoncus. Donec sit amet ante ipsum. In quis ullamcorper ex. Cras ac ullamcorper orci, et aliquet enim. Nam in elit sit amet tortor finibus interdum.
+
+Sed ac facilisis augue. Cras nec nisl consequat, gravida tortor vitae, tincidunt nisi. Duis posuere eu orci at luctus. Morbi nec malesuada arcu. Aliquam erat volutpat. Maecenas pharetra in nisi sed molestie. Cras id urna eu nunc ullamcorper volutpat a sit amet elit. Donec tincidunt laoreet ipsum, a sagittis tellus laoreet sodales. Aliquam in ultricies sapien, semper tempus nisl. Pellentesque lectus nisi, tempus ut fermentum quis, pulvinar ac velit.
+
+Duis laoreet pellentesque libero, egestas mattis ante maximus id. Donec convallis felis vel neque placerat ornare. Curabitur id iaculis lectus. Duis vitae tristique lectus. Sed maximus aliquet nisl, quis bibendum sem. Vestibulum ut ipsum a risus fermentum dapibus tincidunt semper lorem. Proin ante ante, euismod sed turpis eu, dictum bibendum ipsum. Praesent fermentum volutpat metus, quis fringilla arcu fermentum eget. Suspendisse quis condimentum sapien, ut sollicitudin metus. Ut in volutpat enim. Phasellus sapien est, varius in condimentum et, auctor et augue. Donec mattis malesuada leo, vitae pellentesque metus ornare vel. Pellentesque massa nulla, aliquet nec metus et, auctor porta lacus. Fusce ac ex faucibus, placerat nibh ac, fermentum leo. Curabitur interdum fermentum lacus, quis mollis erat suscipit nec. Vestibulum vel pellentesque ipsum, sit amet ultrices quam.
+
+Proin vestibulum nec risus ut porttitor. Pellentesque porta ipsum elit, quis lacinia quam vehicula eu. Nulla consectetur nulla ac euismod tincidunt. Curabitur quis auctor neque, eget viverra nibh. Vivamus porttitor aliquam leo id iaculis. Cras sed dapibus quam. Mauris ullamcorper lacus ut porta sollicitudin. Proin accumsan finibus dolor, eu suscipit massa interdum non. Maecenas lobortis sit amet leo in fringilla.
+% subsection dolor_sit (end)
+
+\subsection{Cifar-10 Dataset} % (fold)
+\label{sub:amet}
+Nulla nec accumsan risus. Mauris consectetur ex vel tempus posuere. Quisque sit amet placerat risus, vitae suscipit massa. Maecenas molestie scelerisque ipsum, ac porta purus dapibus ut. Phasellus rhoncus sit amet lorem nec vulputate. Sed quis erat erat. In congue at nisi in tristique. Pellentesque auctor, nunc ut hendrerit laoreet, neque urna sagittis orci, sit amet accumsan nisi velit et diam. Phasellus sit amet posuere mauris. In hac habitasse platea dictumst. Quisque eget consectetur lectus. Nam finibus porttitor augue, sed fermentum augue vehicula id. Pellentesque convallis auctor condimentum. Donec at pharetra ipsum, id consequat turpis.
+
+Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut semper urna ac imperdiet imperdiet. Duis aliquam enim vel dolor euismod, vel posuere enim cursus. Sed tristique dui vitae lacus facilisis gravida. Donec quis nisl sed mi iaculis placerat. Integer dictum elit quis enim venenatis, eu egestas odio porttitor. Proin ac ipsum semper, tincidunt lectus vitae, elementum nibh. Nunc facilisis scelerisque nibh, eget tincidunt tellus rhoncus non. Etiam luctus tellus a eros dignissim, nec mollis lacus elementum. Fusce tincidunt porta efficitur. Aenean id volutpat sapien, vel fermentum augue. Cras sed dapibus risus. Etiam mi felis, blandit sed rutrum ut, rhoncus sit amet nisi. In quis sem finibus, posuere tortor sit amet, lacinia enim. Proin nibh neque, commodo luctus sagittis in, luctus non diam. Donec semper commodo nunc, et laoreet risus feugiat eget.
+
+Phasellus pulvinar tellus id libero mattis, quis sollicitudin arcu hendrerit. Quisque nec posuere mi, nec luctus magna. Ut consectetur ante vel velit congue, ac vulputate turpis molestie. Maecenas quis diam dolor. Pellentesque rhoncus porta condimentum. Aliquam malesuada leo quis placerat posuere. Duis maximus mauris hendrerit lacus viverra auctor. Morbi in urna libero. Donec dictum, justo a tincidunt dictum, enim mauris condimentum erat, non lobortis ex risus sed sapien. Sed ac sapien luctus, vehicula justo lobortis, congue orci. Praesent ultricies turpis vel ex pretium placerat.
+
+Maecenas ultricies dolor eget lorem vestibulum sodales. Nam tortor elit, bibendum malesuada ante et, pharetra mollis tellus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis ligula nisi, blandit eget condimentum ut, facilisis et urna. Nunc sed velit a urna mattis malesuada. Etiam convallis quam libero, quis maximus metus lacinia non. Donec cursus, justo feugiat scelerisque pretium, leo felis lacinia nulla, vel pharetra mi sem id risus. Aliquam eu metus ac dolor varius ultrices. Nulla faucibus lorem sit amet libero aliquam ullamcorper. Nulla eu quam vulputate, volutpat sapien in, tincidunt neque. Nullam sapien erat, iaculis sed orci vel, porta efficitur lorem. Phasellus a nibh sagittis, iaculis erat ut, egestas risus. Nulla diam massa, dictum at vehicula quis, malesuada sed mi. Morbi vitae dolor quam. Ut bibendum rutrum felis, quis dignissim felis interdum nec.
+
+In vitae faucibus erat, at tristique nisi. Mauris eget sodales lacus, eget mattis ipsum. Integer at iaculis purus. Quisque non elementum orci. Nulla non orci convallis, convallis orci et, rhoncus felis. Fusce nec velit enim. Nam imperdiet et sem vitae gravida. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris placerat maximus aliquet. Donec sagittis augue rutrum consequat egestas.
+
+Vestibulum faucibus, ante tincidunt porttitor malesuada, arcu eros mollis elit, id gravida ante mauris in nisl. Morbi eros sem, ultrices vel leo a, efficitur scelerisque mi. Sed posuere sit amet erat quis facilisis. Vivamus posuere sem ut orci sodales aliquam. Nulla facilisi. Etiam pulvinar finibus augue, vel interdum purus placerat sit amet. Morbi placerat interdum aliquet. Nulla fermentum urna at hendrerit tempus. Vestibulum vitae ultrices dolor.
+
+Duis fringilla mauris ut efficitur egestas. Praesent quis sapien risus. Nulla quis quam nec nulla semper viverra quis vel lorem. Donec commodo faucibus magna eget vestibulum. In hac habitasse platea dictumst. Fusce ullamcorper odio nulla, nec egestas enim efficitur et. Donec pharetra ipsum libero, nec mollis quam posuere nec. Aliquam vitae egestas arcu. Quisque interdum rutrum neque convallis convallis. Nulla non consequat quam. Pellentesque et nisi dictum, posuere nibh vel, eleifend turpis. Praesent tincidunt sodales leo ac efficitur. Phasellus arcu ipsum, molestie ac orci vitae, euismod sodales metus.
+
+Duis est lectus, vestibulum at arcu sed, suscipit pellentesque nisi. Nulla arcu ante, feugiat nec diam ac, auctor ullamcorper nibh. Praesent a arcu sed massa vestibulum condimentum. Etiam gravida at massa in ullamcorper. Aenean finibus, metus et consectetur viverra, augue eros finibus purus, eget sollicitudin erat purus feugiat sapien. Morbi mattis orci sit amet sem semper, non fringilla quam dignissim. Fusce aliquam dolor et lectus pellentesque lobortis. 
+% subsection amet (end)
+% section ipsum (end)
+% section examples (end)
+
+\subsection{COVID-19 Dataset} % (fold)
+\label{sub:amet}
+Nulla nec accumsan risus. Mauris consectetur ex vel tempus posuere. Quisque sit amet placerat risus, vitae suscipit massa. Maecenas molestie scelerisque ipsum, ac porta purus dapibus ut. Phasellus rhoncus sit amet lorem nec vulputate. Sed quis erat erat. In congue at nisi in tristique. Pellentesque auctor, nunc ut hendrerit laoreet, neque urna sagittis orci, sit amet accumsan nisi velit et diam. Phasellus sit amet posuere mauris. In hac habitasse platea dictumst. Quisque eget consectetur lectus. Nam finibus porttitor augue, sed fermentum augue vehicula id. Pellentesque convallis auctor condimentum. Donec at pharetra ipsum, id consequat turpis.
+
+Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut semper urna ac imperdiet imperdiet. Duis aliquam enim vel dolor euismod, vel posuere enim cursus. Sed tristique dui vitae lacus facilisis gravida. Donec quis nisl sed mi iaculis placerat. Integer dictum elit quis enim venenatis, eu egestas odio porttitor. Proin ac ipsum semper, tincidunt lectus vitae, elementum nibh. Nunc facilisis scelerisque nibh, eget tincidunt tellus rhoncus non. Etiam luctus tellus a eros dignissim, nec mollis lacus elementum. Fusce tincidunt porta efficitur. Aenean id volutpat sapien, vel fermentum augue. Cras sed dapibus risus. Etiam mi felis, blandit sed rutrum ut, rhoncus sit amet nisi. In quis sem finibus, posuere tortor sit amet, lacinia enim. Proin nibh neque, commodo luctus sagittis in, luctus non diam. Donec semper commodo nunc, et laoreet risus feugiat eget.
+
+Phasellus pulvinar tellus id libero mattis, quis sollicitudin arcu hendrerit. Quisque nec posuere mi, nec luctus magna. Ut consectetur ante vel velit congue, ac vulputate turpis molestie. Maecenas quis diam dolor. Pellentesque rhoncus porta condimentum. Aliquam malesuada leo quis placerat posuere. Duis maximus mauris hendrerit lacus viverra auctor. Morbi in urna libero. Donec dictum, justo a tincidunt dictum, enim mauris condimentum erat, non lobortis ex risus sed sapien. Sed ac sapien luctus, vehicula justo lobortis, congue orci. Praesent ultricies turpis vel ex pretium placerat.
+
+Maecenas ultricies dolor eget lorem vestibulum sodales. Nam tortor elit, bibendum malesuada ante et, pharetra mollis tellus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis ligula nisi, blandit eget condimentum ut, facilisis et urna. Nunc sed velit a urna mattis malesuada. Etiam convallis quam libero, quis maximus metus lacinia non. Donec cursus, justo feugiat scelerisque pretium, leo felis lacinia nulla, vel pharetra mi sem id risus. Aliquam eu metus ac dolor varius ultrices. Nulla faucibus lorem sit amet libero aliquam ullamcorper. Nulla eu quam vulputate, volutpat sapien in, tincidunt neque. Nullam sapien erat, iaculis sed orci vel, porta efficitur lorem. Phasellus a nibh sagittis, iaculis erat ut, egestas risus. Nulla diam massa, dictum at vehicula quis, malesuada sed mi. Morbi vitae dolor quam. Ut bibendum rutrum felis, quis dignissim felis interdum nec.
+
+In vitae faucibus erat, at tristique nisi. Mauris eget sodales lacus, eget mattis ipsum. Integer at iaculis purus. Quisque non elementum orci. Nulla non orci convallis, convallis orci et, rhoncus felis. Fusce nec velit enim. Nam imperdiet et sem vitae gravida. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris placerat maximus aliquet. Donec sagittis augue rutrum consequat egestas.
+
+Vestibulum faucibus, ante tincidunt porttitor malesuada, arcu eros mollis elit, id gravida ante mauris in nisl. Morbi eros sem, ultrices vel leo a, efficitur scelerisque mi. Sed posuere sit amet erat quis facilisis. Vivamus posuere sem ut orci sodales aliquam. Nulla facilisi. Etiam pulvinar finibus augue, vel interdum purus placerat sit amet. Morbi placerat interdum aliquet. Nulla fermentum urna at hendrerit tempus. Vestibulum vitae ultrices dolor.
+
+Duis fringilla mauris ut efficitur egestas. Praesent quis sapien risus. Nulla quis quam nec nulla semper viverra quis vel lorem. Donec commodo faucibus magna eget vestibulum. In hac habitasse platea dictumst. Fusce ullamcorper odio nulla, nec egestas enim efficitur et. Donec pharetra ipsum libero, nec mollis quam posuere nec. Aliquam vitae egestas arcu. Quisque interdum rutrum neque convallis convallis. Nulla non consequat quam. Pellentesque et nisi dictum, posuere nibh vel, eleifend turpis. Praesent tincidunt sodales leo ac efficitur. Phasellus arcu ipsum, molestie ac orci vitae, euismod sodales metus.
+
+Duis est lectus, vestibulum at arcu sed, suscipit pellentesque nisi. Nulla arcu ante, feugiat nec diam ac, auctor ullamcorper nibh. Praesent a arcu sed massa vestibulum condimentum. Etiam gravida at massa in ullamcorper. Aenean finibus, metus et consectetur viverra, augue eros finibus purus, eget sollicitudin erat purus feugiat sapien. Morbi mattis orci sit amet sem semper, non fringilla quam dignissim. Fusce aliquam dolor et lectus pellentesque lobortis. 
+% subsection amet (end)
+% section ipsum (end)
+% section examples (end)
+
+
+
+
+
+
+\chapter{Ablation Study}
+\label{sec:examples}
+This paper proposes a unifying approach that is capable of (1) imaging single-cell morphology of hundreds of thousands of peripheral blood cells and (2) data-driven learning of characteristic mythologies (possibly of rare cell subsets) indicative of the presence of the disease.
+
+As we originally designed the unifying approach for Sezary Syndrome, which is an aggressive cutaneous T cell lymphoma that is characterized by presence of tumor T cells with abnormal nucleus morphology in the peripheral blood. Morphological identification of tumor T cells in the blood is currently still the gold standard.
+After Image Flow Cytometry there are huge amount of cell images produced from patient as well as healthy data set for comparison. Due to different experimental conditions, such as lighting conditions and different experimental objects, noise deviations are likely to appear on the sampled cell images, moreover, these deviations do not appear in the better quality and pure evaluation data set which leads to higher false negative.
+\subsection[Awesome Figures in the TOC]{Awesome Figures} % (fold)
+\label{sub:figures}
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[width=\textwidth]{lenna.png}
+			\caption{Lenna}
+			\label{fig:lenna}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{lenna.png}}
+			\caption{Lenna facing left}
+			\label{fig:lenna_facing_left}
+		\end{subfigure}
+	\end{center}
+	\caption{The famous Lenna image used in Computer Vision with subcaptions and a global caption.}
+	\label{fig:lennas}
+\end{figure}
+The figure can be referenced in the text \eg\reffig{lennas}.
+Also the subfigures can be referenced \eg\reffig{lenna}, \reffig{lenna_facing_left}.
+% subsection figures (end)
+
+\subsection{Citations} % (fold)
+\label{sub:citations}
+You can cite books from your bibliography \texttt{thesis.bib} (\eg \cite{cochrane}).
+Abbreviations from \texttt{abbrev.bib} help in writing the entries.
+% subsection citations (end)
+
+\subsection{FixMe warnings}
+\label{sub:fixme}
+You can add warnings\fxwarning{WARNING} or notifications\fxnote{Note} to your text.
+This will help you keep an overview on the places in the text you have to work on.
+
+\section{Architectural Design Choices }
+\label{sec:lorem}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a nibh vulputate sapien condimentum vestibulum. Pellentesque tortor orci, aliquam eget odio a, aliquam tristique ante. Nulla tincidunt augue nec eros fringilla pretium. In ultrices fermentum erat quis imperdiet. Integer diam massa, egestas at nunc eu, aliquam placerat turpis. Suspendisse potenti. Nam luctus euismod nisl et volutpat. Sed at turpis ex. In facilisis quam neque, vitae lobortis felis fringilla quis. Phasellus porttitor leo eget massa efficitur, vel commodo diam venenatis. Vestibulum fringilla neque sed laoreet aliquam. Nulla sodales sodales velit ac fermentum.
+
+In finibus pulvinar rhoncus. Mauris facilisis sit amet diam vel fermentum. Praesent laoreet dolor quis aliquet scelerisque. Integer condimentum, tortor dapibus vestibulum tristique, dui mauris posuere lectus, sed porttitor nisi dolor et ipsum. Nullam dignissim tortor ut mauris porta, ut gravida nisl fermentum. Morbi mattis egestas libero, quis elementum orci ornare nec. Morbi ultrices dolor eget arcu hendrerit ullamcorper. Nulla dui augue, molestie ac lobortis nec, pulvinar vitae quam. Cras neque nulla, pulvinar non vehicula quis, tincidunt id quam.
+
+Etiam massa felis, tincidunt vel tincidunt ut, commodo id ipsum. Fusce blandit metus eget egestas mollis. Suspendisse interdum sem pellentesque ligula finibus, ac pretium metus lobortis. Integer id convallis felis, quis volutpat sapien. Phasellus elementum fermentum augue in mattis. Mauris pretium ipsum ornare augue sollicitudin hendrerit. Proin imperdiet interdum pretium. Nam in fringilla nisi, nec sollicitudin lacus. Pellentesque semper sapien vitae nulla scelerisque, ac convallis tortor porttitor. Fusce dolor tellus, porta vel magna vel, gravida ultrices eros. Integer sit amet nisl posuere, consectetur ante et, vulputate nulla. In a fringilla nisl.
+
+Praesent vitae metus interdum, eleifend odio et, vehicula arcu. Suspendisse vulputate viverra enim ut convallis. Nunc nec gravida orci, suscipit interdum lacus. Morbi varius urna a dolor convallis, nec pulvinar massa maximus. Donec sed est ac odio scelerisque fringilla. Proin ac purus nec dolor porttitor tempor et sed dui. Vivamus arcu velit, vulputate sed fringilla dignissim, porta volutpat ipsum. Donec at venenatis lacus.
+
+Vestibulum hendrerit, justo at laoreet dapibus, tortor orci placerat nunc, sed sodales massa quam eget dui. Pellentesque a ipsum non quam sodales pellentesque non eget sem. Pellentesque dignissim accumsan congue. Etiam nec odio at ipsum mollis lobortis. Nam tempus suscipit posuere. In mollis lacus in nulla lobortis sagittis id vitae lorem. Maecenas id libero sit amet lacus porta porta. Nam eu justo a enim efficitur commodo at et turpis. Vestibulum efficitur, elit eget vestibulum sollicitudin, ipsum massa luctus nunc, ut lobortis nisi magna ac velit. Morbi finibus elit a sagittis mattis. Duis ac scelerisque libero. Aliquam aliquam dui urna, quis pulvinar risus rutrum vitae. Curabitur quis lorem tristique, consequat magna vitae, tincidunt diam. Nam viverra velit nec leo mattis, eu mollis tellus imperdiet. Vestibulum nibh nulla, porta eget venenatis non, commodo pulvinar ex.
+% section lorem (end)
+
+\section{Runtime}
+\label{sec:ipsum}
+Mauris ultrices commodo risus, mollis congue dui scelerisque elementum. Nam ac dictum augue. Vestibulum convallis vel dui et porttitor. Aenean a commodo justo. Integer condimentum pulvinar massa, eu venenatis metus bibendum aliquam. Aenean ac tristique nisl, ut maximus tortor. Duis venenatis ultricies tellus, non dignissim metus feugiat vel. Curabitur a lorem ligula. Nunc commodo erat id mauris condimentum euismod. Etiam vel sodales augue. Donec id tincidunt tellus. Pellentesque tempus ultricies lobortis. Vestibulum magna velit, iaculis rhoncus aliquet sed, congue vitae risus. Suspendisse iaculis, nibh at imperdiet tincidunt, mi metus pharetra tortor, quis posuere est ante id ex.
+
+\subsection{Dolor sit} % (fold)
+\label{sub:dolor_sit}
+Fusce a tortor sit amet quam suscipit commodo non eget massa. Vestibulum semper accumsan tristique. Aenean posuere laoreet sollicitudin. Vivamus nec ligula et nunc ornare pellentesque. Aenean vulputate vestibulum risus facilisis condimentum. Morbi ac ex magna. In feugiat ligula in nisi tincidunt malesuada. Morbi convallis nunc id nisi ultrices venenatis. Donec in felis vel lectus lobortis malesuada. Morbi ut neque nulla. Quisque augue nibh, tempor in elit at, convallis gravida enim. Integer iaculis nibh eget commodo mollis. Vivamus at viverra eros. Pellentesque eu elit velit. Nunc nec ligula diam.
+
+Suspendisse tempus id neque vel ultricies. Vivamus efficitur dui non enim vehicula, sed faucibus massa consectetur. Aenean lacinia sapien quis pellentesque auctor. Vestibulum auctor dui a orci imperdiet, vitae posuere sapien vulputate. In eget augue quis erat rhoncus dignissim ut nec felis. Ut dignissim, ligula a porta sollicitudin, erat enim maximus sapien, vitae vehicula ligula eros sed mauris. Maecenas vehicula, mauris nec sagittis pellentesque, mauris turpis volutpat sapien, vitae mattis magna enim sit amet ligula.
+
+Duis sem elit, egestas eleifend auctor quis, elementum nec nisi. Sed sed ipsum ac mi rutrum pretium. Maecenas a pulvinar eros. Integer eget pretium arcu, at egestas ante. Donec neque magna, pellentesque in justo et, convallis congue enim. Etiam et quam sit amet mi ullamcorper pretium vitae id ligula. Maecenas ac ligula justo. Curabitur gravida nunc tincidunt auctor rhoncus. Donec sit amet ante ipsum. In quis ullamcorper ex. Cras ac ullamcorper orci, et aliquet enim. Nam in elit sit amet tortor finibus interdum.
+
+Sed ac facilisis augue. Cras nec nisl consequat, gravida tortor vitae, tincidunt nisi. Duis posuere eu orci at luctus. Morbi nec malesuada arcu. Aliquam erat volutpat. Maecenas pharetra in nisi sed molestie. Cras id urna eu nunc ullamcorper volutpat a sit amet elit. Donec tincidunt laoreet ipsum, a sagittis tellus laoreet sodales. Aliquam in ultricies sapien, semper tempus nisl. Pellentesque lectus nisi, tempus ut fermentum quis, pulvinar ac velit.
+
+Duis laoreet pellentesque libero, egestas mattis ante maximus id. Donec convallis felis vel neque placerat ornare. Curabitur id iaculis lectus. Duis vitae tristique lectus. Sed maximus aliquet nisl, quis bibendum sem. Vestibulum ut ipsum a risus fermentum dapibus tincidunt semper lorem. Proin ante ante, euismod sed turpis eu, dictum bibendum ipsum. Praesent fermentum volutpat metus, quis fringilla arcu fermentum eget. Suspendisse quis condimentum sapien, ut sollicitudin metus. Ut in volutpat enim. Phasellus sapien est, varius in condimentum et, auctor et augue. Donec mattis malesuada leo, vitae pellentesque metus ornare vel. Pellentesque massa nulla, aliquet nec metus et, auctor porta lacus. Fusce ac ex faucibus, placerat nibh ac, fermentum leo. Curabitur interdum fermentum lacus, quis mollis erat suscipit nec. Vestibulum vel pellentesque ipsum, sit amet ultrices quam.
+
+Proin vestibulum nec risus ut porttitor. Pellentesque porta ipsum elit, quis lacinia quam vehicula eu. Nulla consectetur nulla ac euismod tincidunt. Curabitur quis auctor neque, eget viverra nibh. Vivamus porttitor aliquam leo id iaculis. Cras sed dapibus quam. Mauris ullamcorper lacus ut porta sollicitudin. Proin accumsan finibus dolor, eu suscipit massa interdum non. Maecenas lobortis sit amet leo in fringilla.
+% subsection dolor_sit (end)
+
+\subsection{Transfer Learning} % (fold)
+\label{sub:amet}
+Nulla nec accumsan risus. Mauris consectetur ex vel tempus posuere. Quisque sit amet placerat risus, vitae suscipit massa. Maecenas molestie scelerisque ipsum, ac porta purus dapibus ut. Phasellus rhoncus sit amet lorem nec vulputate. Sed quis erat erat. In congue at nisi in tristique. Pellentesque auctor, nunc ut hendrerit laoreet, neque urna sagittis orci, sit amet accumsan nisi velit et diam. Phasellus sit amet posuere mauris. In hac habitasse platea dictumst. Quisque eget consectetur lectus. Nam finibus porttitor augue, sed fermentum augue vehicula id. Pellentesque convallis auctor condimentum. Donec at pharetra ipsum, id consequat turpis.
+
+Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut semper urna ac imperdiet imperdiet. Duis aliquam enim vel dolor euismod, vel posuere enim cursus. Sed tristique dui vitae lacus facilisis gravida. Donec quis nisl sed mi iaculis placerat. Integer dictum elit quis enim venenatis, eu egestas odio porttitor. Proin ac ipsum semper, tincidunt lectus vitae, elementum nibh. Nunc facilisis scelerisque nibh, eget tincidunt tellus rhoncus non. Etiam luctus tellus a eros dignissim, nec mollis lacus elementum. Fusce tincidunt porta efficitur. Aenean id volutpat sapien, vel fermentum augue. Cras sed dapibus risus. Etiam mi felis, blandit sed rutrum ut, rhoncus sit amet nisi. In quis sem finibus, posuere tortor sit amet, lacinia enim. Proin nibh neque, commodo luctus sagittis in, luctus non diam. Donec semper commodo nunc, et laoreet risus feugiat eget.
+
+Phasellus pulvinar tellus id libero mattis, quis sollicitudin arcu hendrerit. Quisque nec posuere mi, nec luctus magna. Ut consectetur ante vel velit congue, ac vulputate turpis molestie. Maecenas quis diam dolor. Pellentesque rhoncus porta condimentum. Aliquam malesuada leo quis placerat posuere. Duis maximus mauris hendrerit lacus viverra auctor. Morbi in urna libero. Donec dictum, justo a tincidunt dictum, enim mauris condimentum erat, non lobortis ex risus sed sapien. Sed ac sapien luctus, vehicula justo lobortis, congue orci. Praesent ultricies turpis vel ex pretium placerat.
+
+Maecenas ultricies dolor eget lorem vestibulum sodales. Nam tortor elit, bibendum malesuada ante et, pharetra mollis tellus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis ligula nisi, blandit eget condimentum ut, facilisis et urna. Nunc sed velit a urna mattis malesuada. Etiam convallis quam libero, quis maximus metus lacinia non. Donec cursus, justo feugiat scelerisque pretium, leo felis lacinia nulla, vel pharetra mi sem id risus. Aliquam eu metus ac dolor varius ultrices. Nulla faucibus lorem sit amet libero aliquam ullamcorper. Nulla eu quam vulputate, volutpat sapien in, tincidunt neque. Nullam sapien erat, iaculis sed orci vel, porta efficitur lorem. Phasellus a nibh sagittis, iaculis erat ut, egestas risus. Nulla diam massa, dictum at vehicula quis, malesuada sed mi. Morbi vitae dolor quam. Ut bibendum rutrum felis, quis dignissim felis interdum nec.
+
+In vitae faucibus erat, at tristique nisi. Mauris eget sodales lacus, eget mattis ipsum. Integer at iaculis purus. Quisque non elementum orci. Nulla non orci convallis, convallis orci et, rhoncus felis. Fusce nec velit enim. Nam imperdiet et sem vitae gravida. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris placerat maximus aliquet. Donec sagittis augue rutrum consequat egestas.
+
+Vestibulum faucibus, ante tincidunt porttitor malesuada, arcu eros mollis elit, id gravida ante mauris in nisl. Morbi eros sem, ultrices vel leo a, efficitur scelerisque mi. Sed posuere sit amet erat quis facilisis. Vivamus posuere sem ut orci sodales aliquam. Nulla facilisi. Etiam pulvinar finibus augue, vel interdum purus placerat sit amet. Morbi placerat interdum aliquet. Nulla fermentum urna at hendrerit tempus. Vestibulum vitae ultrices dolor.
+
+Duis fringilla mauris ut efficitur egestas. Praesent quis sapien risus. Nulla quis quam nec nulla semper viverra quis vel lorem. Donec commodo faucibus magna eget vestibulum. In hac habitasse platea dictumst. Fusce ullamcorper odio nulla, nec egestas enim efficitur et. Donec pharetra ipsum libero, nec mollis quam posuere nec. Aliquam vitae egestas arcu. Quisque interdum rutrum neque convallis convallis. Nulla non consequat quam. Pellentesque et nisi dictum, posuere nibh vel, eleifend turpis. Praesent tincidunt sodales leo ac efficitur. Phasellus arcu ipsum, molestie ac orci vitae, euismod sodales metus.
+
+Duis est lectus, vestibulum at arcu sed, suscipit pellentesque nisi. Nulla arcu ante, feugiat nec diam ac, auctor ullamcorper nibh. Praesent a arcu sed massa vestibulum condimentum. Etiam gravida at massa in ullamcorper. Aenean finibus, metus et consectetur viverra, augue eros finibus purus, eget sollicitudin erat purus feugiat sapien. Morbi mattis orci sit amet sem semper, non fringilla quam dignissim. Fusce aliquam dolor et lectus pellentesque lobortis. 
+
+\subsection{Comparison on Linear cheap operations} % (fold)
+\label{sub:amet}
+Nulla nec accumsan risus. Mauris consectetur ex vel tempus posuere. Quisque sit amet placerat risus, vitae suscipit massa. Maecenas molestie scelerisque ipsum, ac porta purus dapibus ut. Phasellus rhoncus sit amet lorem nec vulputate. Sed quis erat erat. In congue at nisi in tristique. Pellentesque auctor, nunc ut hendrerit laoreet, neque urna sagittis orci, sit amet accumsan nisi velit et diam. Phasellus sit amet posuere mauris. In hac habitasse platea dictumst. Quisque eget consectetur lectus. Nam finibus porttitor augue, sed fermentum augue vehicula id. Pellentesque convallis auctor condimentum. Donec at pharetra ipsum, id consequat turpis.
+
+
+% subsection amet (end)
+% section ipsum (end)
+% section examples (end)
+
+
+
+
+\chapter{Discussion}
+\label{sec:examples}
+
+\section{CellNet Paper}
+\label{sec:lorem}
+
+This chapter is currently in preparation for submission to a peer-reviewed international journal.
+
+\textbf{Qiang Li, Corin Otesteanu, Manfred Claassen}
+
+Work performed at ETH Zurich support by IDEA League Research Grant.
+I generated the inducible cell images, designed, performed and analyzed the experiments and created the figures and the manuscript under the supervision of Dr. Corin Otesteanu and Prof. Dr. Manfred Claassen.
+
+\subsection{Abstract}
+\label{sec:abstract}
+Early diagnosis of cancer is a key determinant of patient outcome. However current existing state-of-the-art high-precision approaches on diagnosis of cancer are only of limited use in deriving a morphological signature in a diagnostic trial, since they require a cell type annotation for every single-cell image. Labeling a large number of data sets in actual cancer detection is very time-consuming and resource-intensive. Unsupervised learning or weakly supervised learning is often unable to apply in clinical medical cancer detection because of insufficient accuracy.
+
+This paper proposes a unifying approach that is capable of (1) imaging single-cell morphology of thousands of peripheral blood cells and (2) data-driven learning of morphological characteristics, which are indicative of the presence of the disease.
+Inspired by leading SOTA model, such as Deep Residual Learning\cite{b20} and Ghosts Net\cite{b19}, we proposed CellNet. Instead of stacking lots of point-wise convolutional layers and takes huge amount of convolutional manipulations, we can avoid the redundant feature maps by taking cheap operation. CellNet is originally designed for Sezary Syndrome Dataset and we provide comprehensive empirical evidence showing that CellNet has 1/4 weights than ResNet18 \cite{b20} and best classification performances on several other benchmarks such as CIFar10 \cite{b21} (92.451\% Top-1 accuracy), Pneumonia Dataset\cite{b38} (91.785\% Top-1 accuracy) and Sezary Syndrome Dataset (95.638\% Top-1 accuracy).
+
+In addition, we purposed AttentionNet Network as an automated data pro-processing tool which provides a new intuition for object recognition, eliminating noise artifacts out of the image precisely can effectively improve the classification performance of many SOTA networks. Instead of manually labeling a large amount of data after Image flow cytometry and PBMC samples \cite{b12}, it is possible to automatically label an object with an accuracy of 88.64 \% in 0.25 seconds by using AttentionNet. 
+
+We also produced the first COVID-19 Chest Xray/CT Dataset containing nearly 2,000 Xray/CT images (nearly 1,500 Healthy Xray/CT images and nearly 500 COVID-19 infected Xray/CT images). Experiments conducted on COVID-19 Datasets also demonstrated that the proposed CellNet is an impressive alternative of current baseline models, and our CellNet (94.719\% in Top-1 accuracy) outperforms the GhostNet\cite{b19} (92.739\%  in Top -1 accuracy) and other leading models. In addition, we developed a software application for potential diagnosis, which integrated with 12 leading SOTA models, including our CellNet. All code is available at \textit{https://github.com/Johnny-liqiang/CellNetUML}.
+
+\subsection{Introduction}
+\label{sec:Introduction}
+In addition to the fact that medical data sets in real-world scenarios are often too complex and contain large amounts of noisy data, the complexity and interpretability of the models greatly affect the difficulty of training and the probability of model adoption.
+An efficient neural architecture design could have very high potential for establishing highly efficient deep networks with fewer parameters and calculations\cite{b19}. Besides them, pre-processing of the data set may further improve classification accuracy.
+ 
+CellNet and AttentionNet are newly designed network based on the need for Sezary Syndrom diagnosis, and they are lightweight, easy to understand, and well generalized. Sezary Syndrom is an aggressive form of cutaneous T-cell lymphoma that is characterized by presence of tumor T-cells with abnormal nucleus morphology in the peripheral blood. The easy and precise detection of malignant cells in the blood of patients with Sezary Syndrome is of important diagnostic, prognostic and therapeutic value, and is essential for disease monitoring under treatment\cite{b6}\cite{b7}. We plan to circumvent the challenges involving the definition of molecular diagnostic markers through an automated procedure, integrating image flow cytometry and deep learning as a route to, ultra-high throughput and sensitive diagnosis.
+
+In the first step, AttentionNet has been developed to automatically annotate and segment cell images obtained from imaging flow cytometry experiments. AttentionNet as an efficient and accurate object detector emphasizing on small target, inherited the characteristics of the real-time detection of the YOLO network, while avoiding the low accuracy of the YOLO network in detecting small objects \cite{b33}. Inspired from the YOLOv3-tiny network\cite{b18}, we adopted the K Means++ algorithm to imply prior box knowledge for prediction. Experimental results demonstrate that AttentionNet is not only a cost efficient solution for practical application (Labeling/Segmenting each image takes only 0.25 seconds in Intel CPU), but also an effective way of improving accuracy of object classification. 
+
+Secondly, we proposed CellNet for cell classification. We apply similar Residual layer to forward and enable deeper neural network, and follow the basic architecture of ResNet18 and GhostNet for its superiority \cite{b19}\cite{b20}. Replace all the ResNet18 \cite{b20} point-wise convolutional layers (In total, 18 layers ) with novel Ghost Bottleneck. In additional, we adopted the SE layers from Squeeze-and-Excitation Networks \cite{b24} to enhance useful features, scale less inhibiting features map. In each ghost module, we first take point-wise convolution to get a few intrinsic feature maps, then we utilized the linear cheap transformation such as depth-wise convolution to generate more ghost feature maps with much lower cost.
+Despite its simplicity (only has 8 layers novel ghost module) and lower parameters ($1/4$ weights than ResNet18\cite{b20}, $1/2$ weights than GhostNet\cite{b19}), CellNet establishes a new state-of-the-art on Sezary Syndrome Dataset (95.638\% Top-1 accuracy) and CIFar10\cite{b21} ( 92.451\% Top-1 accuracy). Moreover, the same method is also very competitive against recent leading supervised approaches on Pneumonia Dataset (91.785\% Top-1 accuracy), where Inception V3 adopted after 7000 epochs reaches only 88.0\%\cite{b38}. 
+
+The remaining sections of this paper are organized as follows: Section 2 briefly outlines some of the most relevant  prior work in medical image classification and segmentation including a short introduction about YOLOv3 \cite{b33} algorithm, the most important intuition of Residual learning, and recently invention of Ghost module.
+Section 3 introduces our proposal. Section 4 presents experimental verification  and visualization on different benchmark data sets. Finally, conclusions are summarized in Section 5.
+
+\subsection{Related Work}
+\subsubsection{Biomedical image analysis}
+
+Deep learning systems rely on multi-layer neural networks that are able to extract increasingly complex, task-related features directly from the data. Recent developments in neural network architecture design and training have enabled researchers to solve previously intractable learning tasks in the field of computer vision. As a result, deep learning-based approaches have become very successful in addressing a wide range of biomedical image analysis tasks such as detection of skin cancers from photographic images \cite{b10}, detection of pneumonia on chest X-rays \cite{b13}, detection of breast cancer metastases in histopathology images and many others \cite{b2}. 
+The above approaches are only of limited use in deriving a morphological signature in a diagnostic trial, since they require a cell type annotation for every single-cell image.
+
+
+For the detection of rare disease-associated cell populations from single-cell mass cytometry data, CellCnn \cite{b3} implements a multiple instance learning approach to define proteomic profiles of cell sub-populations associated with disease status. For instance, using CellCnn to identify paracrine signaling-, AIDS onset- and rare CMV infection-associated cell subsets in peripheral blood and extremely rare leukemic blast populations in minimal residual disease-like situations with frequencies as low as 0.01\%\cite{b3}.
+
+Another widely used approach in biomedical image segmentation is U-Net\cite{b14}. They proposed a net and training strategy that relies on the strong use of data augmentation in order to utilize the available annotated samples more efficiently\cite{b14}.
+There are obviously disadvantages: in-needs of data augmentation with elastic deformation and longer training time (Usually more than 10 hours on 6GB Nvidia Titan GPU); only derived small amount of information from very few annotated images\cite{b14}.
+
+\subsubsection{Supervised/Semi-supervised object classification and segmentation}
+In ResNet\cite{b20}, they explicitly reformulated residual layers and provided comprehensive evidence showing that these residual networks can solving degradation problem: when the network depth is increasing, the accuracy gets unsurprising saturated and then degrades rapidly \cite{b20}.
+More importantly they evaluated both 18-layer and 34-layer ResNet. The 34 layer ResNet exhibits considerably lower both training error and validation error. This indicates that the degradation problem problem is well addressed too. The 18-layer ResNet\cite{b20} converges much faster while still keep comparable accuracy. 
+
+YOLOv3 \cite{b33} follows the principle of coordinate prediction in YOLOv2. 
+Meanwhile, YOLOv3 adopts binary cross entropy loss function instead of multi‐class loss function\cite{b18}. However, YOLOv3 has common mislabeling and out of objectiveness scores problem for small target. To overcome this, a tiny version and sparse representation of shallow network will be investigated. The YOLOv3‐tiny network can basically satisfy real‐time requirement based on limited hardware resources. Nevertheless, the YOLOv3‐tiny creates a feature pyramid with strong semantics at two scales tensors (13 × 13 and 26 × 26) by adopting sub-sampling layers and a fusion approach\cite{b18}.
+
+In GhostNet\cite{b19}, they first investigated in eliminating redundancy feature maps in neural architecture design. The limitation of the original GhostNet \cite{b19} is that it still keeps a lot of layers and did not really get rid of convolutional manipulation. Moreover, it did not provide further experiments on how well the Ghost module can be generalized and integrated into other leading neural networks.
+
+\subsection{Methodology}
+The main novelty of Cellnet is that it creatively combines the features of ResNet\cite{b20} that are easy to expand, easy to understand, and extremely high classification accuracy, and the feature of GhostNet\cite{b19} module that uses a small amount of linear cheap operation to reduce  redundant feature maps, thereby achieving a lighter weight, real-time processing and higher classification accuracy network, especially suitable for the use of complex medical data sets.
+For biomedical images processing, due to different experimental conditions, such as lighting condition and various  experimental objects, noise deviations are likely to appear on the sampled cell images\cite{b6}\cite{b7}, those noise and variability in the background would be confounding variables, and we want to focus on the main object in the image. Therefore, we purpose AttentionNet that plays a important role in removing those artifacts and improving the  classification performance as well.
+
+\subsubsection{CellNet: generate more feature map by linear operation}
+
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[width=\textwidth]{res18.pdf}
+			\caption{res18}
+			\label{fig:res18}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\reflectbox{\includegraphics[width=\textwidth]{Ghostres18.pdf}}
+			\caption{cellnet}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{The comparison between ResNet18 \cite{b20} and CellNet. Despite its simplicity (only 8 layers ghost module) and lower parameters ( $1/4$ weights than ResNet18 \cite{b20}), inside Ghost bottleneck adopted residual function for deeper gradient forward.}
+\end{figure}
+
+Inspired by those two outstanding neural network\cite{b19}\cite{b20}, instead of stacking lots of point-wise convolutional layers and taking huge amount of convolutional manipulations, we can avoid the redundant feature maps by cheap operation. 
+
+As shown in Table 1. The first layer of CellNet is a standard convolutional layer with 64 filters, follows standard batch normalization and relu, in order to generate initial intrinsic feature maps, then we purpose a few series of G-bneck, namely 8 layers. In each stage first apply stride = 1 then apply stride = 2 bottleneck which gradually increase the output channel dimension. After 8 layer feature extraction, we get a 512-dimensional feature vector by global average pooling and convolutional layer. SE layer applied to scale less important feature map. Smoothing, blurring and motion are also widely used linear operation, but they need more GPU support. By using depth-wise convolution layer, we can generate more correlated ghost feature maps with cheaper cost.
+\begin{table}[htbp]
+\centering
+\caption{CellNet network structure}
+\scalebox{0.85}{
+\begin{tabular}{@{}llllllll@{}}
+\toprule
+layer & Type    & Filters & Size/Stride           & Input      & Output     & \multicolumn{1}{l}{\#Expan} & SE \\ \midrule
+0     & Conv2d  & 64      & 3×3/2                 & 416×416×3  & 112×112×64 & -                                  & -  \\
+1     & Maxpool & -       & 3×3/2                 & 112×112×64 & 56×56×64   & -                                  & -  \\
+2     & G-bneck & 64      & 3×3/1                 & 56×56×64   & 56×56×64   & 64                                 & 0  \\
+3     & G-bneck & 64      & 3×3/1                 & 56×56×64   & 56×56×64   & 64                                 & 0  \\
+4     & G-bneck & 64      & 3×3/1                 & 56×56×64   & 56×56×64   & 128                                & 1  \\
+5     & G-bneck & 128     & 3×3/2                 & 56×56×64   & 28×28×128  & 256                                & 0  \\
+6     & G-bneck & 128     & 3×3/1                 & 28×28×128  & 28×28×128  & 512                                & 1  \\
+7     & G-bneck & 256     & 3×3/2                 & 28×28×128  & 14×14×256  & 1024                               & 0  \\
+8     & G-bneck & 256     & 3×3/1                 & 14×14×256  & 14×14×256  & 1024                               & 1  \\
+9     & G-bneck & 512     & 3×3/2                 & 14×14×256  & 7×7×512    & 1024                               & 0  \\
+10    & Conv2d  & 512     & 1×1/1                 & 7×7×512    & 7×7×512    & -                                  & -  \\
+11    & Advpool & -       & 7×7                   & 7×7×512    & 1×1×512    & -                                  & -  \\
+12    & Conv2d  & 512     & 1×1/1                 & 1×1×512    & 1×1×512    & -                                  & -  \\
+13    & FC      & -       & \multicolumn{1}{c}{-} & 1×1×512    & 1000       & -                                  & -  \\ \bottomrule
+
+\multicolumn{8}{l}
+{G-bneck denotes novel Ghostbottleneck. \#Expan means expansion size.}
+
+\end{tabular}}
+\end{table}
+
+
+\begin{figure}[htbp]
+\centering
+\subfigure[The normal Convolutional layer]{
+\begin{minipage}[t]{1\linewidth}
+\centering
+\includegraphics[width=3.5in]{normal conv.png}
+%\caption{fig1}
+\end{minipage}%
+}%
+
+\subfigure[The Ghost module]{
+\begin{minipage}[t]{1\linewidth}
+\centering
+\includegraphics[width=3.5in]{ghostmodule.png}
+%\caption{fig2}
+\end{minipage}
+}%
+\centering
+\caption{The comparison between normal convolutional layer in \cite{b26}\cite{b27}\cite{b28} and ghost module. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
+\end{figure}
+
+\textbf{Ghostmodule: Is point-wise convolution really indispensable?} Unlike Ghost module applied in GhostNet\cite{b19}, we designed two kind of novel Ghost Modules for feature extraction and adopted the SE layers from Squeeze-and-Excitation Networks \cite{b24} for enhancing useful features and balancing less inhibiting feature map. The first novel Ghost module inside of Gbneck acts as an expansion layer increasing the number of channels, while second Ghost module reduces the number of channels to match the shortcut path. Then the inputs and the outputs of these two Ghost modules are concatenated by shortcut. We adopted batch normalization (BN) and ReLU non-linearity right after each layer as well\cite{b19}, except that ReLU was not used after the second Ghost module as suggested by MobileNetV2\cite{b30}. In each novel Ghost Module, we only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation such as depth-wise convolution or affine transformation and wavelet transformation, as suggested by GhostNet\cite{b19}, here the depth-wise convolution was used.
+
+
+\begin{figure}[htbp]
+\centering
+\subfigure[Stride = 1 SE = 0 G-bneck]{
+\begin{minipage}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=2in]{stride1 module.png}
+%\caption{fig1}
+\end{minipage}%
+}%
+\subfigure[Stride = 2 SE = 0 G-bneck]{
+\begin{minipage}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=2in]{stride2 module.png}
+%\caption{fig2}
+\end{minipage}
+}%
+\centering
+\caption{Two kind of Gbnecks we proposed for feature extraction. where we apply Stride = 1 to keep the output channel of the feature map, Stride = 2 decreases the output channel while extracting information without losing a lot of information. SE = 0 represents not applying SE layer. }
+\end{figure}
+
+\textbf{Squeeze-and-Excitation(SE Layer): scaling inhibiting vs intrinsic features map.} Squeeze-and-Excitation (SE)\cite{b24} adaptively recalibrates channel-wise feature responses by explicitly modeling inter-dependencies between channels. 
+
+
+
+\subsubsection{Analysis on complexities and necessities}
+Here, we further analyze the profit on memory usage and theoretical speed-up by employing the Ghost module, in additional we will plot the visual experiments. The theoretical speed-up ratio $\gamma$ of upgrading ordinary convolution with the Ghost module is equal to following:
+
+\begin{equation}
+\begin{split}
+\gamma $& = \frac{\left ( n\cdot {h}'\cdot {w}'\cdot c\cdot k\cdot k \right )}{\left (\frac{n}{s}\cdot {h}'\cdot {w}'\cdot c\cdot k\cdot k +\left ( s-1 \right )\cdot \frac{n}{s}\cdot {h}'\cdot {w}' \cdot d\cdot d \right )} \\
+$&= \frac{c\cdot k\cdot k}{\frac{1}{s}\cdot c\cdot k\cdot k + \frac{s-1}{s}\cdot d\cdot d } \\
+$&\approx \frac{s\cdot c}{s +c-1 } \\
+$&\approx s $\label{speed}
+\end{split}
+\end{equation}
+
+In Equation \eqref{speed}, ${h}' \cdot {w}' \cdot {n}$ represents  $n$ output feature maps with height ${h}'$, width ${w}'$, and $k \cdot k$, $d \cdot d$ stands for the convolution kernel filter and linear operation kernel size, respectively. And $m$ is the number of intrinsic feature maps, where $m < n$ because we only take few intrinsic feature maps and apply a series of cheap linear operations on each intrinsic feature to generate $s$ ghost features. It is also noteworthy that there are 1 ghost map adopted by identify mapping that indicates $s-1$. In total there are $\frac{n}{s} \cdot(s-1)$  linear operations. This leads to theoretically $s$ speed-up ratio.
+
+More feature maps generated by linear operation based on a set of intrinsic feature maps, instead of generating a lot of redundant data by point-wise convolution which takes huge amount of parameters simultaneously. This also partially explains that our net achieves the best performance on several benchmarks shown in Table 2 and Table 3.
+As far as we deeply analyze each-layer-generated feature map by our net, we can also figure out the second factor: the artifacts appear in the image could also be learned by the neural network, which greatly affects the accuracy of the network, with the combination of AttentionNet segmentation techniques in cell image pre-processing, we can more focus on object rather than artifacts.
+
+
+\begin{table}[h]
+\centering
+\caption{Comparison of structure and parameters of state-of-the-art methods on Cifar10 dataset}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Model     & \begin{tabular}[c]{@{}c@{}}Weights\\ (million)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Top-1 Val Acc.\\ (\%)\end{tabular} & \begin{tabular}[c]{@{}c@{}}FLOPs\\ (million)\end{tabular} \\ \midrule
+VGG-16\cite{b23}    & 15                                                          & {\color[HTML]{CB0000} \textbf{93.6}}                          & 313                                                       \\
+ResNet18\cite{b20}   & 11                                                          & 88.779                                                        & 180                                                       \\
+Ghost Net\cite{b19} & 5.18                                                        & 88.238                                                        & 141                                                       \\
+*our      & {\color[HTML]{CB0000} \textbf{2.91}}                        & {\color[HTML]{333333} \textbf{92.45}}                         & {\color[HTML]{CB0000} \textbf{41.7}}                      \\ \bottomrule
+\end{tabular}
+
+\end{table}
+
+
+\begin{table}[h]
+\centering
+\caption{Comparison of structure and parameters of state-of-the-art methods on Pneumonia dataset}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Model                                                  & \begin{tabular}[c]{@{}l@{}}Weights\\ (million)\end{tabular} & \begin{tabular}[c]{@{}l@{}}Top-1 Val Acc.\\ (\%)\end{tabular} & \begin{tabular}[c]{@{}l@{}}FLOPs\\ (million)\end{tabular} \\ \midrule
+\begin{tabular}[c]{@{}l@{}}Inception V3\cite{b38}\end{tabular} & 23.81                                                       & 88.0                                                          & 540                                                       \\
+ResNet18\cite{b20}                                               & 11                                                          & 87.50                                                         & 180                                                       \\
+Ghost Net\cite{b19}                                              & 5.18                                                        & 88.69                                                         & 141                                                       \\
+*our                                                   & {\color[HTML]{CB0000} \textbf{2.91}}                        & {\color[HTML]{CB0000} \textbf{91.78}}                         & {\color[HTML]{CB0000} \textbf{41.7}}                      \\ \bottomrule
+\end{tabular}
+\centering
+\end{table}
+
+
+\begin{figure*}[htbp]
+
+\subfigure[]{
+\begin{minipage}[t]{0.15\linewidth}
+\centering
+\includegraphics[width=1in]{hd1 (4400).png}
+%\caption{fig2}
+\end{minipage}
+}%
+\subfigure[]{
+\begin{minipage}[t]{0.15\linewidth}
+\centering
+\includegraphics[width=1in]{hd1 (4400) (1).png}
+%\caption{fig2}
+\end{minipage}
+}%
+\subfigure[]{
+\begin{minipage}[t]{0.15\linewidth}
+\centering
+\includegraphics[width=1in]{hd1 (4550).png}
+%\caption{fig2}
+\end{minipage}
+}%
+\subfigure[]{
+\begin{minipage}[t]{0.15\linewidth}
+\centering
+\includegraphics[width=1in]{hd1 (4550) (1).png}
+%\caption{fig2}
+\end{minipage}
+}%
+\subfigure[]{
+\begin{minipage}[t]{0.15\linewidth}
+\centering
+\includegraphics[width=1in]{ss2_8 (142).png}
+%\caption{fig2}
+\end{minipage}
+}%
+\subfigure[]{
+\begin{minipage}[t]{0.15\linewidth}
+\centering
+\includegraphics[width=1in]{ss2_8 (142) (1).png}
+%\caption{fig2}
+\end{minipage}
+}%
+
+\subfigure[]{
+\begin{minipage}[t]{0.33\linewidth}
+\centering
+\includegraphics[width=1.5in]{hd1 (4550)ournetWithcellyolo.jpg} 
+%\caption{fig2}
+\end{minipage}
+}
+\subfigure[]{
+\begin{minipage}[t]{0.33\linewidth}
+\centering
+\includegraphics[width=1.5in]{hd1 (4550)resnetWithcellyolo.jpg}
+%\caption{fig2}
+\end{minipage}
+}
+\subfigure[]{
+\begin{minipage}[t]{0.33\linewidth}
+\centering
+\includegraphics[width=1.5in]{hd1 (4550)vggnetWithcellyolo.jpg}
+%\caption{fig2}
+\end{minipage}
+}
+
+\centering
+\caption{The illustration of the necessity of Ghost-Module and AttentionNet. (a)-(f) implying the performances of AttentionNet. After AttentionNet segmentation, artifacts will be removed and only morphological characteristics of the objects stay. The second row are saliency map of cell (d) after ResNet18\cite{b20} (h), our Net (g) and VGG16 net \cite{b23} (i). Leading  STOA  algorithms, such ResNet18 and VGG16 net, are  more focus  these  non  ROI  features,  such  as  the  debris  feature  outside the ROI. Those leading networks pay more attention to those debris information leads to worse classification performance.}
+\end{figure*}
+
+
+\begin{figure*}[htbp]
+\subfigure[]{
+\begin{minipage}[t]{0.33\linewidth}
+\centering
+\includegraphics[width=2.3in]{Inkedfirst Conv1 of resnet18 with pretrain weights on coviddataset_LI.jpg}
+%\caption{fig1}
+\end{minipage}%
+}%
+\subfigure[]{
+\begin{minipage}[t]{0.33\linewidth}
+\centering
+\includegraphics[width=2.3in]{Inkedfirst Conv1 of resnet18 with pretrain weights on penudataset_LI.jpg}
+%\caption{fig2}
+\end{minipage}
+}%
+\subfigure[]{
+\begin{minipage}[t]{0.33\linewidth}
+\centering
+\includegraphics[width=2.3in]{cellnetnecc3.jpg}
+%\caption{fig2}
+\end{minipage}
+}%
+
+\centering
+\caption{The illustration of the necessity of Ghost-Module and CellNet. There are visualization of feature maps after ResNet18\cite{b20} 1st convolutional layer. Whether it is a Xray image of COVID-19 dataset (a), a cell image segmented by attentation (c), or a CT image from Pneumonia Dataset (b), after the first layer of point-wise convolution there is a large amount of redundant feature maps (see the same color marked). Especially for Sezary Syndrome Dataset, there is no need to operate point-wise convolution one by one after AttentionNet segmentation, because all the valid information is within the circle.}
+\end{figure*}
+
+
+\subsubsection{AttentionNet: Automatic $Detector$ and $Segment or$}\label{AA}
+The proposed AttentionNet follows basic structure of YOLOv3-tiny algorithm\cite{b33}, and it attempts to process more efficiently on small target. The attributes of self-detection and labeling, of nearly real-time resolve and of general resource requirements mainly characterize the AttentionNet Network. At the beginning it is  similar to YOLOv3\cite{b33} that the input image is divided into an $M \times M$ grid. Then $B$ bounding boxes and confidence score are defined in each grid cell. Each grid cell predicts $C$ conditional probabilities, denoted as $P(Class_{i}\mid Object_{j})$ for $i$ classes and object $j$. If there is an object $j$ in the grid, then indicated the objectiveness score $P(Object_{j})$  equal to $1$\cite{b18}. Here, we refer the initiatives from YoloV3, the confidence score also represents the accuracy of the box prediction, which is defined as $GIOU_{Ground truth}^{Predition}$. Unlike the originally YOLOv3\cite{b33}, instead of using Intersection‐Over‐Union (IOU), we use $GIOU$ with higher precision, which refers to the generalized intersection area between the predicted bounding box and ground truth box.
+
+It should be noted that each grid cell predicted conditional class probability is not same as the confidence score. These often leads to misunderstanding of the fact that the former $P(Class_{i} \mid Object_{j})$ is predicted in each grid, while the $P(Object_{j}) \times GIOU_{Ground truth}^{Predition}$ is predicted in each bounding box\cite{b18}. 
+Finally Class Score $S$ is defined as follow (1): \label{eq}
+\begin{equation}
+\begin{split}
+$S&=P(Class_{i}\mid Object_{j}) \times P(Object_{j}) \times GIOU_{Ground truth}^{Predition} \\
+$& = P(Class_{i}) \times GIOU_{Ground truth}^{Predition} $\label{eq}
+\end{split}
+\end{equation}
+
+The Class Score $S$ computed the probability of the object $j \in  i$ class appearing in the box, as well as how well the bounding box fits each object $j$.
+
+The original YOLOv3\cite{b33} used the darknet front-end feature extraction module, but the detection performance on Sezary Syndrom dataset is unsatisfied. On the contrary, AttentionNet with only $13 \times 13$, $26 \times 26$ yolo scale output tensors adopts multi-scale fusion, and K means++ clustering\cite{b18} techniques, outperforms TF-Yolo\cite{b18} and  YOLOv3 \cite{b33}, which has $13 \times 13$, $26 \times 26$, $52 \times 52$ yolo scale output tensor. In order to train a suitable segment-or, it is recommended to choose corresponding scale tensors refer to different data sets. 
+
+\textbf{GBCIOU and Circle segmentation.} Using the cvfillPoly function, we can easily classify the cell image into simple polygonal areas and achieve high-speed segmentation once we obtain the output from AttentionNet network for anchor box detection, namely ( $x_{1}$, $y_{1}$, $x_{2}$, $y_{2}$). However, it has very obvious shortcomings that the shape of the segmentation does not perfectly approximate the ground truth of the cell. To overcome this problem, we proposed $HSV$ space mask threshold method, simply converting to $HSV$ space and using threshold to eliminate the outside part of central circle of box detection.  For the common challenge of the YOLO original version: when multiple objects standing in the same area or overlapping in the central point, it will become much more difficult to draw the correct prediction and always leads to wrong labeling. In our case if multiple cells occur and one cell has more competitive confidence score than another during circle detection that will leads to either non-labelled or partly labelled problem.
+We proposed the GBCIOU function to ideally find general intersected box center when multiple box predictions occur in the same image, in addition to the GIOU (general interaction of union) computes the deviation between ground truth and the prediction.
+
+
+
+\subsection{Experiments}
+To verify the effectiveness of the proposed novel Ghost module and CellNet architecture, we conduct experiments on several benchmark visual datasets, including CIFAR-10\cite{b21}, phenomenon dataset \cite{b38}, and COVID-19 benchmark \cite{b36}\cite{b37}. 
+
+
+
+\subsubsection{CellNet on Visual Benchmarks}
+
+\begin{figure}[h]
+\centering
+\includegraphics[height=250pt]{Cifar-12-06-2020.png}
+\label{fig}
+\centering
+\caption{Comparison of state-of-art methods for training on benchmark CIFAR-10 Dataset. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy ) than both ResNet and GhostNet, it is illustrated by both the standard derivation, namely the stability, and the final converged accuracy.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=250pt]{Pneumonia_TimeSeries-1.png}
+\label{fig}
+\centering
+\caption{ Comparison of state-of-art methods for training on Pneumonia Dataset. Benchmark Pneumonia Dataset contains 5,856 Xray/CT images. Considering the fact that Our Net has only 8 Novel Ghostmodule layers and 2.91 millions of weights, outperforms both ResNet18, GhostNet and InceptionV3 net from Accuracy and Complexity perspective views.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=250pt]{COVID-19_TimeSeries-1.png}
+\label{fig}
+\centering
+\caption{ Comparison of state-of-art methods for training on COVID-19 Dataset. COVID-19 Dataset contains nearly 2,000 Xray/CT images we sampled from newest publications. Our Net achieves 3rd place classification performance among these state-of-art models while least weights and computational cost. The weights of our models is 2.91 million, comparing to DenseNet121 7.98 millions of weights, MobileNet V2 3.4 millions of weights and 301 millions of FLOPs. Considering the fact of the higher complexity and parameter amount of other SOTA Nets, our Net is very competitive on classification tasks for the biomedical dataset. }
+\end{figure}
+
+
+\begin{figure}[h]
+\includegraphics[height=290pt]{BarDiagram_Bold.png}
+\label{fig}
+\centering
+\caption{Graphical summary of composition of COVID-19 Xray/CT images. Based on initial COVID-19 Image Data Collection \cite{b37}, we additionally collected and sorted nearly 2,000 CT/Xray images, with wide range in gender, age, survival condition and country/places from newest publications and CDC public sources\cite{b36}\cite{b37}\cite{b38}. }
+%\caption{Graphical summary of Alex Net\cite{b31}, Squeeze net\cite{b24}, ResNet18\cite{b20}, MobieNetv2\cite{b30}, Our Net, Ghost Net\cite{b19}, DenseNet121\cite{b32}, and Vgg11\cite{b23} performance on COVID-19 dataset. }
+\end{figure}
+
+CIFAR-10 dataset\cite{b21} consists of 60,000 32 × 32 color images in 10 classes, with 50,000 training images and 10,000 test images. A common data augmentation scheme including random crop\cite{b22} and mirroring\cite{b19} is adopted as well. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy  ) than both ResNet18 and GhostNet, with the least  weights, namely $1/7$ weights than VGG16 \cite{b23}. 
+
+
+
+On benchmark Pneumonia Dataset\cite{b38}. The Pneumonia / Normal classification val accuracy of our Net converges into nearly 91.785\% better than GhostNet and ResNet18. In addition, after around 80 epochs the accuracy of our Net converges into nearly 91.785\%, comparing to  Inception V3 after 7,000 epochs reaches 88.0\%\cite{b38}.
+
+
+
+
+The 2019 novel corona virus (COVID-19) brings huge challenge to our life and we are facing an increasingly disrupted challenging time. In order to help the medical scientists, we made this COVID-19 dataset. Based on initial COVID-19 Image Data Collection\cite{b37}, which contains only 123 frontal view X-rays. We additionally collected data from newest publications and  assembled medical images from websites and publications such as European Journal of Radiology\cite{b36}, and collected nearly 1583 healthy Lung CT images as comparative data from recently available resources and publications\cite{b37} \cite{b38}.
+
+
+\subsection*{Conclusion}
+To reduce the complexity and computational costs of recent deep neural networks on biomedical image processing area \cite{b3}\cite{b15}\cite{b17}, this paper presents a novel unifying approach: firstly adopted AttentionNet as a very effective and efficient tool for image pre-processing and artifacts elimination. The experiments conducted on benchmarks illustrate that the AttentionNet method is a plug-and-play tool for SOTA module data pre-processing with remarkable speed and comparable performance. More importantly, we proposed CellNet for biomedical image classification, which using two novel designed Ghost modules to generated ghost feature map that get rid of complex and redundant feature map with lower cost, and it outperforms state-of-the-art neural architectures in several classical medical benchmarks.
+What's more, we completed an AI-assisted diagnostic in a real-world medical scenario by integrating 12 leading models (including our AttentionNet and CellNet) into a software application, which provides a reference for high-precision bio-medically assisted diagnosis of complex medical data sets (such as Sezary Syndrome) and all code are publicly available.
+
+
+
+
+\section{CellNet Software}
+\label{sec:ipsum}
+Mauris ultrices commodo risus, mollis congue dui scelerisque elementum. Nam ac dictum augue. Vestibulum convallis vel dui et porttitor. Aenean a commodo justo. Integer condimentum pulvinar massa, eu venenatis metus bibendum aliquam. Aenean ac tristique nisl, ut maximus tortor. Duis venenatis ultricies tellus, non dignissim metus feugiat vel. Curabitur a lorem ligula. Nunc commodo erat id mauris condimentum euismod. Etiam vel sodales augue. Donec id tincidunt tellus. Pellentesque tempus ultricies lobortis. Vestibulum magna velit, iaculis rhoncus aliquet sed, congue vitae risus. Suspendisse iaculis, nibh at imperdiet tincidunt, mi metus pharetra tortor, quis posuere est ante id ex.
+
+\subsection{Dolor sit} % (fold)
+\label{sub:dolor_sit}
+Fusce a tortor sit amet quam suscipit commodo non eget massa. Vestibulum semper accumsan tristique. Aenean posuere laoreet sollicitudin. Vivamus nec ligula et nunc ornare pellentesque. Aenean vulputate vestibulum risus facilisis condimentum. Morbi ac ex magna. In feugiat ligula in nisi tincidunt malesuada. Morbi convallis nunc id nisi ultrices venenatis. Donec in felis vel lectus lobortis malesuada. Morbi ut neque nulla. Quisque augue nibh, tempor in elit at, convallis gravida enim. Integer iaculis nibh eget commodo mollis. Vivamus at viverra eros. Pellentesque eu elit velit. Nunc nec ligula diam.
+
+Suspendisse tempus id neque vel ultricies. Vivamus efficitur dui non enim vehicula, sed faucibus massa consectetur. Aenean lacinia sapien quis pellentesque auctor. Vestibulum auctor dui a orci imperdiet, vitae posuere sapien vulputate. In eget augue quis erat rhoncus dignissim ut nec felis. Ut dignissim, ligula a porta sollicitudin, erat enim maximus sapien, vitae vehicula ligula eros sed mauris. Maecenas vehicula, mauris nec sagittis pellentesque, mauris turpis volutpat sapien, vitae mattis magna enim sit amet ligula.
+
+Duis sem elit, egestas eleifend auctor quis, elementum nec nisi. Sed sed ipsum ac mi rutrum pretium. Maecenas a pulvinar eros. Integer eget pretium arcu, at egestas ante. Donec neque magna, pellentesque in justo et, convallis congue enim. Etiam et quam sit amet mi ullamcorper pretium vitae id ligula. Maecenas ac ligula justo. Curabitur gravida nunc tincidunt auctor rhoncus. Donec sit amet ante ipsum. In quis ullamcorper ex. Cras ac ullamcorper orci, et aliquet enim. Nam in elit sit amet tortor finibus interdum.
+
+Sed ac facilisis augue. Cras nec nisl consequat, gravida tortor vitae, tincidunt nisi. Duis posuere eu orci at luctus. Morbi nec malesuada arcu. Aliquam erat volutpat. Maecenas pharetra in nisi sed molestie. Cras id urna eu nunc ullamcorper volutpat a sit amet elit. Donec tincidunt laoreet ipsum, a sagittis tellus laoreet sodales. Aliquam in ultricies sapien, semper tempus nisl. Pellentesque lectus nisi, tempus ut fermentum quis, pulvinar ac velit.
+
+Duis laoreet pellentesque libero, egestas mattis ante maximus id. Donec convallis felis vel neque placerat ornare. Curabitur id iaculis lectus. Duis vitae tristique lectus. Sed maximus aliquet nisl, quis bibendum sem. Vestibulum ut ipsum a risus fermentum dapibus tincidunt semper lorem. Proin ante ante, euismod sed turpis eu, dictum bibendum ipsum. Praesent fermentum volutpat metus, quis fringilla arcu fermentum eget. Suspendisse quis condimentum sapien, ut sollicitudin metus. Ut in volutpat enim. Phasellus sapien est, varius in condimentum et, auctor et augue. Donec mattis malesuada leo, vitae pellentesque metus ornare vel. Pellentesque massa nulla, aliquet nec metus et, auctor porta lacus. Fusce ac ex faucibus, placerat nibh ac, fermentum leo. Curabitur interdum fermentum lacus, quis mollis erat suscipit nec. Vestibulum vel pellentesque ipsum, sit amet ultrices quam.
+
+Proin vestibulum nec risus ut porttitor. Pellentesque porta ipsum elit, quis lacinia quam vehicula eu. Nulla consectetur nulla ac euismod tincidunt. Curabitur quis auctor neque, eget viverra nibh. Vivamus porttitor aliquam leo id iaculis. Cras sed dapibus quam. Mauris ullamcorper lacus ut porta sollicitudin. Proin accumsan finibus dolor, eu suscipit massa interdum non. Maecenas lobortis sit amet leo in fringilla.
+% subsection dolor_sit (end)
+
+\subsection{Amet} % (fold)
+\label{sub:amet}
+Nulla nec accumsan risus. Mauris consectetur ex vel tempus posuere. Quisque sit amet placerat risus, vitae suscipit massa. Maecenas molestie scelerisque ipsum, ac porta purus dapibus ut. Phasellus rhoncus sit amet lorem nec vulputate. Sed quis erat erat. In congue at nisi in tristique. Pellentesque auctor, nunc ut hendrerit laoreet, neque urna sagittis orci, sit amet accumsan nisi velit et diam. Phasellus sit amet posuere mauris. In hac habitasse platea dictumst. Quisque eget consectetur lectus. Nam finibus porttitor augue, sed fermentum augue vehicula id. Pellentesque convallis auctor condimentum. Donec at pharetra ipsum, id consequat turpis.
+
+Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut semper urna ac imperdiet imperdiet. Duis aliquam enim vel dolor euismod, vel posuere enim cursus. Sed tristique dui vitae lacus facilisis gravida. Donec quis nisl sed mi iaculis placerat. Integer dictum elit quis enim venenatis, eu egestas odio porttitor. Proin ac ipsum semper, tincidunt lectus vitae, elementum nibh. Nunc facilisis scelerisque nibh, eget tincidunt tellus rhoncus non. Etiam luctus tellus a eros dignissim, nec mollis lacus elementum. Fusce tincidunt porta efficitur. Aenean id volutpat sapien, vel fermentum augue. Cras sed dapibus risus. Etiam mi felis, blandit sed rutrum ut, rhoncus sit amet nisi. In quis sem finibus, posuere tortor sit amet, lacinia enim. Proin nibh neque, commodo luctus sagittis in, luctus non diam. Donec semper commodo nunc, et laoreet risus feugiat eget.
+
+Phasellus pulvinar tellus id libero mattis, quis sollicitudin arcu hendrerit. Quisque nec posuere mi, nec luctus magna. Ut consectetur ante vel velit congue, ac vulputate turpis molestie. Maecenas quis diam dolor. Pellentesque rhoncus porta condimentum. Aliquam malesuada leo quis placerat posuere. Duis maximus mauris hendrerit lacus viverra auctor. Morbi in urna libero. Donec dictum, justo a tincidunt dictum, enim mauris condimentum erat, non lobortis ex risus sed sapien. Sed ac sapien luctus, vehicula justo lobortis, congue orci. Praesent ultricies turpis vel ex pretium placerat.
+
+Maecenas ultricies dolor eget lorem vestibulum sodales. Nam tortor elit, bibendum malesuada ante et, pharetra mollis tellus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis ligula nisi, blandit eget condimentum ut, facilisis et urna. Nunc sed velit a urna mattis malesuada. Etiam convallis quam libero, quis maximus metus lacinia non. Donec cursus, justo feugiat scelerisque pretium, leo felis lacinia nulla, vel pharetra mi sem id risus. Aliquam eu metus ac dolor varius ultrices. Nulla faucibus lorem sit amet libero aliquam ullamcorper. Nulla eu quam vulputate, volutpat sapien in, tincidunt neque. Nullam sapien erat, iaculis sed orci vel, porta efficitur lorem. Phasellus a nibh sagittis, iaculis erat ut, egestas risus. Nulla diam massa, dictum at vehicula quis, malesuada sed mi. Morbi vitae dolor quam. Ut bibendum rutrum felis, quis dignissim felis interdum nec.
+
+In vitae faucibus erat, at tristique nisi. Mauris eget sodales lacus, eget mattis ipsum. Integer at iaculis purus. Quisque non elementum orci. Nulla non orci convallis, convallis orci et, rhoncus felis. Fusce nec velit enim. Nam imperdiet et sem vitae gravida. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris placerat maximus aliquet. Donec sagittis augue rutrum consequat egestas.
+
+Vestibulum faucibus, ante tincidunt porttitor malesuada, arcu eros mollis elit, id gravida ante mauris in nisl. Morbi eros sem, ultrices vel leo a, efficitur scelerisque mi. Sed posuere sit amet erat quis facilisis. Vivamus posuere sem ut orci sodales aliquam. Nulla facilisi. Etiam pulvinar finibus augue, vel interdum purus placerat sit amet. Morbi placerat interdum aliquet. Nulla fermentum urna at hendrerit tempus. Vestibulum vitae ultrices dolor.
+
+Duis fringilla mauris ut efficitur egestas. Praesent quis sapien risus. Nulla quis quam nec nulla semper viverra quis vel lorem. Donec commodo faucibus magna eget vestibulum. In hac habitasse platea dictumst. Fusce ullamcorper odio nulla, nec egestas enim efficitur et. Donec pharetra ipsum libero, nec mollis quam posuere nec. Aliquam vitae egestas arcu. Quisque interdum rutrum neque convallis convallis. Nulla non consequat quam. Pellentesque et nisi dictum, posuere nibh vel, eleifend turpis. Praesent tincidunt sodales leo ac efficitur. Phasellus arcu ipsum, molestie ac orci vitae, euismod sodales metus.
+
+Duis est lectus, vestibulum at arcu sed, suscipit pellentesque nisi. Nulla arcu ante, feugiat nec diam ac, auctor ullamcorper nibh. Praesent a arcu sed massa vestibulum condimentum. Etiam gravida at massa in ullamcorper. Aenean finibus, metus et consectetur viverra, augue eros finibus purus, eget sollicitudin erat purus feugiat sapien. Morbi mattis orci sit amet sem semper, non fringilla quam dignissim. Fusce aliquam dolor et lectus pellentesque lobortis. 
+% subsection amet (end)
+% section ipsum (end)
+% section examples (end)
