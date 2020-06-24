@@ -201,43 +201,22 @@ Duis est lectus, vestibulum at arcu sed, suscipit pellentesque nisi. Nulla arcu 
 
 \chapter{Methodology}
 \label{sec:Methodology}
-This paper proposes a unifying approach that is capable of (1) imaging single-cell morphology of hundreds of thousands of peripheral blood cells and (2) data-driven learning of characteristic mythologies (possibly of rare cell subsets) indicative of the presence of the disease.
+The purpose of this thesis is to invent a unifying approach that is capable of not only imaging single-cell morphology of thousands of peripheral blood cells, but also data-driven learning of characteristic mythologies indicative of the presence of the disease. With this in mind, we introduce a novel family of deep hierarchical network architectures called AttentionNet. Its goal is to leverage a simple but well-established architecture for nearly-semantic segmentation in order to ensure 
+higher precision classification task. Thus, we are able to base our claims about multi-Scale prediction framework and multiple layers concatenation of original YOLOv3 architecture on a variety of experiments individually (see Chapter 5). The idea of this novel AttentionNet architecture is to combine lighter-weight layers  and k-means++ techniques in pre-processing, and GBCIOU multi-object segment techniques such that the network explores and archives the nearly-semantic segmentation for cells with lower cost computation cost and complexity.
 
-As we originally designed the unifying approach for Sezary Syndrome, which is an aggressive cutaneous T cell lymphoma that is characterized by presence of tumor T cells with abnormal nucleus morphology in the peripheral blood. Morphological identification of tumor T cells in the blood is currently still the gold standard.
-After Image Flow Cytometry there are huge amount of cell images produced from patient as well as healthy data set for comparison. Due to different experimental conditions, such as lighting conditions and different experimental objects, noise deviations are likely to appear on the sampled cell images, moreover, these deviations do not appear in the better quality and pure evaluation data set which leads to higher false negative.
-\subsection[Awesome Figures in the TOC]{Awesome Figures} % (fold)
+For biomedical images processing, due to different experimental conditions, such as lighting condition and various  experimental objects, noise deviations are likely to appear on the sampled cell images\cite{b6}\cite{b7}, those noise and variability in the background would be confounding variables.
+When applying attentionnet first, we explicitly learn features focusing on the morphology structure of the object. As we originally designed the unifying approach for Sezary Syndrome, which is an aggressive cutaneous T cell lymphoma that is characterized by presence of tumor T cells with abnormal nucleus morphology in the peripheral blood. Morphological identification of tumor T cells in the blood is currently still the gold standard.
+Hence, we assume that after AttentionNet segmentation convolutions are more likely to learn feature representations only for cell objects as only the cell objects are preserved.
 
-\label{sub:figures}
-\begin{figure}[ht]
-	\begin{center}
-		\begin{subfigure}[b]{0.49\textwidth}
-			\includegraphics[width=\textwidth]{lenna.png}
-			\caption{Lenna}
-			\label{fig:lenna}
-		\end{subfigure}
-		\begin{subfigure}[b]{0.49\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{lenna.png}}
-			\caption{Lenna facing left}
-			\label{fig:lenna_facing_left}
-		\end{subfigure}
-	\end{center}
-	\caption{The famous Lenna image used in Computer Vision with subcaptions and a global caption.}
-	\label{fig:lennas}
-\end{figure}
-The figure can be referenced in the text \eg\reffig{lennas}.
-Also the subfigures can be referenced \eg\reffig{lenna}, \reffig{lenna_facing_left}.
-% subsection figures (end)
+Modern architectures leverage multi-scale hierarchies in order to learn feature representations at different resolutions from fine-grained, highly localized features to coarse but semantically enriched features, such as original YOLO network and other state-of-the-art models. On the other hand, it also increases  the complexity of network, requires excessive computational cost and has insufficient sensitivity to customer datasets.
 
-\subsection{Citations} % (fold)
-\label{sub:citations}
-You can cite books from your bibliography \texttt{thesis.bib} (\eg \cite{cochrane}).
-Abbreviations from \texttt{abbrev.bib} help in writing the entries.
-% subsection citations (end)
+AttentionNet however discards Darknet feature extraction layer of original YOLO, which is a multi convolutional stacked layer, and relies on two yolo output layers. Because the prior of the predicted box is known upfront by k-Mean++ clustering we introduced. Thus, only a few up-sampling layers additional are needed to give a satisfied accurate prediction of the cell position. then, circle detection algorithm will convert Square bounding box to nearly semantic cell prediction while guaranteeing user-defined quality requirements of the cell structure.
 
-\subsection{FixMe warnings}
-\label{sub:fixme}
-You can add warnings\fxwarning{WARNING} or notifications\fxnote{Note} to your text.
-This will help you keep an overview on the places in the text you have to work on.
+Since NMS(Non-Maximum Suppression) of YOLOV3 will only removing prediction boundary boxes that have a high overlap and a low class score, we cannot guarantee good performance in cases such as：multiple cells overlap each other and have high objectiveness scores, or multiple cells do not overlap but are presented in the same frame. It is inevitable to utilize GBCIOU to eliminate objects with relative lower objectiveness score while maximizing retention of overlapping cells.
+
+It is worth noting that the AttentionNet is not involved in the task of cell classification. We therefore introduce CellNet. The main novelty of CellNet is that it creatively combines the features of ResNet\cite{b20} that are easy to expand, easy to understand, and extremely high classification accuracy, and the feature of GhostNet\cite{b19} module that uses a small amount of linear cheap operation to reduce  redundant feature maps, thereby achieving a lighter weight, real-time processing and higher classification accuracy network, especially suitable for the use of complex medical data sets.
+%is currently still the gold standard\cite{b3}. There are huge amount of cell images produced from image flow cytometry process, including both healthy data set and diseases data set for comparison. 
+
 
 \section{AttentionNet}
 \label{sec:lorem}
@@ -251,6 +230,178 @@ Praesent vitae metus interdum, eleifend odio et, vehicula arcu. Suspendisse vulp
 
 Vestibulum hendrerit, justo at laoreet dapibus, tortor orci placerat nunc, sed sodales massa quam eget dui. Pellentesque a ipsum non quam sodales pellentesque non eget sem. Pellentesque dignissim accumsan congue. Etiam nec odio at ipsum mollis lobortis. Nam tempus suscipit posuere. In mollis lacus in nulla lobortis sagittis id vitae lorem. Maecenas id libero sit amet lacus porta porta. Nam eu justo a enim efficitur commodo at et turpis. Vestibulum efficitur, elit eget vestibulum sollicitudin, ipsum massa luctus nunc, ut lobortis nisi magna ac velit. Morbi finibus elit a sagittis mattis. Duis ac scelerisque libero. Aliquam aliquam dui urna, quis pulvinar risus rutrum vitae. Curabitur quis lorem tristique, consequat magna vitae, tincidunt diam. Nam viverra velit nec leo mattis, eu mollis tellus imperdiet. Vestibulum nibh nulla, porta eget venenatis non, commodo pulvinar ex.
 % section lorem (end)
+
+
+%\subsection[Awesome Figures in the TOC]{Awesome Figures} % (fold)
+
+%\label{sub:figures}
+%\begin{figure}[ht]
+%	\begin{center}
+%		\begin{subfigure}[b]{0.49\textwidth}
+%			\includegraphics[width=\textwidth]{lenna.png}
+%			\caption{Lenna}
+%			\label{fig:lenna}
+%		\end{subfigure}
+%		\begin{subfigure}[b]{0.49\textwidth}
+%			\reflectbox{\includegraphics[width=\textwidth]{lenna.png}}
+%			\caption{Lenna facing left}
+%			\label{fig:lenna_facing_left}
+%		\end{subfigure}
+%	\end{center}
+%	\caption{The famous Lenna image used in Computer Vision with subcaptions and a global caption.}
+%	\label{fig:lennas}
+%\end{figure}
+%The figure can be referenced in the text \eg\reffig{lennas}.
+%Also the subfigures can be referenced \eg\reffig{lenna}, \reffig{lenna_facing_left}.
+% subsection figures (end)
+
+
+\subsection{Network Architecture} % (fold)
+\label{sub:citations}
+
+In Figure 3.1, we present our multi-scale AttentionNet architecture which adopts the YOLOV3-Tiny architecture as its fundamental building block in order to process more efficiently on small target. We follow the same
+symmetrical encoder-decoder architecture with additional skip-connections interconnected them in the same hierarchy level. At each hierarchy level, we perform several point-wise convolutions in a consecutive manner. 
+
+The attributes of self-detection and labeling, of nearly real-time resolve and of general resource requirements mainly characterize the AttentionNet Network. At the beginning it is  similar to YOLOv3\cite{b33} that the input image is divided into an $M \times M$ grid. Then $B$ bounding boxes and confidence score are defined in each grid cell. Each grid cell predicts $C$ conditional probabilities, denoted as $P(Class_{i}\mid Object_{j})$ for $i$ classes and object $j$. If there is an object $j$ in the grid, then indicated the objectiveness score $P(Object_{j})$  equal to $1$\cite{b18}. Here, we refer the initiatives from YoloV3, the confidence score also represents the accuracy of the box prediction, which is defined as $GIOU_{Ground truth}^{Predition}$. Unlike the originally YOLOv3\cite{b33}, instead of using Intersection‐Over‐Union (IOU), we use $GIOU$ with higher precision, which refers to the generalized intersection area between the predicted bounding box and ground truth box.
+
+It should be noted that each grid cell predicted conditional class probability is not same as the confidence score. These often leads to misunderstanding of the fact that the former $P(Class_{i} \mid Object_{j})$ is predicted in each grid, while the $P(Object_{j}) \times GIOU_{Ground truth}^{Predition}$ is predicted in each bounding box\cite{b18}. 
+Finally Class Score $S$ is defined as follow (1): \label{eq}
+\begin{equation}
+\begin{split}
+$S&=P(Class_{i}\mid Object_{j}) \times P(Object_{j}) \times GIOU_{Ground truth}^{Predition} \\
+$& = P(Class_{i}) \times GIOU_{Ground truth}^{Predition} $\label{eq}
+\end{split}
+\end{equation}
+
+The Class Score $S$ computed the probability of the object $j \in  i$ class appearing in the box, as well as how well the bounding box fits each object $j$.
+
+
+
+\begin{table}[htbp]
+\centering
+
+\scalebox{0.9}{
+\begin{tabular}{@{}clllll@{}}
+\toprule
+\multicolumn{1}{l}{\textbf{layer}} & \textbf{Type}                & \multicolumn{1}{l}{\textbf{Filters}} & \textbf{Size/Stride} & \textbf{Input}       & \textbf{Output}                          \\ \midrule
+0                                  & Convolutional                & 16                                   & 3×3/1                & 416×416×3            & 416×416×16                               \\
+1                                  & Maxpool                      &                                      & 2×2/2                & 416×416×16           & 208×208×16                               \\
+2                                  & Convolutional                & 32                                   & 3×3/1                & 208×208×16           & 208×208×32                               \\
+3                                  & Maxpool                      &                                      & 2×2/2                & 208×208×32           & 104×104×32                               \\
+4                                  & Convolutional                & 64                                   & 3×3/1                & 104×104×32           & 104×104×64                               \\
+5                                  & Maxpool                      &                                      & 2×2/2                & 104×104×64           & 52×52×64                                 \\
+6                                  & Convolutional                & 128                                  & 3×3/1                & 52×52×64             & 52×52×128                                \\
+7                                  & Maxpool                      &                                      & 2×2/2                & 52×52×128            & 26×26×128                                \\
+8                                  & Convolutional                & 256                                  & 3×3/1                & 26×26×128            & 26×26×256                                \\
+9                                  & Maxpool                      &                                      & 2×2/2                & 26×26×256            & 13×13×256                                \\
+10                                 & Convolutional                & 512                                  & 3×3/1                & 13×13×256            & 13×13×512                                \\
+11                                 & Maxpool                      &                                      & 2×2/1                & 13×13×512            & 13×13×512                                \\
+12                                 & Convolutional                & 1024                                 & 3×3/1                & 13×13×512            & 13×13×1024                               \\
+13                                 & Convolutional                & 256                                  & 1×1/1                & 13×13×1024           & 13×13×256                                \\
+14                                 & Convolutional                & 512                                  & 3×3/1                & 13×13×256            & 13×13×512                                \\
+15                                 & Convolutional                & {\color[HTML]{CB0000} \textbf{18}}   & 1×1/1                & 13×13×512            & {\color[HTML]{CB0000} \textbf{13×13×18}} \\
+16                                 & YOLO                         &                                      & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}                     \\
+17                                 & \textit{\textbf{Rout13}}     &                                      &                      &                      &                                          \\
+18                                 & Convolutional                & 128                                  & 1×1/1                & 13×13×256            & 13×13×128                                \\
+19                                 & Up-sampling                  &                                      & 2×2/2                & 13×13×256            & 26×26×128                                \\
+20                                 & \textit{\textbf{Route 19,8}} &                                      &                      &                      &                                          \\
+21                                 & Convolutional                & 256                                  & 3×3/1                & 26×26×384            & 26×26×256                                \\
+22                                 & Convolutional                & {\color[HTML]{CB0000} \textbf{18}}   & 1×1/1                & 26×26×256            & {\color[HTML]{CB0000} \textbf{26×26×18}} \\
+23                                 & YOLO                         &                                      &                      &                      &                                          \\ \bottomrule
+
+\end{tabular}}
+\caption{\textbf{AttentionNet network structure}. $^{\mathrm{18}}$Final YOLO Output should equal to 3×(classes+5))}
+\end{table}
+
+
+
+\subsection{Multi Scale Tensor Prediction Framework}
+\label{sub:fixme}
+
+The original YOLOv3\cite{b33} used the darknet front-end feature extraction module, but the detection performance on Sezary Syndrom dataset is unsatisfied. On the contrary, AttentionNet with only $13 \times 13$, $26 \times 26$ yolo scale output tensors adopts multi-scale fusion, and K means++ clustering\cite{b18} techniques, outperforms TF-Yolo\cite{b18} and  YOLOv3 \cite{b33}, which has $13 \times 13$, $26 \times 26$, $52 \times 52$ yolo scale output tensor. In order to train a suitable segment-or, it is recommended to choose corresponding scale tensors refer to different data sets. 
+
+We use a YOLOV3 like architecture due to its modularisation capabilities. In the ablation study, we individually measure the impact of all architectural components. Here, we vary the tensor Multi Scale Tensor, as well as the number of hierarchy levels used by the architecture. Moreover, we vary the number of point-wise convolution layers to measure the effect of each Yolo tensor output independently and in parallel. Hence, we make reasonable
+claims about the combination of only $13 \times 13$, $26 \times 26$ yolo scale output tensors.
+
+
+\begin{figure}[htbp]
+\centering
+\subfigure[ $13 \times 13$, $26 \times 26$ tensor Cellyolo PR on val dataset]{
+\begin{minipage}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=2in]{2 tensor cellyolo PR on val dataset.png}
+%\caption{fig1}
+\end{minipage}%
+}%
+
+
+\subfigure[$52 \times 52$, $26 \times 26$tensor Cellyolo PR on val dataset]{
+\begin{minipage}[t]{0.5\linewidth}
+\centering
+\includegraphics[width=2in]{52 tensor cellyolo PR on val dataset.png}
+%\caption{fig2}
+\end{minipage}
+}%
+\centering
+\caption{Precision-Recall curve on val sub-dataset of Sezary Syndrom dataset(1k training image,726 test image), in terms of different scale yolo output layers}
+\end{figure}
+
+
+
+\subsection[Awesome Figures in the TOC]
+
+\label{sub:figures}
+
+
+K‐means++ clustering is an approach commonly used to adaptive partition a dataset into groups. It is necessary to specify the number of cluster centers in advance. The k‐means++ algorithm generally uses the Euclidean distance to measure the distance between two points. Instead of using prior 9 box given by YOLOv3 trained on COCO dataset, for our customer dataset, it's noteworthy that give the prior knowledge of ground truth box. Using small subset of manually annotated cell, we can improve $GIOU$(ground truth box position, prediction box location) scores, and these will leads to better class scores as well and in final achieve higher accuracy.
+
+Nevertheless, there are the following three scale targets in the dataset: large‐scale targets,
+moderate‐scale targets, and small‐scale targets [30]. The main steps of the K‐means++ method are as
+follows:   
+Step 1: Choose an initial center t1 uniformly at random from the dataset X .
+Step 2: Choose the next center ti , selecting  with probability
+where D(x) is the distance from a data point x to the closest center.
+Step 3: Repeat Step 2, until D x( ) is the shortest distance. After which, k center is chosen.
+Step 4: Define center 
+Step 5: For i , set the cluster Ti to be the set of points in X that are closer to
+ti than they are to tj for all j  i.
+Step 6: For i k , set ti to be the center of mass of all points inTi
+Step 7: Repeat Step 5 and Step 6 until T converges.
+The definition of the three sizes of targets here refers to the proportion that they are in the entire image.
+
+As mentioned above, YOLOv3 algorithm has achieved end‐to‐end training and high‐speed target detection. However, some problems still exist. Conventional YOLO divides each image into a fixed grid, which results in the number of detected objects will be limited. The fixed parameters provided by anchor are suitable for the targets in the VOC datasets, while they are not adapted to the targets in specific scenes. Common targets, such as vehicles, tanks, and airplanes, have a large aspect ratio. Therefore, this section takes advantage of the ideas in Fast R‐CNN and SSD to re‐cluster
+according to a spacific scenario. In the beginning, the network manually sets a priori box. To guarantees the selection of network is more subjective, and it would make the deep network easier to learn. Furthermore, its predictions perform better than the original method. In order to optimize the adapted parameters and select appropriate anchor box size, the designed network needs to recluster according to real application domains. In this way, the AttentionNet network achieve nearly semantic prediction, meanwhile, it is insensitive to small objects particularly.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Citations} % (fold)
+\label{sub:citations}
+You can cite books from your bibliography \texttt{thesis.bib} (\eg \cite{cochrane}).
+Abbreviations from \texttt{abbrev.bib} help in writing the entries.
+% subsection citations (end)
+
+\subsection{FixMe warnings}
+\label{sub:fixme}
+You can add warnings\fxwarning{WARNING} or notifications\fxnote{Note} to your text.
+This will help you keep an overview on the places in the text you have to work on.
+
+
+
+
 
 \section{CellNet}
 \label{sec:ipsum}
@@ -590,28 +741,32 @@ For biomedical images processing, due to different experimental conditions, such
 
 \subsubsection{CellNet: generate more feature map by linear operation}
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\begin{center}
-		\begin{subfigure}[b]{0.49\textwidth}
-			\includegraphics[width=0.9\textwidth]{res18.pdf}
-			\caption{res18}
+		\begin{subfigure}[t]{0.49\textwidth}
+		    \centering
+			\includegraphics[height=6.5in]{res18.pdf}
+			\caption{Overall architecture of ResNet18}
 			\label{fig:res18}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.49\textwidth}
-			\reflectbox{\includegraphics[width=0.9\textwidth]{Ghostres18.pdf}}
-			\caption{cellnet}
+		\begin{subfigure}[t]{0.49\textwidth}
+		    \centering
+			\includegraphics[height =6in]{Ghostres18.pdf}
+			\caption{Overall architecture of CellNet}
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
-	\caption{The comparison between ResNet18 \cite{b20} and CellNet. Despite its simplicity (only 8 layers ghost module) and lower parameters ( $1/4$ weights than ResNet18 \cite{b20}), inside Ghost bottleneck adopted residual function for deeper gradient forward.}
+	\caption{\textbf{The comparison between ResNet18 \cite{b20} and CellNet}. Despite its simplicity (only 8 layers ghost module) and lower parameters ( $1/4$ weights than ResNet18 \cite{b20}), inside Ghost bottleneck adopted residual function for deeper gradient forward.}
 \end{figure}
+
+
 
 Inspired by those two outstanding neural network\cite{b19}\cite{b20}, instead of stacking lots of point-wise convolutional layers and taking huge amount of convolutional manipulations, we can avoid the redundant feature maps by cheap operation. 
 
 As shown in Table 1. The first layer of CellNet is a standard convolutional layer with 64 filters, follows standard batch normalization and relu, in order to generate initial intrinsic feature maps, then we purpose a few series of G-bneck, namely 8 layers. In each stage first apply stride = 1 then apply stride = 2 bottleneck which gradually increase the output channel dimension. After 8 layer feature extraction, we get a 512-dimensional feature vector by global average pooling and convolutional layer. SE layer applied to scale less important feature map. Smoothing, blurring and motion are also widely used linear operation, but they need more GPU support. By using depth-wise convolution layer, we can generate more correlated ghost feature maps with cheaper cost.
 \begin{table}[htbp]
 \centering
-\caption{CellNet network structure}
+
 \scalebox{0.85}{
 \begin{tabular}{@{}llllllll@{}}
 \toprule
@@ -631,13 +786,12 @@ layer & Type    & Filters & Size/Stride           & Input      & Output     & \m
 12    & Conv2d  & 512     & 1×1/1                 & 1×1×512    & 1×1×512    & -                                  & -  \\
 13    & FC      & -       & \multicolumn{1}{c}{-} & 1×1×512    & 1000       & -                                  & -  \\ \bottomrule
 
-\multicolumn{8}{l}
-{G-bneck denotes novel Ghostbottleneck. \#Expan means expansion size.}
 
 \end{tabular}}
+\caption{\textbf{CellNet Network Structure}. G-bneck denotes novel Ghostbottleneck. \#Expan means expansion size.}
 \end{table}
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\begin{center}
 		\begin{subfigure}[b]{0.49\textwidth}
 			\includegraphics[width=\textwidth]{normal conv.png}
@@ -645,27 +799,28 @@ layer & Type    & Filters & Size/Stride           & Input      & Output     & \m
 			\label{fig:res18}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.49\textwidth}
+		    \centering
 			\includegraphics[width=\textwidth]{ghostmodule.png}
 			\caption{The Ghost module}
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
-	\caption{The comparison between normal convolutional layer in \cite{b26}\cite{b27}\cite{b28} and ghost module. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
+	\caption{\textbf{The comparison between normal convolutional layer in \cite{b26}\cite{b27}\cite{b28} and ghost module}. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
 \end{figure}
 
 
 
 \textbf{Ghostmodule: Is point-wise convolution really indispensable?} Unlike Ghost module applied in GhostNet\cite{b19}, we designed two kind of novel Ghost Modules for feature extraction and adopted the SE layers from Squeeze-and-Excitation Networks \cite{b24} for enhancing useful features and balancing less inhibiting feature map. The first novel Ghost module inside of Gbneck acts as an expansion layer increasing the number of channels, while second Ghost module reduces the number of channels to match the shortcut path. Then the inputs and the outputs of these two Ghost modules are concatenated by shortcut. We adopted batch normalization (BN) and ReLU non-linearity right after each layer as well\cite{b19}, except that ReLU was not used after the second Ghost module as suggested by MobileNetV2\cite{b30}. In each novel Ghost Module, we only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation such as depth-wise convolution or affine transformation and wavelet transformation, as suggested by GhostNet\cite{b19}, here the depth-wise convolution was used.
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\begin{center}
 		\begin{subfigure}[b]{0.49\textwidth}
-			\includegraphics[width=\textwidth]{stride1 module.png}
+			\includegraphics[width=3.5in]{stride1 module.png}
 			\caption{Stride = 1 SE = 0 G-bneck}
 			\label{fig:res18}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.49\textwidth}
-			\includegraphics[width=\textwidth]{stride2 module.png}
+			\includegraphics[width=3.5in]{stride2 module.png}
 			\caption{Stride = 2 SE = 0 G-bneck}
 			\label{fig:cellnet}
 		\end{subfigure}
@@ -698,7 +853,6 @@ As far as we deeply analyze each-layer-generated feature map by our net, we can 
 
 \begin{table}[h]
 \centering
-\caption{Comparison of structure and parameters of state-of-the-art methods on Cifar10 dataset}
 \begin{tabular}{@{}llll@{}}
 \toprule
 Model     & \begin{tabular}[c]{@{}c@{}}Weights\\ (million)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Top-1 Val Acc.\\ (\%)\end{tabular} & \begin{tabular}[c]{@{}c@{}}FLOPs\\ (million)\end{tabular} \\ \midrule
@@ -707,13 +861,12 @@ ResNet18\cite{b20}   & 11                                                       
 Ghost Net\cite{b19} & 5.18                                                        & 88.238                                                        & 141                                                       \\
 *our      & {\color[HTML]{CB0000} \textbf{2.91}}                        & {\color[HTML]{333333} \textbf{92.45}}                         & {\color[HTML]{CB0000} \textbf{41.7}}                      \\ \bottomrule
 \end{tabular}
-
+\caption{\textbf{Comparison of structure and parameters of state-of-the-art methods on Cifar10 dataset}}
 \end{table}
 
 
 \begin{table}[h]
 \centering
-\caption{Comparison of structure and parameters of state-of-the-art methods on Pneumonia dataset}
 \begin{tabular}{@{}llll@{}}
 \toprule
 Model                                                  & \begin{tabular}[c]{@{}l@{}}Weights\\ (million)\end{tabular} & \begin{tabular}[c]{@{}l@{}}Top-1 Val Acc.\\ (\%)\end{tabular} & \begin{tabular}[c]{@{}l@{}}FLOPs\\ (million)\end{tabular} \\ \midrule
@@ -723,79 +876,90 @@ Ghost Net\cite{b19}                                              & 5.18         
 *our                                                   & {\color[HTML]{CB0000} \textbf{2.91}}                        & {\color[HTML]{CB0000} \textbf{91.78}}                         & {\color[HTML]{CB0000} \textbf{41.7}}                      \\ \bottomrule
 \end{tabular}
 \centering
+\caption{\textbf{Comparison of structure and parameters of state-of-the-art methods on Pneumonia dataset}}
 \end{table}
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\begin{center}
-		\begin{subfigure}[b]{0.25\textwidth}
-			\includegraphics[width=\textwidth]{hd1 (4400).png}
-			
+		\begin{subfigure}[b]{0.45\textwidth}
+		    \centering
+			\includegraphics[height= 0.10\textheight]{hd1 (4400).png}
+			\caption{}
 			\label{fig:res18}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.25\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4400) (1).png}}
-			
-			\label{fig:cellnet}
-		\end{subfigure}
-		\begin{subfigure}[b]{0.25\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4550).png}}
-			
-			\label{fig:cellnet}
-		\end{subfigure}
-		\begin{subfigure}[b]{0.25\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4550) (1).png}}
-			
-			\label{fig:cellnet}
-		\end{subfigure}
-		\begin{subfigure}[b]{0.25\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{ss2_8 (142).png}}
-			
-			\label{fig:cellnet}
-		\end{subfigure}
-		\begin{subfigure}[b]{0.25\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{ss2_8 (142) (1).png}}
-			
+		\begin{subfigure}[b]{0.45\textwidth}
+		    \centering
+			\includegraphics[height= 0.10\textheight]{hd1 (4400) (1).png}
+			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 		
+		\begin{subfigure}[b]{0.45\textwidth}
+		    \centering
+			\includegraphics[height= 0.10\textheight]{hd1 (4550).png}
+			\caption{}
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+		    \centering
+			\includegraphics[height= 0.10\textheight]{hd1 (4550) (1).png}
+			\caption{}
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+		    \centering
+			\includegraphics[height= 0.10\textheight]{ss2_8 (142).png}
+			\caption{}
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+		    \centering
+			\includegraphics[height= 0.10\textheight]{ss2_8 (142) (1).png}
+			\caption{}
+			\label{fig:cellnet}
+		\end{subfigure}
+		
+		
 		\begin{subfigure}[b]{0.33\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4550)ournetWithcellyolo.jpg}}
-			
+		    \centering
+			\includegraphics[height= 0.20\textheight]{hd1 (4550)ournetWithcellyolo.jpg}
+			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.33\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4550)resnetWithcellyolo.jpg}}
-			
+		    \centering
+			\includegraphics[height= 0.20\textheight]{hd1 (4550)resnetWithcellyolo.jpg}
+			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.33\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{hd1 (4550)vggnetWithcellyolo.jpg}}
-			
+		    \centering
+			\includegraphics[height= 0.20\textheight]{hd1 (4550)vggnetWithcellyolo.jpg}
+			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
 	\caption{The illustration of the necessity of Ghost-Module and AttentionNet. (a)-(f) implying the performances of AttentionNet. After AttentionNet segmentation, artifacts will be removed and only morphological characteristics of the objects stay. The second row are saliency map of cell (d) after ResNet18\cite{b20} (h), our Net (g) and VGG16 net \cite{b23} (i). Leading  STOA  algorithms, such ResNet18 and VGG16 net, are  more focus  these  non  ROI  features,  such  as  the  debris  feature  outside the ROI. Those leading networks pay more attention to those debris information leads to worse classification performance.}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\begin{center}
-		\begin{subfigure}[b]{0.33\textwidth}
-			\includegraphics[width=\textwidth]{Inkedfirst Conv1 of resnet18 with pretrain weights on coviddataset_LI.jpg}
-			
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[height= 0.25\textheight]{Inkedfirst Conv1 of resnet18 with pretrain weights on coviddataset_LI.jpg}
+			\caption{}
 			\label{fig:res18}
 		\end{subfigure}
 		
 		
-		\begin{subfigure}[b]{0.33\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{Inkedfirst Conv1 of resnet18 with pretrain weights on penudataset_LI.jpg}}
-			
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[height= 0.25\textheight]{Inkedfirst Conv1 of resnet18 with pretrain weights on penudataset_LI.jpg}
+			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 		
-		
-		\begin{subfigure}[b]{0.33\textwidth}
-			\reflectbox{\includegraphics[width=\textwidth]{cellnetnecc3.jpg}}
-			
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[height= 0.25\textheight]{cellnetnecc3.jpg}
+			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 		
@@ -803,7 +967,7 @@ Ghost Net\cite{b19}                                              & 5.18         
 	\caption{The illustration of the necessity of Ghost-Module and CellNet. There are visualization of feature maps after ResNet18\cite{b20} 1st convolutional layer. Whether it is a Xray image of COVID-19 dataset (a), a cell image segmented by attentation (c), or a CT image from Pneumonia Dataset (b), after the first layer of point-wise convolution there is a large amount of redundant feature maps (see the same color marked). Especially for Sezary Syndrome Dataset, there is no need to operate point-wise convolution one by one after AttentionNet segmentation, because all the valid information is within the circle.}
 \end{figure}
 
-\subsubsection{AttentionNet: Automatic $Detector$ and $Segment or$}\label{AA}
+\subsubsection{AttentionNet: Automatic Detector and Segment-or}\label{AA}
 The proposed AttentionNet follows basic structure of YOLOv3-tiny algorithm\cite{b33}, and it attempts to process more efficiently on small target. The attributes of self-detection and labeling, of nearly real-time resolve and of general resource requirements mainly characterize the AttentionNet Network. At the beginning it is  similar to YOLOv3\cite{b33} that the input image is divided into an $M \times M$ grid. Then $B$ bounding boxes and confidence score are defined in each grid cell. Each grid cell predicts $C$ conditional probabilities, denoted as $P(Class_{i}\mid Object_{j})$ for $i$ classes and object $j$. If there is an object $j$ in the grid, then indicated the objectiveness score $P(Object_{j})$  equal to $1$\cite{b18}. Here, we refer the initiatives from YoloV3, the confidence score also represents the accuracy of the box prediction, which is defined as $GIOU_{Ground truth}^{Predition}$. Unlike the originally YOLOv3\cite{b33}, instead of using Intersection‐Over‐Union (IOU), we use $GIOU$ with higher precision, which refers to the generalized intersection area between the predicted bounding box and ground truth box.
 
 It should be noted that each grid cell predicted conditional class probability is not same as the confidence score. These often leads to misunderstanding of the fact that the former $P(Class_{i} \mid Object_{j})$ is predicted in each grid, while the $P(Object_{j}) \times GIOU_{Ground truth}^{Predition}$ is predicted in each bounding box\cite{b18}. 
@@ -834,7 +998,7 @@ To verify the effectiveness of the proposed novel Ghost module and CellNet archi
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{Cifar-12-06-2020.png}
+\includegraphics[height=200pt, width=0.9\textwidth]{Cifar-12-06-2020.png}
 \label{fig}
 \centering
 \caption{Comparison of state-of-art methods for training on benchmark CIFAR-10 Dataset. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy ) than both ResNet and GhostNet, it is illustrated by both the standard derivation, namely the stability, and the final converged accuracy.}
@@ -847,7 +1011,7 @@ CIFAR-10 dataset\cite{b21} consists of 60,000 32 × 32 color images in 10 classe
 On benchmark Pneumonia Dataset\cite{b38}. The Pneumonia / Normal classification val accuracy of our Net converges into nearly 91.785\% better than GhostNet and ResNet18. In addition, after around 80 epochs the accuracy of our Net converges into nearly 91.785\%, comparing to  Inception V3 after 7,000 epochs reaches 88.0\%\cite{b38}.
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{Pneumonia_TimeSeries-1.png}
+\includegraphics[height=200pt, width=0.9\textwidth]{Pneumonia_TimeSeries-1.png}
 \label{fig}
 \centering
 \caption{ Comparison of state-of-art methods for training on Pneumonia Dataset. Benchmark Pneumonia Dataset contains 5,856 Xray/CT images. Considering the fact that Our Net has only 8 Novel Ghostmodule layers and 2.91 millions of weights, outperforms both ResNet18, GhostNet and InceptionV3 net from Accuracy and Complexity perspective views.}
@@ -855,25 +1019,21 @@ On benchmark Pneumonia Dataset\cite{b38}. The Pneumonia / Normal classification 
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\textwidth]{COVID-19_TimeSeries-1.png}
+\includegraphics[height=200pt, width=0.9\textwidth]{COVID-19_TimeSeries-1.png}
 \label{fig}
 \centering
-\caption{ Comparison of state-of-art methods for training on COVID-19 Dataset. COVID-19 Dataset contains nearly 2,000 Xray/CT images we sampled from newest publications. Our Net achieves 3rd place classification performance among these state-of-art models while least weights and computational cost. The weights of our models is 2.91 million, comparing to DenseNet121 7.98 millions of weights, MobileNet V2 3.4 millions of weights and 301 millions of FLOPs. Considering the fact of the higher complexity and parameter amount of other SOTA Nets, our Net is very competitive on classification tasks for the biomedical dataset. }
+\caption{ Comparison of state-of-art methods for training on COVID-19 Dataset.  The weights of our models is 2.91 million, comparing to DenseNet121 7.98 millions of weights, MobileNet V2 3.4 millions of weights and 301 millions of FLOPs. Considering the fact of the higher complexity and parameter amount of other SOTA Nets, our Net is very competitive on classification tasks for the biomedical dataset. }
 \end{figure}
 
 
 \begin{figure}[h]
-\includegraphics[width=\textwidth]{BarDiagram_Bold.png}
+\includegraphics[height=240pt,width=0.9\textwidth]{BarDiagram_Bold.png}
 \label{fig}
 \centering
 \caption{Graphical summary of composition of COVID-19 Xray/CT images. Based on initial COVID-19 Image Data Collection \cite{b37}, we additionally collected and sorted nearly 2,000 CT/Xray images, with wide range in gender, age, survival condition and country/places from newest publications and CDC public sources\cite{b36}\cite{b37}\cite{b38}. }
 %\caption{Graphical summary of Alex Net\cite{b31}, Squeeze net\cite{b24}, ResNet18\cite{b20}, MobieNetv2\cite{b30}, Our Net, Ghost Net\cite{b19}, DenseNet121\cite{b32}, and Vgg11\cite{b23} performance on COVID-19 dataset. }
 \end{figure}
-The 2019 novel corona virus (COVID-19) brings huge challenge to our life and we are facing an increasingly disrupted challenging time. In order to help the medical scientists, we made this COVID-19 dataset. Based on initial COVID-19 Image Data Collection\cite{b37}, which contains only 123 frontal view X-rays. We additionally collected data from newest publications and  assembled medical images from websites and publications such as European Journal of Radiology\cite{b36}, and collected nearly 1583 healthy Lung CT images as comparative data from recently available resources and publications\cite{b37} \cite{b38}.
-
-
-
-
+The 2019 novel corona virus (COVID-19) brings huge challenge to our life and we are facing an increasingly disrupted challenging time. In order to help the medical scientists, we made this COVID-19 dataset. Based on initial COVID-19 Image Data Collection\cite{b37}, which contains only 123 frontal view X-rays. We additionally collected data from newest publications and  assembled medical images from websites and publications such as European Journal of Radiology\cite{b36}, and collected nearly 1583 healthy Lung CT images as comparative data from recently available resources and publications\cite{b37} \cite{b38}. COVID-19 Dataset contains nearly 2,000 Xray/CT images we sampled from newest publications. Our Net achieves 3rd place classification performance among these state-of-art models while least weights and computational cost.
 
 
 
