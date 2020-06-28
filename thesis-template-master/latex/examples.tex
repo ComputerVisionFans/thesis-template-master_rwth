@@ -271,6 +271,7 @@ The attributes of self-detection and labeling, of nearly real-time resolve and o
 
 It should be noted that each grid cell predicted conditional class probability is not same as the confidence score. These often leads to misunderstanding of the fact that the former $P(Class_{i} \mid Object_{j})$ is predicted in each grid, while the $P(Object_{j}) \times GIOU_{Ground truth}^{Predition}$ is predicted in each bounding box\cite{b18}. 
 Finally Class Score $S$ is defined as follow (1): \label{eq}
+
 \begin{equation}
 \begin{split}
 $S&=P(Class_{i}\mid Object_{j}) \times P(Object_{j}) \times GIOU_{Ground truth}^{Predition} \\
@@ -328,6 +329,11 @@ K‐means++ clustering is an approach commonly used to adaptive partition a data
 			\caption{The cluster distribution}
 			\label{fig:cellnet}
 		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[width=\textwidth]{thesis-template-master/images/anchor.JPG}
+			\caption{ Prior box and location prediction box}
+			\label{fig:res18}
+		\end{subfigure}
 	\end{center}
 	\caption{\textbf{The comparison between normal convolutional layer in \cite{b26}\cite{b27}\cite{b28} and ghost module}. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
 \end{figure}
@@ -352,15 +358,109 @@ Step 7: Repeat Step 5 and Step 6 until T converges.
 
 The definition of the three sizes of targets here refers to the proportion that they are in the entire image.
 
-As mentioned above, YOLOv3 algorithm has achieved end‐to‐end training and high‐speed target detection. However, some problems still exist. Conventional YOLO divides each image into a fixed grid, which results in the number of detected objects will be limited. The fixed parameters provided by anchor are suitable for the targets in the VOC datasets, while they are not adapted to the targets in specific scenes. Common targets, such as vehicles, tanks, and airplanes, have a large aspect ratio. Therefore, this section takes advantage of the ideas in Fast R‐CNN and SSD to re‐cluster
-according to a spacific scenario. In the beginning, the network manually sets a priori box. To guarantees the selection of network is more subjective, and it would make the deep network easier to learn. Furthermore, its predictions perform better than the original method. In order to optimize the adapted parameters and select appropriate anchor box size, the designed network needs to recluster according to real application domains. In this way, the AttentionNet network achieve nearly semantic prediction, meanwhile, it is insensitive to small objects particularly.
+\begin{figure}[h]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+		    \centering
+			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/withkmean.png}
+			\caption{With k-means++ cluster}
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+		    \centering
+			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/withoutkmean.png}
+			\caption{Without k-means++ cluster}
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+		    \centering
+			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/withkmean1.png}
+			\caption{With k-means++ cluster}
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+		    \centering
+			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/withoutkmean2.png}
+			\caption{Without k-means++ cluster}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{The comparison between normal convolutional layer in \cite{b26}\cite{b27}\cite{b28} and ghost module}. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
+\end{figure}
+
+As mentioned above, YOLOv3 algorithm has achieved end‐to‐end training and high‐speed target detection. However, some problems still exist. Conventional YOLO divides each image into a fixed grid, which results in the number of detected objects will be limited. The fixed parameters provided by anchor are suitable for the targets in the VOC datasets, while they are not adapted to the targets in specific scenes. Common targets, such as vehicles, tanks, and airplanes, have a large aspect ratio. Therefore, this section takes advantage of the ideas in Fast R‐CNN and SSD to re‐cluster according to a spacific scenario. In the beginning, the network manually sets a priori box. To guarantees the selection of network is more subjective, and it would make the deep network easier to learn. Furthermore, its predictions perform better than the original method. In order to optimize the adapted parameters and select appropriate anchor box size, the designed network needs to recluster according to real application domains. In this way, the AttentionNet network achieve nearly semantic prediction, meanwhile, it is insensitive to small objects particularly.
+
+
 
 
 \subsection{Loss function} % (fold)
 \label{sub:citations}
-You can cite books from your bibliography \texttt{thesis.bib} (\eg \cite{cochrane}).
-Abbreviations from \texttt{abbrev.bib} help in writing the entries.
-% subsection citations (end)
+
+Contrarily to the original implementation of YOLOv3 (Chapter 2.3.2), we calculate the loss function by means of three parts. Here, we divide them into three compositions, the loss between the ground truth box and the prediction box, the confidence score loss, the final cross entropy loss for class label. First part is the prediction bounding box loss, second part indicates the confidence loss and final part represents the class label loss. k means the classes, the conf states the confidence, and the 10647 generated from 2535 prediction bounding boxes. It is equal to $(13\times13\time3+26\time26\time3)=2535$ in contrast to originally YOLOv3 has $(13\times13\time3+26\time26\time3+26\time26\time3)=10647$ prediction bounding boxes.
+
+\begin{equation}
+\begin{split}
+$Loss&=\frac{1}{2}\sum_{i=1}^{2535}\lambda _{obj}\times \{ \left ( 2-truth_{w} \times truth_{h}\right )\times  \sum_{r\in \left ( x,y,w,h \right )}^{}\left ( truth_{r}-predict_{r} \right )^{2} \\$
+$&+ \sum_{k-1}^{r=0} \left ( \left ( r==truth_{class} \right )-predict_{class_{r}} \right )^{2}  \} + \left ( truth _{conf}-predict_{conf}\right )^{2}$  \label{eq}
+\end{split}
+\caption{\textbf{Loss function adopted in AttentionNet}.}
+\end{equation}
+
+
+\textbf{ The Loss for Bounding Box}:
+\begin{equation}
+\begin{split}
+$\lambda _{obj}\times \left  \left ( 2-truth_{w} \times truth_{h}\right )\times \sum_{r\in \left ( x,y,w,h \right )}^{}\left ( truth_{r}-predict_{r} \right )^{2}$ \label{eq}
+\end{split}
+\caption{\textbf{The Loss for Bounding Box}.}
+\end{equation}
+In YOLOv1, the author did find the square root of the width and height (w, h), in order to Weakening the influence of the bounding box size on the loss value. Here, we are following YOLOv3 priority suggestions do not adopt the square root method, but added a weight related to the size of the  object box size. namely with weight = $  2-truth_{w} \times truth_{h}  $, value range from (1~2). In contrast to the first version of YOLO network, which adopted the IOU loss to calculate the loss between  prediction box and prior, the YOLOv3 imporved the accuracy by 1\% under the  contribution of GIOU loss. 
+
+In cvpr2019 paper GIOU, they proposed a new way to optimize boundary boxes mode, defined as generalized IOU, the bounding box is generally composed of the upper left and lower right corners of the coordinates, denoted as (x, y, x2, y2). Note that this is actually a vector, and vector distances are generally can be measured by either the L1 norm or the L2 norm.
+
+However, when either the L1 or L2 norms is the same, it was found that the values of both IOU and GIOU are very different, indicating that the use of the L paradigm to measure the the distance between  the prediction and the real ground truth is inappropriate.
+
+
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+		    \centering
+			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/l2loss.JPG}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{Two sets of examples with the bounding
+boxes represented by two corners (x1, y1, x2, y2) for first row, center and size (xc, yc, w, h) for second row. For all three cases in each set$ ℓ2$
+norm distance, and  $ℓ1$-norm distance, between the representation of two rectangles are exactly same value, but their IoU and GIoU values are very different.}
+\end{figure}
+
+
+In this case, the IOU is commonly used in academia to measure the similarity between two boundaries, but we found experimentally that there are two obvious drawbacks to using IOU which makes it less suitable for the loss function.
+
+First, when there is no overlap between the prediction box and the ground truth. An IOU value of 0 results in a gradient of 0 when optimizing the loss function, meaning that optimization is not possible.
+
+secondly, even if the prediction box and the real box overlap and have the same IOU value, the detection effect will be very different. This is indistinguishable by IOU, because IOU is the same, but this can be reflected by GIOU . If the two bounding boxes overlap the better, the better the alignment, the higher the GIOU value.
+
+\textbf{ The confidence score loss}:
+\begin{equation}
+\begin{split}
+$\left ( truth _{conf}-predict_{conf}\right )^{2}$ \label{eq}
+\end{split}
+\caption{\textbf{The Loss for Bounding Box}.}
+\end{equation}
+
+
+First, we should find the prediction bounding box with the largest IOU value of the real ground truth. If the largest IOU is less than the threshold, then the prediction is considered to contain no objects, and it is the background grid. Then we calculate the   confidence loss (we hope that if the grid contains objects, then the confidence of the prediction box output is 1, and 0 when there is no object). The confidence $\lambda _{obj}$ comes from focal loss. It indicates the confidence level to determine if there is an object in the grid.
+
+\textbf{ The cross entropy loss for class label:}
+\begin{equation}
+\begin{split}
+$\lambda _{obj}\times \sum_{k-1}^{r=0}  ( ( r==truth_{class}  )-predict_{class_{r}} )^{2} $ \label{eq}
+\end{split}
+\caption{\textbf{The Loss for Bounding Box}.}
+\end{equation}
+Finally,we  utilize the cross entropy loss to generate the class label.
 
 
 \subsection{GBCIOU and Circle segmentation}
