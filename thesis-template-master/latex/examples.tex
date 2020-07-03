@@ -223,8 +223,6 @@ It is worth noting that the AttentionNet is not involved in the task of cell cla
 \label{sec:lorem}
 
 
-
-
 \subsection{Network Architecture} % (fold)
 \label{sub:citations}
 
@@ -314,6 +312,7 @@ claims about the combination of only $13 \times 13$, $26 \times 26$ yolo scale o
 
 
 \subsection{K‐means++ Clustering in Pre-processing}
+
 K‐means++ clustering is an approach commonly used to adaptive partition a dataset into groups. It is necessary to specify the number of cluster centers in advance. The k‐means++ algorithm generally uses the Euclidean distance to measure the distance between two points. Instead of using prior 9 box given by YOLOv3 trained on COCO dataset, for our customer dataset, it's noteworthy that give the prior knowledge of ground truth box. Using small subset of manually annotated cell, we can improve $GIOU$(ground truth box position, prediction box location) scores, and these will leads to better class scores as well and in final achieve higher accuracy.
 
 \begin{figure}[h]
@@ -338,26 +337,7 @@ K‐means++ clustering is an approach commonly used to adaptive partition a data
 	\caption{\textbf{The comparison between normal convolutional layer in \cite{b26}\cite{b27}\cite{b28} and ghost module}. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
 \end{figure}
 
-Nevertheless, there are the following three scale targets in the dataset: large‐scale targets, moderate‐scale targets, and small‐scale targets [30]. The main steps of the K‐means++ method are as follows:   
-
-Step 1: Choose an initial center t1 uniformly at random from the dataset X.
-
-Step 2: Choose the next center ti , selecting  with probability
-where D(x) is the distance from a data point x to the closest center.
-
-Step 3: Repeat Step 2, until D x( ) is the shortest distance. After which, k center is chosen.
-
-Step 4: Define center 
-
-Step 5: For i , set the cluster Ti to be the set of points in X that are closer to
-ti than they are to tj for all j i.
-
-Step 6: For i k , set ti to be the center of mass of all points inTi
-
-Step 7: Repeat Step 5 and Step 6 until T converges.
-
-The definition of the three sizes of targets here refers to the proportion that they are in the entire image.
-
+Nevertheless, there are the following three scale targets in the dataset: large‐scale targets, moderate‐scale targets, and small‐scale targets [30]. The main steps of the K‐means++ method are as follows:  The definition of the three sizes of targets here refers to the proportion that they are in the entire image.
 \begin{figure}[h]
 	\begin{center}
 		\begin{subfigure}[b]{0.49\textwidth}
@@ -387,6 +367,32 @@ The definition of the three sizes of targets here refers to the proportion that 
 	\end{center}
 	\caption{\textbf{The comparison between normal convolutional layer in \cite{b26}\cite{b27}\cite{b28} and ghost module}. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
 \end{figure}
+
+
+\begin{algorithm}[h]
+  \caption{K‐means++ Clustering in ground truth boxes.}
+  \label{alg:Framwork}
+  \begin{algorithmic}[1]
+    \Require
+    manually labelled a series of ground truth $B^{i}$ bounding boxes coordinates：
+     $B^{i}=\left ( x_{1}^{i},y_{1}^{i},x_{2}^{i},y_{2}^{i} \right ), i\in n.$ And clusters number $K$
+    \Ensure
+    optimal  prediction box size $\left ( w,h \right )$
+    \State For each box $B^{i}$, calculated the width and height by:
+    
+    $w^{i}=(x_{2}^{i}-x_{1}^{i}), h^{i}=(x_{2}^{i}-x_{1}^{i})$, 
+    
+    \State Choose an initial center $t_{1}$ uniformly at random from the dataset $X=(w^{i},h^{i}),i\in n$.
+    \While{$d\left ( x \right )$ shortest distance and  $K$ cluster not reached}
+       \State Choose the next center $t_{i}$ , selecting $t_{i}={x}'\in X $ with probability $\frac{d ( {x}')^{2}}{\sum_{x\in X}^{}d\left ( x \right )^{2} }$
+where $d\left ( x \right )$ is the distance from a data point $x$ to the closest cluster center.
+       \State For $i \in \left \{ 1,2,...K \right \}$ , set the cluster $T_{i}$ to be the set of points in $X$ that are closer to
+$t_{i}$ than they are to $t_{j}$ for all $i\neq j$.
+    
+  
+    \Return $T_{i}=(w^{i},h^{i}),i \in K$.
+  \end{algorithmic}
+\end{algorithm}
 
 As mentioned above, YOLOv3 algorithm has achieved end‐to‐end training and high‐speed target detection. However, some problems still exist. Conventional YOLO divides each image into a fixed grid, which results in the number of detected objects will be limited. The fixed parameters provided by anchor are suitable for the targets in the VOC datasets, while they are not adapted to the targets in specific scenes. Common targets, such as vehicles, tanks, and airplanes, have a large aspect ratio. Therefore, this section takes advantage of the ideas in Fast R‐CNN and SSD to re‐cluster according to a spacific scenario. In the beginning, the network manually sets a priori box. To guarantees the selection of network is more subjective, and it would make the deep network easier to learn. Furthermore, its predictions perform better than the original method. In order to optimize the adapted parameters and select appropriate anchor box size, the designed network needs to recluster according to real application domains. In this way, the AttentionNet network achieve nearly semantic prediction, meanwhile, it is insensitive to small objects particularly.
 
@@ -611,12 +617,133 @@ We proposed the GBCIOU function to ideally find general intersected box center w
 
 \section{CellNet}
 \label{sec:ipsum}
-Inspired by those two outstanding neural network\cite{b19}\cite{b20}, instead of stacking lots of point-wise convolutional layers and taking huge amount of convolutional manipulations, we can avoid the redundant feature maps by cheap operation. 
-%Especially, the only interest of the regions after taking AttentionNet pre-processing will focus on the cell as all the artifacts existed on the images have already been eliminated.
-As shown in Table 1. The first layer of CellNet is a standard convolutional layer with 64 filters, follows standard batch normalization and relu, in order to generate initial intrinsic feature maps, then we purpose a few series of G-bneck, namely 8 layers. In each stage first apply stride = 1 then apply stride = 2 bottleneck which gradually increase the output channel dimension. After 8 layer feature extraction, we get a 512-dimensional feature vector by global average pooling and convolutional layer. SE layer applied to scale less important feature map. Smoothing, blurring and motion are also widely used linear operation, but they need more GPU support. By using depth-wise convolution layer, we can generate more correlated ghost feature maps with cheaper cost.
+
 
 \subsection{Network Architecture} % (fold)
 \label{sub:Network Architecture_2}
+Inspired by those two outstanding neural network\cite{b19}\cite{b20}, instead of stacking lots of point-wise convolutional layers and taking huge amount of convolutional manipulations, we can avoid the redundant feature maps by cheap operation. 
+%Especially, the only interest of the regions after taking AttentionNet pre-processing will focus on the cell as all the artifacts existed on the images have already been eliminated.
+
+As shown in Table 1. The first layer of CellNet is a standard convolutional layer with 64 filters, follows standard batch normalization and relu, in order to generate initial intrinsic feature maps, then we purpose a few series of G-bneck, namely 8 layers. In each stage first apply stride = 1 then apply stride = 2 bottleneck which gradually increase the output channel dimension. After 8 layer feature extraction, we get a 512-dimensional feature vector by global average pooling and convolutional layer. SE layer applied to scale less important feature map. Smoothing, blurring and motion are also widely used linear operation, but they need more GPU support. By using depth-wise convolution layer, we can generate more correlated ghost feature maps with cheaper cost.
+
+
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{subfigure}[t]{0.49\textwidth}
+		    \centering
+			\includegraphics[height=5in]{thesis-template-master/images/res18.pdf}
+			\caption{Overall architecture of ResNet18}
+			\label{fig:res18}
+		\end{subfigure}
+		\begin{subfigure}[t]{0.49\textwidth}
+		    \centering
+			\includegraphics[height =4in]{thesis-template-master/images/Ghostres18.pdf}
+			\caption{Overall architecture of CellNet}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{The comparison between ResNet18 \cite{b20} and CellNet}. Despite its simplicity (only 8 layers ghost module) and lower parameters ( $1/4$ weights than ResNet18 \cite{b20}), inside Ghost bottleneck adopted residual function for deeper gradient forward.}
+\end{figure}
+
+
+
+
+
+
+
+
+\subsection{Novel Ghostmodule} % (fold)
+\label{sub:amet}
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{subfigure}[b]{\textwidth}
+		    \centering
+			\includegraphics[width=\textwidth]{thesis-template-master/images/normal conv.png}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{The normal Convolutional layer in \cite{b26}\cite{b27}\cite{b28}}. As its illustrated that to extraction the same amount of feature map, there are much more redundant output feature map by taking point wise convolution, especially for the small target objects or less informative images.}
+\end{figure}
+
+
+\begin{figure}[h]
+	\begin{center}
+		
+		\begin{subfigure}[b]{\textwidth}
+		    \centering
+			\includegraphics[width=\textwidth]{thesis-template-master/images/ghostmodule.png}
+			
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{The ghost module layer in \cite{b19}}. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
+\end{figure}
+
+Unlike Ghost module applied in GhostNet\cite{b19}, we designed two kind of novel Ghost Modules for feature extraction and adopted the SE layers from Squeeze-and-Excitation Networks \cite{b24} for enhancing useful features and balancing less inhibiting feature map. The first novel Ghost module inside of Gbneck acts as an expansion layer increasing the number of channels, while second Ghost module reduces the number of channels to match the shortcut path. Then the inputs and the outputs of these two Ghost modules are concatenated by shortcut. We adopted batch normalization (BN) and ReLU non-linearity right after each layer as well\cite{b19}, except that ReLU was not used after the second Ghost module as suggested by MobileNetV2\cite{b30}. In each novel Ghost Module, we only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation such as depth-wise convolution or affine transformation and wavelet transformation, as suggested by GhostNet\cite{b19}, here the depth-wise convolution was used.
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+		    \centering
+			\includegraphics[width=\textwidth]{thesis-template-master/images/stride1 module.png}
+			\caption{Stride = 1 SE = 0 G-bneck}
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+		    \centering
+			\includegraphics[width=\textwidth]{thesis-template-master/images/stride2 module.png}
+			\caption{Stride = 2 SE = 0 G-bneck}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{Two kind of Gbnecks we proposed for feature extraction}.We apply Stride = 1 to keep the output channel of the feature map, Stride = 2 decreases the output channel while extracting information without losing a lot of information. SE = 0 represents not applying SE layer.}
+\end{figure}
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{subfigure}[b]{\textwidth}
+		    \centering
+			\includegraphics[width=\textwidth]{thesis-template-master/images/SElayer.png}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{SE Layer}.}
+\end{figure}
+
+\subsection{Squeeze-and-Excitation (SE Layer)} % (fold)
+\label{sub:amet}
+
+\textbf{scaling inhibiting vs intrinsic features map.} Squeeze-and-Excitation (SE)\cite{b24} adaptively recalibrates channel-wise feature responses by explicitly modeling inter-dependencies between channels. 
+
+SENet further demonstrated that SE blocks bring significant improvements in performance for existing state-of-the-art CNNs with slight additional computational cost \cite{b24}. 
+
+
+
+\subsection{Analysis on complexities and necessities} % (fold)
+\label{sub:dolor_sit}
+Here, we further analyze the profit on memory usage and theoretical speed-up by employing the Ghost module, in additional we will plot the visual experiments. The theoretical speed-up ratio $\gamma$ of upgrading ordinary convolution with the Ghost module is equal to following:
+
+\begin{equation}
+\begin{split}
+\gamma $& = \frac{\left ( n\cdot {h}'\cdot {w}'\cdot c\cdot k\cdot k \right )}{\left (\frac{n}{s}\cdot {h}'\cdot {w}'\cdot c\cdot k\cdot k +\left ( s-1 \right )\cdot \frac{n}{s}\cdot {h}'\cdot {w}' \cdot d\cdot d \right )} \\
+$&= \frac{c\cdot k\cdot k}{\frac{1}{s}\cdot c\cdot k\cdot k + \frac{s-1}{s}\cdot d\cdot d } \\
+$&\approx \frac{s\cdot c}{s +c-1 } \\
+$&\approx s $\label{speed}
+\end{split}
+\end{equation}
+
+In Equation \eqref{speed}, ${h}' \cdot {w}' \cdot {n}$ represents  $n$ output feature maps with height ${h}'$, width ${w}'$, and $k \cdot k$, $d \cdot d$ stands for the convolution kernel filter and linear operation kernel size, respectively. And $m$ is the number of intrinsic feature maps, where $m < n$ because we only take few intrinsic feature maps and apply a series of cheap linear operations on each intrinsic feature to generate $s$ ghost features. It is also noteworthy that there are 1 ghost map adopted by identify mapping that indicates $s-1$. In total there are $\frac{n}{s} \cdot(s-1)$  linear operations. This leads to theoretically $s$ speed-up ratio.
+
+More feature maps generated by linear operation based on a set of intrinsic feature maps, instead of generating a lot of redundant data by point-wise convolution which takes huge amount of parameters simultaneously. This also partially explains that our net achieves the best performance on several benchmarks shown in Table 2 and Table 3.
+As far as we deeply analyze each-layer-generated feature map by our net, we can also figure out the second factor: the artifacts appear in the image could also be learned by the neural network, which greatly affects the accuracy of the network, with the combination of AttentionNet segmentation techniques in cell image pre-processing, we can more focus on object rather than artifacts.
+
+
+
+
+
 \begin{table}[htbp]
 \centering
 \caption{CellNet network structure}
@@ -645,63 +772,34 @@ layer & Type    & Filters & Size/Stride           & Input      & Output     & \m
 \end{tabular}}
 \end{table}
 
-\subsection{Novel Ghostmodule} % (fold)
-\label{sub:amet}
 
-\begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[b]{0.49\textwidth}
-		    \centering
-			\includegraphics[width=\textwidth]{thesis-template-master/images/normal conv.png}
-			\caption{The normal Convolutional layer}
-			\label{fig:cellnet}
-		\end{subfigure}
-		\begin{subfigure}[b]{0.49\textwidth}
-		    \centering
-			\includegraphics[width=\textwidth]{thesis-template-master/images/ghostmodule.png}
-			\caption{The Ghost module}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{\textbf{The comparison between normal convolutional layer in \cite{b26}\cite{b27}\cite{b28} and ghost module}. We only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation to generate ghost map with lower cost.}
-\end{figure}
 
-Unlike Ghost module applied in GhostNet\cite{b19}, we designed two kind of novel Ghost Modules for feature extraction and adopted the SE layers from Squeeze-and-Excitation Networks \cite{b24} for enhancing useful features and balancing less inhibiting feature map. The first novel Ghost module inside of Gbneck acts as an expansion layer increasing the number of channels, while second Ghost module reduces the number of channels to match the shortcut path. Then the inputs and the outputs of these two Ghost modules are concatenated by shortcut. We adopted batch normalization (BN) and ReLU non-linearity right after each layer as well\cite{b19}, except that ReLU was not used after the second Ghost module as suggested by MobileNetV2\cite{b30}. In each novel Ghost Module, we only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation such as depth-wise convolution or affine transformation and wavelet transformation, as suggested by GhostNet\cite{b19}, here the depth-wise convolution was used.
 
-\begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[b]{0.49\textwidth}
-		    \centering
-			\includegraphics[width=\textwidth]{thesis-template-master/images/stride1 module.png}
-			\caption{Stride = 1 SE = 0 G-bneck}
-			\label{fig:cellnet}
-		\end{subfigure}
-		\begin{subfigure}[b]{0.49\textwidth}
-		    \centering
-			\includegraphics[width=\textwidth]{thesis-template-master/images/stride2 module.png}
-			\caption{Stride = 2 SE = 0 G-bneck}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{\textbf{Two kind of Gbnecks we proposed for feature extraction}.We apply Stride = 1 to keep the output channel of the feature map, Stride = 2 decreases the output channel while extracting information without losing a lot of information. SE = 0 represents not applying SE layer.}
-\end{figure}
 
-\subsection{Squeeze-and-Excitation (SE Layer)} % (fold)
-\label{sub:amet}
-scaling inhibiting vs intrinsic features map.} Squeeze-and-Excitation (SE)\cite{b24} adaptively recalibrates channel-wise feature responses by explicitly modeling inter-dependencies between channels. 
 
-SENet further demonstrated that SE blocks bring significant improvements in performance for existing state-of-the-art CNNs with slight additional computational cost \cite{b24}. 
 
-\begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[b]{\textwidth}
-		    \centering
-			\includegraphics[width=\textwidth]{thesis-template-master/images/SElayer.png}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{\textbf{SE Layer}.}
-\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -712,23 +810,7 @@ This paper proposes a unifying approach that is capable of (1) imaging single-ce
 As we originally designed the unifying approach for Sezary Syndrome, which is an aggressive cutaneous T cell lymphoma that is characterized by presence of tumor T cells with abnormal nucleus morphology in the peripheral blood. Morphological identification of tumor T cells in the blood is currently still the gold standard.
 After Image Flow Cytometry there are huge amount of cell images produced from patient as well as healthy data set for comparison. Due to different experimental conditions, such as lighting conditions and different experimental objects, noise deviations are likely to appear on the sampled cell images, moreover, these deviations do not appear in the better quality and pure evaluation data set which leads to higher false negative.
 
-\section{Analysis on complexities and necessities} % (fold)
-\label{sub:dolor_sit}
-Here, we further analyze the profit on memory usage and theoretical speed-up by employing the Ghost module, in additional we will plot the visual experiments. The theoretical speed-up ratio $\gamma$ of upgrading ordinary convolution with the Ghost module is equal to following:
 
-\begin{equation}
-\begin{split}
-\gamma $& = \frac{\left ( n\cdot {h}'\cdot {w}'\cdot c\cdot k\cdot k \right )}{\left (\frac{n}{s}\cdot {h}'\cdot {w}'\cdot c\cdot k\cdot k +\left ( s-1 \right )\cdot \frac{n}{s}\cdot {h}'\cdot {w}' \cdot d\cdot d \right )} \\
-$&= \frac{c\cdot k\cdot k}{\frac{1}{s}\cdot c\cdot k\cdot k + \frac{s-1}{s}\cdot d\cdot d } \\
-$&\approx \frac{s\cdot c}{s +c-1 } \\
-$&\approx s $\label{speed}
-\end{split}
-\end{equation}
-
-In Equation \eqref{speed}, ${h}' \cdot {w}' \cdot {n}$ represents  $n$ output feature maps with height ${h}'$, width ${w}'$, and $k \cdot k$, $d \cdot d$ stands for the convolution kernel filter and linear operation kernel size, respectively. And $m$ is the number of intrinsic feature maps, where $m < n$ because we only take few intrinsic feature maps and apply a series of cheap linear operations on each intrinsic feature to generate $s$ ghost features. It is also noteworthy that there are 1 ghost map adopted by identify mapping that indicates $s-1$. In total there are $\frac{n}{s} \cdot(s-1)$  linear operations. This leads to theoretically $s$ speed-up ratio.
-
-More feature maps generated by linear operation based on a set of intrinsic feature maps, instead of generating a lot of redundant data by point-wise convolution which takes huge amount of parameters simultaneously. This also partially explains that our net achieves the best performance on several benchmarks shown in Table 2 and Table 3.
-As far as we deeply analyze each-layer-generated feature map by our net, we can also figure out the second factor: the artifacts appear in the image could also be learned by the neural network, which greatly affects the accuracy of the network, with the combination of AttentionNet segmentation techniques in cell image pre-processing, we can more focus on object rather than artifacts.
 
 \section{Sezary Sydrome Dataset}
 \label{sec:lorem}
