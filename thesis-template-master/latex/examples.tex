@@ -964,6 +964,29 @@ As Table illustrated, we will obtain an accuracy of 50\%, when  we taking the To
 
 \section{Sezary Sydrome Dataset}
 \label{sec:lorem}
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{subfigure}[b]{\textwidth}
+		    \centering
+			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/wellcellSezary dataset.JPG}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{Wellcell dataset on Sezary dataset}. In total we had Well cell data:$HD16:49787+ HD17:37009+SS1:5250+SS2:10852= 102,898$.}
+\end{figure}
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{subfigure}[b]{\textwidth}
+		    \centering
+			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/noiseofSezarySyndrome.JPG}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{Noise dataset of SezarySyndrome}.We had noise data: 12,695.}
+\end{figure}
+
 \subsection{The introduction of Sezary Sydrome Dataset}
 Sezary syndrome is an aggressive form of cutaneous T-cell lymphoma which is a group of disorders that occur when T-cells (a type of white blood cell) become cancerous and affect the skin\cite{Alain}. Moreover, it corresponds to 3\% of all cutaneous lymphomas, and it is characterized by a triad of manifestations: erythrodermia with pruritus, limphonodomegalia and atypical circulating lymphocytes (referred to as Sézary or Lutzner cells). Associated clinical manifestations include lagophthalmos, alopecia, palmoplantar hyperkeratosis and onycodystrophy.\cite{Yamashita}
 
@@ -1054,74 +1077,99 @@ A diagnosis of Sezary syndrome is often suspected in people with characteristic 
 	\label{fig:lennas}
 \end{figure}
 
-Based on previously manually bag-labeled image, we manipulated the second round of filtering, because of the impurity of the data set. This is actually final data set amount. Because we do not allow the cell folder contains obviously noise data, so we manually checked for the whole data set again and deleted those impure images, the following data is the newest version of the folder. 
+Based on previously manually bag-labeled image, we manipulated the second round of filtering, because of the impurity of the data set. This is actually final data set amount. Because we do not allow the cell folder contains obviously noise data, so we manually checked for the whole data set again and deleted those impure images, the following data is the newest version of the folder(Seen figure 4.2 and figure 4.3). 
 
-
-\begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[b]{\textwidth}
-		    \centering
-			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/wellcellSezary dataset.JPG}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{\textbf{Wellcell dataset on Sezary dataset}. In total we had Well cell data:$HD16:49787+ HD17:37009+SS1:5250+SS2:10852= 102,898$.}
-\end{figure}
-
-\begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[b]{\textwidth}
-		    \centering
-			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/noiseofSezarySyndrome.JPG}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{\textbf{Noise dataset of SezarySyndrome}.We had noise data: 12,695.}
-\end{figure}
 
 
 \subsection{AttentionNet on Sezary Sydrome Dataset}
-With help of Cycle detection and more Cell data be manually labeled, We trained 1000 epochs We input 857 instance level-labeled image,which we set up 772(90\%) image for train set, and 85 images for test. For Training image:$772 iamges + 274 noise image 
-+ 144 HD Cell image 
-+ 439 SS cell image $. Val image: 85 image, in additional we test the trained model on 723 new image as well.
-This is the performance:
+
+\begin{table}[b]
+\scalebox{0.5}{
+\begin{tabular}{@{}ccl@{}}
+\toprule
+Configuration hyperparameter         & Value                                                                                                & Annotation                                                                                                                                                                                                                                                                                                                                                                                             \\ \midrule
+\multicolumn{1}{|c|}{batch}          & \multicolumn{1}{c|}{64}                                                                              & \multicolumn{1}{l|}{Update parameters every batch of 64 samples}                                                                                                                                                                                                                                                                                                                                       \\ \midrule
+\multicolumn{1}{|c|}{subdivisions}   & \multicolumn{1}{c|}{1}                                                                               & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The batch will be divided by 1 to decrease GPU VRAM requirements \\ as we are using ETH Leonhard we donot facing the GPU resources limitations\end{tabular}}                                                                                                                                                                                            \\ \midrule
+\multicolumn{1}{|c|}{height}         & \multicolumn{1}{c|}{416}                                                                             & \multicolumn{1}{l|}{The width of input figure}                                                                                                                                                                                                                                                                                                                                                         \\ \midrule
+\multicolumn{1}{|c|}{width}          & \multicolumn{1}{c|}{416}                                                                             & \multicolumn{1}{l|}{The height of input figure}                                                                                                                                                                                                                                                                                                                                                        \\ \midrule
+\multicolumn{1}{|c|}{channels}       & \multicolumn{1}{c|}{3}                                                                               & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The channels of input training images,\\ as our image is here RGB image, therefore, we set here 3\end{tabular}}                                                                                                                                                                                                                                         \\ \midrule
+\multicolumn{1}{|c|}{momentum}       & \multicolumn{1}{c|}{0.9}                                                                             & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}For the poorly conditioned Hessian matrix problem \\ (intuitively, the gradient is highly sensitive to certain directions of the parameter space)\\ usually set 0.5, 0.9, or 0.99, which means the maximum speed is \\ 2 times, 10 times, 100 times the algorithm of SGD\end{tabular}}                                                                  \\ \midrule
+\multicolumn{1}{|c|}{decay}          & \multicolumn{1}{c|}{0.0005}                                                                          & \multicolumn{1}{l|}{Regularization term of weight decay  to prevent overfitting}                                                                                                                                                                                                                                                                                                                       \\ \midrule
+\multicolumn{1}{|c|}{angle}          & \multicolumn{1}{c|}{0}                                                                               & \multicolumn{1}{l|}{Generate more training samples by rotation}                                                                                                                                                                                                                                                                                                                                        \\ \midrule
+\multicolumn{1}{|c|}{saturation}     & \multicolumn{1}{c|}{1.5}                                                                             & \multicolumn{1}{l|}{Generate more training samples by adjusting saturation}                                                                                                                                                                                                                                                                                                                            \\ \midrule
+\multicolumn{1}{|c|}{exposure}       & \multicolumn{1}{c|}{1.5}                                                                             & \multicolumn{1}{l|}{Generate more training samples by adjusting exposure}                                                                                                                                                                                                                                                                                                                              \\ \midrule
+\multicolumn{1}{|c|}{hue}            & \multicolumn{1}{c|}{.1}                                                                              & \multicolumn{1}{l|}{Generate more training samples by adjusting hue}                                                                                                                                                                                                                                                                                                                                   \\ \midrule
+\multicolumn{1}{|c|}{learning rate}  & \multicolumn{1}{c|}{0.001}                                                                           & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Initial learning rate, The learning rate determines how fast the parameter moves to the optimal solution. \\ If it is too large, it may cross the optimal value and cause the model to fail to converge. \\ Otherwise if it is too small, the algorithm cannot converge for a long time \\ and it is easy to fall into the local optimal.\end{tabular}} \\ \midrule
+\multicolumn{1}{|c|}{max batches}    & \multicolumn{1}{c|}{500200}                                                                          & \multicolumn{1}{l|}{Stop learning after training reaches max\_batches}                                                                                                                                                                                                                                                                                                                                 \\ \midrule
+\multicolumn{1}{|c|}{policy}         & \multicolumn{1}{c|}{steps}                                                                           & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The policies for adjusting the learning rate are as follows:\\ CONSTANT, STEP, EXP, POLY, STEPS, SIG, RANDOM\end{tabular}}                                                                                                                                                                                                                              \\ \midrule
+\multicolumn{1}{|c|}{steps}          & \multicolumn{1}{c|}{400000,450000}                                                                   & \multicolumn{1}{l|}{Adjust the learning rate according to batch\_num}                                                                                                                                                                                                                                                                                                                                  \\ \midrule
+\multicolumn{1}{|c|}{scales}         & \multicolumn{1}{c|}{.1,.1}                                                                           & \multicolumn{1}{l|}{The rate of change in learning rate, cumulatively multiplied}                                                                                                                                                                                                                                                                                                                      \\ \midrule
+\multicolumn{1}{|c|}{mask}           & \multicolumn{1}{c|}{1,2,3,4,5,67,8,9}                                                                & \multicolumn{1}{l|}{Yolo Output Layer will select different three anchor box set}                                                                                                                                                                                                                                                                                                                      \\ \midrule
+\multicolumn{1}{|c|}{anchors}        & \multicolumn{1}{c|}{\begin{tabular}[c]{@{}c@{}}38,39 50,53\\ 51,67 71,78\\ 84,83 99,95\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}The prior prediction box learned from our KMeans++cluster \\ one set contains two value (w,h)\end{tabular}}                                                                                                                                                                                                                                             \\ \midrule
+\multicolumn{1}{|c|}{classes}        & \multicolumn{1}{c|}{2}                                                                               & \multicolumn{1}{l|}{The number of object classes that the network needs to classifier}                                                                                                                                                                                                                                                                                                                 \\ \midrule
+\multicolumn{1}{|c|}{num}            & \multicolumn{1}{c|}{6}                                                                               & \multicolumn{1}{l|}{Each grid cell predicts \#num number of bounding boxes}                                                                                                                                                                                                                                                                                                                            \\ \midrule
+\multicolumn{1}{|c|}{jitter}         & \multicolumn{1}{c|}{0.3}                                                                             & \multicolumn{1}{l|}{Increase noise by jitter to suppress overfitting}                                                                                                                                                                                                                                                                                                                                  \\ \midrule
+\multicolumn{1}{|c|}{ignore\_thresh} & \multicolumn{1}{c|}{0.7}                                                                             & \multicolumn{1}{l|}{The parameter determines whether the IOU error needs to be calculated  in the cost function}                                                                                                                                                                                                                                                                                       \\ \midrule
+\multicolumn{1}{|c|}{truth\_thresh}  & \multicolumn{1}{c|}{1}                                                                               & \multicolumn{1}{l|}{The size of the IOU threshold involved in the calculation}                                                                                                                                                                                                                                                                                                                         \\ \midrule
+\multicolumn{1}{|c|}{random}         & \multicolumn{1}{c|}{1}                                                                               & \multicolumn{1}{l|}{Multi-scale training is enabled. Otherwise, the training size of image is the same as the input size}                                                                                                                                                                                                                                                                              \\ \bottomrule
+\end{tabular}}
+\caption{ \textbf{AttentionNet configuration files (.cfg) }. As shown in the evaluation table, we will present here the training hyper-parameters that we chooses indetails and explained the reason why we set like that.}
+\end{table}
+
+
+\subsubsection{Implementation and Hyper-parameters}
+
+\textbf{Preparing dataset.} Before starting to train, we prepare the data for object detection. we used LabelImg tool to formulate the expert defined good cell/noise shapes. In this tool we can prepare our data in two different format: xml and txt. For the suggestion of original yolov3, we used txt format. We also wrote a function (xmltotxt.py) can basically convert the xml format to txt format. 
+
+Any machine learning training procedure involves first splitting the data randomly into two sets. By using our (filtertrainandtest.py) script we can split the test and train data set into user defined distribution. Training set: this is the part of the data on which we train the model. Test set : This is the part of the data on which we test our model. Typically, this is 10-30\% of the data. No image should be part of the both the training and the test set.
+
+Then we create two file named train.txt and test.txt. These files must contain path of train and test images in data set line by line. Train.txt should have the formal: $(data/images/imagenames.png)$ and Test.txt should have the formal $(data/images/imagenames.png)$.
+
+Because we are supervised learning, we should also generate (./image) and (. /labels) folder accordingly. Moreover, the label file and the image should have same filename. This can be guarantee by our script (xmltotxt.py).
+
+\textbf{Preparing AttentionNet configuration files}. YOLOv3 needs certain specific files to know how and what to train. We must create these three files(.data, .names, and .cfg) and we explain those configuration hyper parameters in the above table 4.3\\
+
+\subsubsection{Evaluated performances}
+With help of Cycle detection and more Cell data be manually labeled, We trained 1000 epochs We input 857 instance level-labeled image,which we set up 772(90\%) image for train set, and 85 images for test. For Training image: 772 images consists of 274 noise image , 144 HD Cell image and  439 SS cell image. Val image: 85 image, In addition, we test the trained model on 723 new image as well.
+
 
 \begin{figure}[h]
 	\begin{center}
 		\begin{subfigure}[b]{\textwidth}
 		    \centering
-			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/An illustration test performance of CellYolo best weight.png}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{\textbf{An illustration test performance on Well cell of at AttentionNet best weight.} We will inspired by pseudo label learning which set the ratio between manually labeled data and the generator generated data, so that the ratio=0.5 now  the ratio is 0.301. As we seen, the well cells are well recognized and perfectly located}
-\end{figure}
-
-\begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[b]{\textwidth}
-		    \centering
-			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/An illustration test performance of CellYolo best weight2.png}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{\textbf{An illustration test performance on noise set of at AttentionNet best weight.}. The main problems lay on the noise data, as we seen the Recognition was well-done, but the locations was pretty terrible, if we using this as labels and input them to training process, we won’t get well P and F1}
-\end{figure}
-
-\begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[b]{\textwidth}
-		    \centering
-			\includegraphics[width=0.9\textwidth]{thesis-template-master/images/cellyolo best weight based on manually labeled 1500 images.png}
+			\includegraphics[width=1\textwidth]{thesis-template-master/images/cellyolo best weight based on manually labeled 1500 images.png}
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{The demonstration of train performance of CellYolo best weight based on manually labeled 1500 images}. The P value is nearly 85\% and the F1 value is also quite well, the mAP@0.5 nearly88\%}
 \end{figure}
 
-We designed the AttentionNet tool, which provides a new intuition for object recognition, cutting out noise artifacts in the image, which can effectively improve the performance of many networks, such as Alexnet and GoogleNet. What’s more, AttentionNet has also pioneered automatic labeling. Instead of manually labeling a large amount of data. Using CellYolo, it is possible to automatically label an object with an accuracy of 88.64\% in 0.25 seconds. For training such a segmentor, our suggestion is to choose representative data that is small and refined, and a large amount of data will lose accuracy because of the impression of noise data. So far, we recommend training AttentionNet with a 1: 1 ratio, which means 50\% manually labeled data and 50\% pseudo labeled data.
+\begin{figure}[t]
+	\begin{center}
+		\begin{subfigure}[b]{\textwidth}
+		    \centering
+			\includegraphics[width=0.7\textwidth]{thesis-template-master/images/An illustration test performance of CellYolo best weight.png}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{An illustration test performance on Well cell of at AttentionNet best weight.} We will inspired by pseudo label learning which set the ratio between manually labeled data and the generator generated data, so that the ratio=0.5 now  the ratio is 0.301. As we seen, the well cells are well recognized and perfectly located}
+\end{figure}
 
-\begin{table}[]
+
+
+\begin{figure}[t]
+	\begin{center}
+		\begin{subfigure}[t]{\textwidth}
+		    \centering
+			\includegraphics[width=0.7\textwidth]{thesis-template-master/images/An illustration test performance of CellYolo best weight2.png}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{An illustration test performance on noise set of at AttentionNet best weight.}. The main problems lay on the noise data, as we seen the Recognition was well-done, but the locations was pretty terrible, if we using this as labels and input them to training process, we won’t get well P and F1}
+\end{figure}
+
+
+\begin{table}[b]
 \scalebox{0.6}{
 \begin{tabular}{@{}lccc@{}}
 \toprule
@@ -1145,10 +1193,10 @@ Time Cost(s)                                   & 15.674                         
 \caption{Evaluation different design on Sezary Syndrome Dataset}
 \end{table}
 
-\textbf{Implementation and Training Details}
-As shown in the evaluation table, we will present here the training hyper-parameters that we chooses.batch=64, subdivisions=1,width=416
-height=416, channels=3,momentum=0.9
-decay=0.0005, angle=0, saturation = 1.5,exposure = 1.5,hue=.1, learning_rate=0.001,burn_in=1000,max_batches = 500200,policy=steps,steps=400000,450000,scales=.1,.1
+We designed the AttentionNet tool, which provides a new intuition for object recognition, cutting out noise artifacts in the image, which can effectively improve the performance of many networks, such as Alexnet and GoogleNet. What’s more, AttentionNet has also pioneered automatic labeling. Instead of manually labeling a large amount of data. Using AttentionNet, it is possible to automatically label an object with an accuracy of 88.64\% in 0.25 seconds. For training such a segmentor, our suggestion is to choose representative data that is small and refined, and a large amount of data will lose accuracy because of the impression of noise data. So far, we recommend training AttentionNet with a 1: 1 ratio, which means 50\% manually labeled data and 50\% pseudo labeled data.
+
+
+
 
 
 
@@ -1166,15 +1214,6 @@ Shuffle Net v2\cite{b29} & {\color[HTML]{CB0000} 1.4}                           
 \end{tabular}
 \caption{Comparison of structure and parameters of state-of-the-art methods on Sezary Syndrome Dataset}
 \end{table}
-
-
-
-
-
-
-
-
-
 
 
 
