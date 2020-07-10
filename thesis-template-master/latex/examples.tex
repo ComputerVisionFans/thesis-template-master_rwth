@@ -1103,7 +1103,7 @@ With help of Cycle detection and more Cell data be manually labeled, We trained 
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
-	\caption{\textbf{The demonstration of train performance of CellYolo best weight based on manually labeled 1500 images}. The P value is nearly 85\% and the F1 value is also quite well, the mAP@0.5 nearly88\%}
+	\caption{\textbf{The demonstration of train performance of CellYolo best weight based on manually labeled 1500 images}. The P value is nearly 85\% and the F1 value is also quite well, the mAP@0.5 achieves nearly 88\%.}
 \end{figure}
 
 \begin{figure}[h]
@@ -1114,7 +1114,7 @@ With help of Cycle detection and more Cell data be manually labeled, We trained 
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
-	\caption{\textbf{An illustration test performance on Well cell of at AttentionNet best weight.} As we seen, the well cells are well recognized and perfectly located as well.}
+	\caption{\textbf{ Detection Performance on val Wellcell dataset with AttentionNet best weight.} As we seen, the well cells are well recognized and perfectly located as well.}
 \end{figure}
 
 
@@ -1127,13 +1127,53 @@ With help of Cycle detection and more Cell data be manually labeled, We trained 
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
-	\caption{\textbf{An illustration test performance on noise set of at AttentionNet best weight.}. The main problems lay on the noise data, as we seen the recognition is well-done even for different scale artifacts.}
+	\caption{\textbf{Detection Performance on val Noise dataset with AttentionNet best weight.} The main problems lay on the noise data, as we seen the recognition is well-done even for different scale artifacts.}
 \end{figure}
 
 
-\begin{table}[t]
-\scalebox{0.6}{
-\begin{tabular}{@{}lccc@{}}
+\begin{figure}[ht]
+	\begin{center}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\includegraphics[width=\textwidth]{thesis-template-master/images/bestweightoncell.jpg}
+			\label{fig:Debris}
+			\caption{well cell}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\includegraphics[width=\textwidth]{thesis-template-master/images/bestweightoncell2.jpg}
+			\label{fig:Out of Focus}
+			\caption{well cell}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\includegraphics[width=\textwidth]{thesis-template-master/images/bestweightoncell3.png}
+			\label{fig:Lighting Artifacts}
+			\caption{well cell}
+		\end{subfigure}
+	
+		
+		\begin{subfigure}[b]{0.25\textwidth}
+			\includegraphics[width=\textwidth]{thesis-template-master/images/bestweightonnoise1.jpg}
+			\label{fig:Contaminated}
+			\caption{noise cell}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\includegraphics[width=\textwidth]{thesis-template-master/images/bestweightonnoise2.jpg}
+			\label{fig:Good Cell}
+			\caption{noise cell}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\includegraphics[width=\textwidth]{thesis-template-master/images/bestweightonnoise3.jpg}
+			\label{fig:Good Cell}
+			\caption{noise cell}
+		\end{subfigure}
+	\end{center}
+	\caption{ Segmentation performance with AttentionNet best weight, GBCIOU and Circle segmentation. The confidence score reach up to 0.86 out of 1, and the segmentation performance for both wellcell and noise achieve semantic level.}
+	\label{fig:lennas}
+\end{figure}
+
+\begin{table}[b]
+\centering
+\scalebox{0.55}{
+\begin{tabular}{@{}clccc@{}}
 \toprule
 \multicolumn{1}{c}{\textbf{Evaluation matrix}} & \textbf{\begin{tabular}[c]{@{}c@{}}500 epochs\\ +450 train images \\ +YOLOv3 tiny\end{tabular}}                     & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +450 train images\\ +YOLOv3 tiny\end{tabular}}                                     & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +450 train images\\ +Circle detection\\ +YOLOv3 tiny\end{tabular}}                                               \\ \midrule
 TP(HD Cell be detected as Cell)                & 193/308=0.633                                                                                                       & 0.6558                                                                                                                              & 0.56                                                                                                                                                              \\
@@ -1155,12 +1195,34 @@ Time Cost(s)                                   & 15.674                         
 \caption{Evaluation different design on Sezary Syndrome Dataset}
 \end{table}
 
-We designed the AttentionNet tool, which provides a new intuition for object recognition, cutting out noise artifacts in the image, which can effectively improve the performance of many networks, such as Alexnet and GoogleNet. What’s more, AttentionNet has also pioneered automatic labeling. Instead of manually labeling a large amount of data. Using AttentionNet, it is possible to automatically label an object with an accuracy of 88.64\% in 0.25 seconds. For training such a segmentor, our suggestion is to choose representative data that is small and refined, and a large amount of data will lose accuracy because of the impression of noise data. So far, we recommend training AttentionNet with a 1: 1 ratio, which means 50\% manually labeled data and 50\% pseudo labeled data.
+As table 4.4 illustrates, we conduct a thorough evaluation study on different design in order to support our claims that (1) current best weight we archive based on 1000 epochs with nearly manually labeled 850 representative Noise and Well cell images, added Circle detect and segmentation in the final phase, and using YOLOv3-tiny two YOLO output layers architecture;(2) the amount Training image does not play a key role in accuracy but the training epochs contribute a lot to the overall improved performance;(3) YOLO output tensors as a means of different target detector, independently contribute to classification and detection performance of  different customer dataset;(4) the combinations of different algorithms we designed, including GBCIOU or KMeans++ in preprocessing and novel architecture design enable us efficiently detect noise image and well cell, and finishing segmentation in very lower time cost.
 
 
 
 
+\subsection{CellNet on Sezary Sydrome Dataset}
+\subsubsection{Implementation and Hyper-parameters}
 
+
+\subsubsection{Evaluated performances}
+
+
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\includegraphics[height=0.30\textheight]{thesis-template-master/images/Inkedfirst Conv1 of resnet18 with pretrain weights on penudataset_LI.jpg}
+			\caption{}
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+			\includegraphics[height=0.30\textheight]{thesis-template-master/images/cellnetnecc3.jpg}
+			\caption{}
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{The illustration of the necessity of Ghost-Module and CellNet. There are visualization of feature maps after ResNet18\cite{b20} 1st convolutional layer. Whether it is  a cell image from Sezary Syndrome dataset segmented by AttentionNet (c), or a CT image from Pneumonia Dataset (b), after the first layer of point-wise convolution there is a large amount of redundant feature maps (see the same color marked). Especially for Sezary Syndrome Dataset, there is no need to operate point-wise convolution one by one after AttentionNet segmentation, because all the valid information is within the circle.}
+\end{figure}
 
 
 \begin{table}[t]
@@ -1242,26 +1304,25 @@ SqueezeNet V2 & {\color[HTML]{000000} N/A}                                      
 
 
 
-
-
-
-
-
 \chapter{Ablation Study}
 \label{sec:examples}
+
 This paper proposes a unifying approach that is capable of (1) imaging single-cell morphology of hundreds of thousands of peripheral blood cells and (2) data-driven learning of characteristic mythologies (possibly of rare cell subsets) indicative of the presence of the disease.
 
 As we originally designed the unifying approach for Sezary Syndrome, which is an aggressive cutaneous T cell lymphoma that is characterized by presence of tumor T cells with abnormal nucleus morphology in the peripheral blood. Morphological identification of tumor T cells in the blood is currently still the gold standard.
 After Image Flow Cytometry there are huge amount of cell images produced from patient as well as healthy data set for comparison. Due to different experimental conditions, such as lighting conditions and different experimental objects, noise deviations are likely to appear on the sampled cell images, moreover, these deviations do not appear in the better quality and pure evaluation data set which leads to higher false negative.
 
 
-
 \section{Architectural Design Choices }
 \label{sec:lorem}
 
+We designed the AttentionNet tool, which provides a new intuition for object recognition, cutting out noise artifacts in the image, which can effectively improve the performance of many networks, such as Alexnet and GoogleNet. What’s more, AttentionNet has also pioneered automatic labeling. Instead of manually labeling a large amount of data. Using AttentionNet, it is possible to automatically label an object with an accuracy of 88.64\% in 0.25 seconds. For training such a segmentor, our suggestion is to choose representative data that is small and refined, and a large amount of data will lose accuracy because of the impression of noise data. So far, we recommend training AttentionNet with a 1: 1 ratio, which means 50\% manually labeled data and 50\% pseudo labeled data.
 
 \section{Runtime}
 \label{sec:ipsum}
+
+
+
 
 
 \section{Transfer Learning} % (fold)
