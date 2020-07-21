@@ -1043,7 +1043,7 @@ Based on previously manually bag-labeled image, we manipulated the second round 
 
 \subsection{AttentionNet on Sezary Sydrome Dataset}
 
-\begin{table}[b]
+\begin{table}[t]
 \scalebox{0.5}{
 \begin{tabular}{@{}ccl@{}}
 \toprule
@@ -1089,49 +1089,63 @@ Because we are supervised learning, we should also generate (./image) and (. /la
 
 \textbf{Preparing AttentionNet configuration files}. YOLOv3 needs certain specific files to know how and what to train. We must create these three files(.data, .names, and .cfg) and we explain those configuration hyper parameters in the above table 4.3\\
 
+
+
 \subsubsection{Evaluated performances}
 With help of Cycle detection and more Cell data be manually labeled, We trained 1000 epochs We input 857 instance level-labeled image,which we set up 772(90\%) image for train set, and 85 images for test. For Training image: 772 images consists of 274 noise images, 144 HD Cell images and 439 SS cell images. Val image: 85 images, In addition, we test the trained model on 723 new images as well.
 
 
+\begin{table}[t]
+\centering
+\scalebox{0.6}{
+\begin{tabular}{@{}clccc@{}}
+\toprule
+\multicolumn{1}{c}{\textbf{Evaluation matrix}} & \textbf{\begin{tabular}[c]{@{}c@{}}500 epochs\\ +450 train images \\ +YOLOv3 tiny\end{tabular}}                     & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +450 train images\\ +YOLOv3 tiny\end{tabular}}                                     & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +450 train images\\ +Circle detection\\ +YOLOv3 tiny\end{tabular}}                                               \\ \midrule
+TP(HD Cell be detected as Cell)                & 193/308=0.633                                                                                                       & 0.6558                                                                                                                              & 0.56                                                                                                                                                              \\
+TP(SS Cell be detected as Cell)                & 166/306=0.5424                                                                                                      & 0.6078                                                                                                                              & 0.4314                                                                                                                                                            \\
+FP(Noise be detected as Cell)                  & 0                                                                                                                   & 1                                                                                                                                   & 0                                                                                                                                                                 \\
+TN(Noise be detected as Noise)                 & 82/109=0.7523                                                                                                       & 0.871559                                                                                                                            & 0.6605                                                                                                                                                            \\
+Image No Label                                 & 300/723=41.49\%                                                                                                     & 33.05\%                                                                                                                             & 47.72\%                                                                                                                                                           \\
+mAP                                            & 0.376                                                                                                               & 0.551                                                                                                                               & 0.551                                                                                                                                                             \\
+Time Cost(s)                                   & 236.344                                                                                                             & 16.344                                                                                                                              & 475.65                                                                                                                                                            \\ \midrule
+\textbf{Evaluation matrix}                     & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +850 train images\\ +Circle detection\\ +YOLOv3 tiny\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +850 train images\\ +26*26, 52*52  YOLOversion\\ +KMean++ clustering\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +1400 train images\\ +26*26, 52*52 YOLOversion\\ +Circle detection\\ +KMean++clustering \\ +GBCIOU\end{tabular}} \\ \midrule
+TP(HD Cell be detected as Cell)                & 0.95129                                                                                                             & 0.9123                                                                                                                              & 0.8571                                                                                                                                                            \\
+TP(SS Cell be detected as Cell)                & 0.9738                                                                                                              & 0.9117                                                                                                                              & 0.8497                                                                                                                                                            \\
+FP(Noise be detected as Cell)                  & 12                                                                                                                  & 10                                                                                                                                  & 11                                                                                                                                                                \\
+TN(Noise be detected as Noise)                 & 0.8073                                                                                                              & 0.6605                                                                                                                              & 0.587                                                                                                                                                             \\
+Image No Label                                 & 1.93\%                                                                                                              & 11.20\%                                                                                                                             & 17.1\%                                                                                                                                                            \\
+mAP                                            & 0.881                                                                                                               & 0.7255                                                                                                                              & 0.53                                                                                                                                                              \\
+Time Cost(s)                                   & 15.674                                                                                                              & 284.467                                                                                                                             & 266.36                                                                                                                                                            \\ \bottomrule
+\end{tabular}}
+\caption{Evaluation different design on Sezary Syndrome Dataset}
+\end{table}
 
-\begin{figure}[h]
+
+\begin{figure}[t]
 	\begin{center}
-		\begin{subfigure}[b]{\textwidth}
-		    \centering
-			\includegraphics[width=1\textwidth]{thesis-template-master/images/cellyolo best weight based on manually labeled 1500 images.png}
-			\label{fig:cellnet}
+		\begin{subfigure}[c]{0.6\textwidth}
+			\includegraphics[width=\textwidth]{thesis-template-master/images/An illustration test performance of CellYolo best weight.png}
+			\label{fig:Debris}
+			\caption{val Wellcell dataset}
 		\end{subfigure}
+		\begin{subfigure}[c]{0.6\textwidth}
+			\includegraphics[width=\textwidth]{thesis-template-master/images/An illustration test performance of CellYolo best weight2.png}
+			\label{fig:Out of Focus}
+			\caption{val Noise dataset}
+		\end{subfigure}
+		
 	\end{center}
-	\caption{\textbf{The demonstration of train performance of CellYolo best weight based on manually labeled 1500 images}. The P value is nearly 85\% and the F1 value is also quite well, the mAP@0.5 achieves nearly 88\%.}
+	\caption{ Detection Performance on val dataset with AttentionNet best weight. As we seen, the well cells are well recognized and perfectly located as well. The main problems lay on the noise data, as we seen the recognition is well-done even for different scale artifacts.}
+	\label{fig:lennas}
 \end{figure}
 
-
-
-
 \begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[b]{\textwidth}
-		    \centering
-			\includegraphics[width=0.6\textwidth]{thesis-template-master/images/An illustration test performance of CellYolo best weight.png}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{\textbf{ Detection Performance on val Wellcell dataset with AttentionNet best weight.} As we seen, the well cells are well recognized and perfectly located as well.}
+\begin{center}
+\includegraphics[width=\textwidth]{thesis-template-master/images/cellyolo best weight based on manually labeled 1500 images.png}
+\label{fig:cellnet}
+\end{center}
+\caption{\textbf{The demonstration of train performance of CellYolo best weight based on manually labeled 1500 images}. The P value is nearly 85\% and the F1 value is also quite well, the mAP@0.5 achieves nearly 88\%.}
 \end{figure}
-
-
-
-\begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[t]{\textwidth}
-		    \centering
-			\includegraphics[width=0.6\textwidth]{thesis-template-master/images/An illustration test performance of CellYolo best weight2.png}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{\textbf{Detection Performance on val Noise dataset with AttentionNet best weight.} The main problems lay on the noise data, as we seen the recognition is well-done even for different scale artifacts.}
-\end{figure}
-
 
 \begin{figure}[t]
 	\begin{center}
@@ -1170,32 +1184,6 @@ With help of Cycle detection and more Cell data be manually labeled, We trained 
 	\caption{ Segmentation performance with AttentionNet best weight, GBCIOU and Circle segmentation. The confidence score reach up to 0.86 out of 1, and the segmentation performance for both wellcell and noise achieve semantic level.}
 	\label{fig:lennas}
 \end{figure}
-
-
-\begin{table}[t]
-\centering
-\scalebox{0.55}{
-\begin{tabular}{@{}clccc@{}}
-\toprule
-\multicolumn{1}{c}{\textbf{Evaluation matrix}} & \textbf{\begin{tabular}[c]{@{}c@{}}500 epochs\\ +450 train images \\ +YOLOv3 tiny\end{tabular}}                     & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +450 train images\\ +YOLOv3 tiny\end{tabular}}                                     & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +450 train images\\ +Circle detection\\ +YOLOv3 tiny\end{tabular}}                                               \\ \midrule
-TP(HD Cell be detected as Cell)                & 193/308=0.633                                                                                                       & 0.6558                                                                                                                              & 0.56                                                                                                                                                              \\
-TP(SS Cell be detected as Cell)                & 166/306=0.5424                                                                                                      & 0.6078                                                                                                                              & 0.4314                                                                                                                                                            \\
-FP(Noise be detected as Cell)                  & 0                                                                                                                   & 1                                                                                                                                   & 0                                                                                                                                                                 \\
-TN(Noise be detected as Noise)                 & 82/109=0.7523                                                                                                       & 0.871559                                                                                                                            & 0.6605                                                                                                                                                            \\
-Image No Label                                 & 300/723=41.49\%                                                                                                     & 33.05\%                                                                                                                             & 47.72\%                                                                                                                                                           \\
-mAP                                            & 0.376                                                                                                               & 0.551                                                                                                                               & 0.551                                                                                                                                                             \\
-Time Cost(s)                                   & 236.344                                                                                                             & 16.344                                                                                                                              & 475.65                                                                                                                                                            \\ \midrule
-\textbf{Evaluation matrix}                     & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +850 train images\\ +Circle detection\\ +YOLOv3 tiny\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +850 train images\\ +26*26, 52*52  YOLOversion\\ +KMean++ clustering\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +1400 train images\\ +26*26, 52*52 YOLOversion\\ +Circle detection\\ +KMean++clustering \\ +GBCIOU\end{tabular}} \\ \midrule
-TP(HD Cell be detected as Cell)                & 0.95129                                                                                                             & 0.9123                                                                                                                              & 0.8571                                                                                                                                                            \\
-TP(SS Cell be detected as Cell)                & 0.9738                                                                                                              & 0.9117                                                                                                                              & 0.8497                                                                                                                                                            \\
-FP(Noise be detected as Cell)                  & 12                                                                                                                  & 10                                                                                                                                  & 11                                                                                                                                                                \\
-TN(Noise be detected as Noise)                 & 0.8073                                                                                                              & 0.6605                                                                                                                              & 0.587                                                                                                                                                             \\
-Image No Label                                 & 1.93\%                                                                                                              & 11.20\%                                                                                                                             & 17.1\%                                                                                                                                                            \\
-mAP                                            & 0.881                                                                                                               & 0.7255                                                                                                                              & 0.53                                                                                                                                                              \\
-Time Cost(s)                                   & 15.674                                                                                                              & 284.467                                                                                                                             & 266.36                                                                                                                                                            \\ \bottomrule
-\end{tabular}}
-\caption{Evaluation different design on Sezary Syndrome Dataset}
-\end{table}
 
 As table 4.4 illustrates, we conduct a thorough evaluation study on different design in order to support our claims that (1) current best weight we archive based on 1000 epochs with nearly manually labeled 850 representative Noise and Well cell images, added Circle detect and segmentation in the final phase, and using YOLOv3-tiny two YOLO output layers architecture;(2) the amount Training image does not play a key role in accuracy but the training epochs contribute a lot to the overall improved performance;(3) YOLO output tensors as a means of different target detector, independently contribute to classification and detection performance of  different customer dataset;(4) the combinations of different algorithms we designed, including GBCIOU or KMeans++ in preprocessing and novel architecture design enable us efficiently detect noise image and well cell, and finishing segmentation in very lower time cost.
 
@@ -1236,31 +1224,45 @@ We train the network end-to-end by minimizing the cross-entropy loss using the S
 
 \end{table}
 \subsubsection{Evaluated performances}
+ResNet18 [17] and shuffleNetv2 [25] were verified so farthe most representative best performance on Sezary SyndromeDataset. But Our* Net can achieve higher classification perfor-mance (e.g. 95.638\% top-1 accuracy ) than ResNet 18 ,ShuffleNet V2  and GhostNet , while less weights andcomputational cost.
 
 
 
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.33\textheight]{thesis-template-master/images/cellnetnecc3.jpg}
+\label{fig:cellnet}
+\end{center}
+\caption{The illustration of the necessity of Ghost-Module and CellNet. There are visualization of feature maps after ResNet18\cite{20} 1st convolutional layer. Especially for Sezary Syndrome Dataset, after the first layer of point-wise convolution there is a large amount of redundant feature maps (see the same color marked) there is no need to operate point-wise convolution one by one, because all the valid information is within the circle after AttentionNet segmentation.}
+\end{figure}
 
 \begin{figure}[h]
 	\begin{center}
 		\begin{subfigure}[b]{0.25\textwidth}
-			\includegraphics[height=0.2\textheight]{thesis-template-master/images/Inkedfirst Conv1 of resnet18 with pretrain weights on penudataset_LI.jpg}
+		    \centering
+			\includegraphics[height= 0.15\textheight]{thesis-template-master/images/hd1 (4550)ournetWithcellyolo.jpg}
 			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.25\textwidth}
-			\includegraphics[height=0.2\textheight]{thesis-template-master/images/cellnetnecc3.jpg}
+		    \centering
+			\includegraphics[height= 0.15\textheight]{thesis-template-master/images/hd1 (4550)resnetWithcellyolo.jpg}
+			\caption{}
+			\label{fig:cellnet}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.25\textwidth}
+		    \centering
+			\includegraphics[height= 0.15\textheight]{thesis-template-master/images/hd1 (4550)vggnetWithcellyolo.jpg}
 			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
-	\caption{The illustration of the necessity of Ghost-Module and CellNet. There are visualization of feature maps after ResNet18\cite{20} 1st convolutional layer. Whether it is  a cell image from Sezary Syndrome dataset segmented by AttentionNet (c), or a CT image from Pneumonia Dataset (b), after the first layer of point-wise convolution there is a large amount of redundant feature maps (see the same color marked). Especially for Sezary Syndrome Dataset, there is no need to operate point-wise convolution one by one after AttentionNet segmentation, because all the valid information is within the circle.}
+	\caption{The illustration of the necessity of Ghost-Module and AttentionNet. After AttentionNet segmentation, artifacts will be removed and only morphological characteristics of the objects stay. There are saliency map of cell (d) after ResNet18\cite{20} (a), our Net (b) and VGG16 net \cite{23} (c). Leading  STOA  algorithms, such ResNet18 and VGG16 net, are  more focus  these  non  ROI  features,  such  as  the  debris  feature  outside the ROI. Those leading networks pay more attention to those debris information leads to worse classification performance.}
 \end{figure}
 
-
-
-\begin{table}[t]
+\begin{table}[h]
 \centering
-
 \begin{tabular}{@{}llll@{}}
 \toprule
 Model          & \begin{tabular}[c]{@{}l@{}}Weights\\ (million)\end{tabular} & \begin{tabular}[c]{@{}l@{}}Top-1 Val Acc.\\ (\%)\end{tabular} & \begin{tabular}[c]{@{}l@{}}FLOPs\\ (million)\end{tabular} \\ \midrule
@@ -1272,37 +1274,24 @@ Shuffle Net v2\cite{29} & {\color[HTML]{CB0000} 1.4}                            
 \caption{Comparison of structure and parameters of state-of-the-art methods on Sezary Syndrome Dataset}
 \end{table}
 
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[height=200pt,width=0.9\textwidth]{thesis-template-master/images/Sesary_TimeSeries-12-06-2020.png}
+\label{fig:cellnet}
+\end{center}
+\caption{ResNet18 [17] and shuffleNetv2 [25]  Our Net performance on Sezary SyndromeDataset. Our net  achieves higher classification perfor-mance (e.g. 95.638\% top-1 accuracy ) than ResNet 18 ,ShuffleNet V2  and GhostNet, while less weights andcomputational cost.}
+\end{figure}
+
 
 
 \section{Pneumonia Dataset}
 \label{sec:ipsum}
+The demonstration of Pneumonia dataset. Author in  built the standard benchmark Pneumonia dataset. It contains nearly 2000 patients CT images, the training set contain two classes Normal 1341 images and Pneumonia 3875 images, the Val set contains 242 normal images and 398 pneumonia images
+
 On benchmark Pneumonia Dataset\cite{38}. The Pneumonia / Normal classification val accuracy of our Net converges into nearly 91.785\% better than GhostNet and ResNet18. In addition, after around 80 epochs the accuracy of our Net converges into nearly 91.785\%, comparing to  Inception V3 after 7,000 epochs reaches 88.0\%\cite{38}.
-
-\begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[b]{0.5\textwidth}
-			\includegraphics[height=0.5\textheight]{thesis-template-master/images/Time Series Plot of Shufflenet V, ResNet18 Val, GhostNet18 V, on Sezary with cellyolo.png}
-			\caption{}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{The demonstration of Pneumonia dataset. Author in Identifying Medical Diagnoses and Treatable Diseases by Image-Based Deep Learning, Cell 2018, built the standard benchmark Pneumonia dataset. It contains nearly 2000 patients CT images, the training set contain two classes Normal 1341 images and Pneumonia 3875 images, the Val set contains 242 normal images and 398 pneumonia images.}
-\end{figure}
-
-\begin{figure}[h]
-	\begin{center}
-		\begin{subfigure}[b]{0.5\textwidth}
-			\includegraphics[height=0.5\textheight]{thesis-template-master/images/Time Series Plot of Shufflenet V, ResNet18 Val, GhostNet18 V, on Sezary with cellyolo.png}
-			\caption{}
-			\label{fig:cellnet}
-		\end{subfigure}
-	\end{center}
-	\caption{Our*Net, GnostNet@CVPR2020 and ResNet18 @CVPR 2015 Val performance on Pneumonia dataset. The Pneumonia /Normal classification val_accuracy of our Net converges into nearly 91.785\% better than Ghost Net and ResNet18.}
-\end{figure}
 
 \begin{table}[h]
 \centering
-
 \begin{tabular}{@{}llll@{}}
 \toprule
 Model                                                  & \begin{tabular}[c]{@{}l@{}}Weights\\ (million)\end{tabular} & \begin{tabular}[c]{@{}l@{}}Top-1 Val Acc.\\ (\%)\end{tabular} & \begin{tabular}[c]{@{}l@{}}FLOPs\\ (million)\end{tabular} \\ \midrule
@@ -1311,18 +1300,24 @@ ResNet18\cite{20}                                               & 11            
 Ghost Net\cite{19}                                              & 5.18                                                        & 88.69                                                         & 141                                                       \\
 *our                                                   & {\color[HTML]{CB0000} \textbf{2.91}}                        & {\color[HTML]{CB0000} \textbf{91.78}}                         & {\color[HTML]{CB0000} \textbf{41.7}}                      \\ \bottomrule
 \end{tabular}
-
-\caption{Comparison of structure and parameters of state-of-the-art methods on Pneumonia dataset}
+\centering
+\caption{\textbf{Comparison of structure and parameters of state-of-the-art methods on Pneumonia dataset}}
 \end{table}
 
 
+\begin{figure}[b]
+\centering
+\includegraphics[height=200pt,width=0.9\textwidth]{thesis-template-master/images/Pneumonia_TimeSeries-1.png}
+\label{fig}
+\centering
+\caption{ Comparison of state-of-art methods for training on Pneumonia Dataset. Considering the fact that Our Net has only 8 Novel Ghostmodule layers and 2.91 millions of weights, outperforms both ResNet18, GhostNet and InceptionV3 net from Accuracy and Complexity perspective views.}
+\end{figure}
+
 
 \section{Cifar-10 Dataset} % (fold)
-\label{sub:amet}
-CIFAR-10 dataset\cite{21} consists of 60,000 $32 \times 32$ color images in 10 classes, with 50,000 training images and 10,000 test images. A common data augmentation scheme including random crop\cite{22} and mirroring\cite{19} is adopted as well. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy  ) than both ResNet18 and GhostNet, with the least  weights, namely $1/7$ weights than VGG16 \cite{23}. 
-\begin{table}[h]
+\label{sub:amet}To verify the effectiveness and generalization of the proposed Our*Net architecture, we conduct experiments on several benchmark visual datasets, including CIFAR-10. And we compare the performance with seveal so far best  representative state-of-the-art models.
+\begin{table}[t]
 \centering
-
 \begin{tabular}{@{}llll@{}}
 \toprule
 Model     & \begin{tabular}[c]{@{}c@{}}Weights\\ (million)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Top-1 Val Acc.\\ (\%)\end{tabular} & \begin{tabular}[c]{@{}c@{}}FLOPs\\ (million)\end{tabular} \\ \midrule
@@ -1331,17 +1326,57 @@ ResNet18\cite{20}   & 11                                                        
 Ghost Net\cite{19} & 5.18                                                        & 88.238                                                        & 141                                                       \\
 *our      & {\color[HTML]{CB0000} \textbf{2.91}}                        & {\color[HTML]{333333} \textbf{92.45}}                         & {\color[HTML]{CB0000} \textbf{41.7}}                      \\ \bottomrule
 \end{tabular}
-\caption{Comparison of structure and parameters of state-of-the-art methods on Cifar10 dataset}
+\caption{\textbf{Comparison of structure and parameters of state-of-the-art methods on Cifar10 dataset}}
 \end{table}
+CIFAR-10 dataset\cite{21} consists of 60,000 $32 \times 32$ color images in 10 classes, with 50,000 training images and 10,000 test images. A common data augmentation scheme including random crop\cite{22} and mirroring\cite{19} is adopted as well. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy  ) than both ResNet18 and GhostNet, with the least  weights, namely $1/7$ weights than VGG16 \cite{23}. 
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[height=0.3\textheight]{thesis-template-master/images/cifardataset.png}
+\label{fig:cellnet}
+\end{center}
+\caption{Demonstration of CIFAR-10 dataset. CIFAR-10 dataset consists of 60,000  32 × 32 color images in 10 classes, with 50,000 training images and 10,000 test images. Note: as those images are  32 × 32, we do not apply AttentionNet preprocessing. Indeed, a common data augmentation scheme including random crop and mirroring is adopted during experiments.}
+\end{figure}
+
+
+
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=200pt,width=0.7\textwidth]{thesis-template-master/images/Cifar-12-06-2020.png}
+\label{fig:cellnet}
+\end{center}
+\caption{Comparison of state-of-art methods on CIFAR10 Dataset.  ResNet won 1st place in the ILSVRC 2015 classification competition with top-5 error rate of 3.57\%, Converges faster compared to other models and solved the degradation problem. For Cifar10 dataset, Our Net achieves the better classification performance than ResNet18 and recently CVPR 2020 published GhostNet.}
+\end{figure}
+
 
 \section{COVID-19 Dataset} % (fold)
 \label{sub:amet}
 
 The 2019 novel corona virus (COVID-19) brings huge challenge to our life and we are facing an increasingly disrupted challenging time. In order to help the medical scientists, we made this COVID-19 dataset. Based on initial COVID-19 Image Data Collection\cite{37}, which contains only 123 frontal view X-rays. We additionally collected data from newest publications and  assembled medical images from websites and publications such as European Journal of Radiology\cite{36}, and collected nearly 1583 healthy Lung CT images as comparative data from recently available resources and publications\cite{37} \cite{38}.
 
+
+Bilateral multiple lobular and sub segmental areas of consolidation constitute the typical findings in chest CT images of intensive care unit (ICU) patients on admission Huang 2020. In comparison, non-ICU patients show bilateral ground-glass opacity and sub segmental areas of consolidation in their chest CT images Huang 2020. In these patients, later chest CT images display bilateral ground-glass opacity with resolved consolidation Huang 2020.
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=200pt,width=0.9\textwidth]{thesis-template-master/images/covidlungandhealthylung.JPG}
+\label{fig:cellnet}
+\end{center}
+\caption{The COVID infected patient’s lung (second row) and normal healthy lung (first row). While the diagnosis is confirmed using polymerase chain reaction (PCR), infected patients with pneumonia may present on chest X-ray and computed tomography (CT) images with a pattern that is moderately characteristic for the human eye.}
+\end{figure}
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[height=200pt,width=0.8\textwidth]{thesis-template-master/images/COVID-19_TimeSeries-1.png}
+\label{fig}
+\centering
+\caption{ Comparison of state-of-art methods for training on COVID-19 Dataset.  The weights of our models is 2.91 million, comparing to DenseNet121 7.98 millions of weights, MobileNet V2 3.4 millions of weights and 301 millions of FLOPs. Considering the fact of the higher complexity and parameter amount of other SOTA Nets, our Net is very competitive on classification tasks for the biomedical dataset. }
+\end{figure}
+
 \begin{table}[h]
 \centering
-
 \begin{tabular}{@{}llll@{}}
 \toprule
 Model         & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Weights\\ (million)\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Top-1 Val Acc.\\ (\%)\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}FLops\\ (million)\end{tabular}} \\ \midrule
@@ -1357,7 +1392,13 @@ SqueezeNet V2 & {\color[HTML]{000000} N/A}                                      
 \caption{Comparison of structure and parameters of state-of-the-art methods on COVID-19 dataset}
 \end{table}
 
-
+\begin{figure}[b]
+\includegraphics[width=0.8\textwidth]{thesis-template-master/images/BarDiagram_Bold.png}
+\label{fig}
+\centering
+\caption{Graphical summary of composition of COVID-19 Xray/CT images. Based on initial COVID-19 Image Data Collection \cite{37}, we additionally collected and sorted nearly 2,000 CT/Xray images, with wide range in gender, age, survival condition and country/places from newest publications and CDC public sources\cite{36}\cite{37}\cite{38}. }
+%\caption{Graphical summary of Alex Net\cite{31}, Squeeze net\cite{24}, ResNet18\cite{20}, MobieNetv2\cite{30}, Our Net, Ghost Net\cite{19}, DenseNet121\cite{32}, and Vgg11\cite{23} performance on COVID-19 dataset. }
+\end{figure}
 
 
 \chapter{Ablation Study}
@@ -1416,6 +1457,16 @@ In addition, we purposed AttentionNet Network as an automated data pro-processin
 
 We also produced the first COVID-19 Chest Xray/CT Dataset containing nearly 2,000 Xray/CT images (nearly 1,500 Healthy Xray/CT images and nearly 500 COVID-19 infected Xray/CT images). Experiments conducted on COVID-19 Datasets also demonstrated that the proposed CellNet is an impressive alternative of current baseline models, and our CellNet (94.719\% in Top-1 accuracy) outperforms the GhostNet\cite{19} (92.739\%  in Top -1 accuracy) and other leading models. In addition, we developed a software application for potential diagnosis, which integrated with 12 leading SOTA models, including our CellNet. All code is available at \textit{https://github.com/Johnny-liqiang/CellNetUML}.
 
+\label{sub:figures}
+\begin{figure}[t]
+	\begin{center}
+	\includegraphics[width=\textwidth]{thesis-template-master/images/general workflow2.pdf}
+	\label{fig:lenna}
+	\end{center}
+	\caption{General Workflow of Proposed Project. After Image Flow Cytometry (Morphological identification of tumor T-cells in the blood), those generated images can be categorized into 6 typical classes: lighting artifacts, out of focus cell, debris, contaminated cell, outside FOV cells  and multiple cell concatenated together. Using AttentionNet as a automatic detector and segment-or, we can filter out most of the artifacts in the images and only keep the morphological characteristics of the cell for CellNet classification. CellNet only has 8 novel Ghost module layers. CellNet software includes a total of 5 interfaces, 25 buttons, 10 user prompt functions and inherits 12 algorithms with the integration of 4 data sets.}
+	\label{fig:lennas}
+\end{figure}
+
 \subsection{Introduction}
 \label{sec:Introduction}
 In addition to the fact that medical data sets in real-world scenarios are often too complex and contain large amounts of noisy data, the complexity and interpretability of the models greatly affect the difficulty of training and the probability of model adoption.
@@ -1458,6 +1509,7 @@ For biomedical images processing, due to different experimental conditions, such
 
 \subsubsection{CellNet: generate more feature map by linear operation}
 
+\begin{comment}
 \begin{figure}[h]
 	\begin{center}
 		\begin{subfigure}[t]{0.49\textwidth}
@@ -1476,11 +1528,13 @@ For biomedical images processing, due to different experimental conditions, such
 	\caption{\textbf{The comparison between ResNet18 \cite{20} and CellNet}. Despite its simplicity (only 8 layers ghost module) and lower parameters ( $1/4$ weights than ResNet18 \cite{20}), inside Ghost bottleneck adopted residual function for deeper gradient forward.}
 \end{figure}
 
+\end{comment}
+
 
 
 Inspired by those two outstanding neural network\cite{19}\cite{20}, instead of stacking lots of point-wise convolutional layers and taking huge amount of convolutional manipulations, we can avoid the redundant feature maps by cheap operation. 
 
-As shown in Table 1. The first layer of CellNet is a standard convolutional layer with 64 filters, follows standard batch normalization and relu, in order to generate initial intrinsic feature maps, then we purpose a few series of G-bneck, namely 8 layers. In each stage first apply stride = 1 then apply stride = 2 bottleneck which gradually increase the output channel dimension. After 8 layer feature extraction, we get a 512-dimensional feature vector by global average pooling and convolutional layer. SE layer applied to scale less important feature map. Smoothing, blurring and motion are also widely used linear operation, but they need more GPU support. By using depth-wise convolution layer, we can generate more correlated ghost feature maps with cheaper cost.
+As shown in Table 6.1. The first layer of CellNet is a standard convolutional layer with 64 filters, follows standard batch normalization and relu, in order to generate initial intrinsic feature maps, then we purpose a few series of G-bneck, namely 8 layers. In each stage first apply stride = 1 then apply stride = 2 bottleneck which gradually increase the output channel dimension. After 8 layer feature extraction, we get a 512-dimensional feature vector by global average pooling and convolutional layer. SE layer applied to scale less important feature map. Smoothing, blurring and motion are also widely used linear operation, but they need more GPU support. By using depth-wise convolution layer, we can generate more correlated ghost feature maps with cheaper cost.
 \begin{table}[htbp]
 \centering
 
@@ -1529,6 +1583,7 @@ layer & Type    & Filters & Size/Stride           & Input      & Output     & \m
 
 \textbf{Ghostmodule: Is point-wise convolution really indispensable?} Unlike Ghost module applied in GhostNet\cite{19}, we designed two kind of novel Ghost Modules for feature extraction and adopted the SE layers from Squeeze-and-Excitation Networks \cite{24} for enhancing useful features and balancing less inhibiting feature map. The first novel Ghost module inside of Gbneck acts as an expansion layer increasing the number of channels, while second Ghost module reduces the number of channels to match the shortcut path. Then the inputs and the outputs of these two Ghost modules are concatenated by shortcut. We adopted batch normalization (BN) and ReLU non-linearity right after each layer as well\cite{19}, except that ReLU was not used after the second Ghost module as suggested by MobileNetV2\cite{30}. In each novel Ghost Module, we only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the linear cheap transformation such as depth-wise convolution or affine transformation and wavelet transformation, as suggested by GhostNet\cite{19}, here the depth-wise convolution was used.
 
+\begin{comment}
 \begin{figure}[h]
 	\begin{center}
 		\begin{subfigure}[b]{0.49\textwidth}
@@ -1544,9 +1599,11 @@ layer & Type    & Filters & Size/Stride           & Input      & Output     & \m
 	\end{center}
 	\caption{Two kind of Gbnecks we proposed for feature extraction. where we apply Stride = 1 to keep the output channel of the feature map, Stride = 2 decreases the output channel while extracting information without losing a lot of information. SE = 0 represents not applying SE layer.}
 \end{figure}
+\end{comment}
 
 
-\textbf{Squeeze-and-Excitation(SE Layer): scaling inhibiting vs intrinsic features map.} Squeeze-and-Excitation (SE)\cite{24} adaptively recalibrates channel-wise feature responses by explicitly modeling inter-dependencies between channels. 
+
+\textbf{Squeeze-and-Excitation(SE Layer): scaling inhibiting vs intrinsic features map.} Squeeze-and-Excitation (SE)\cite{24} adaptively recalibrates channelwise feature responses by explicitly modeling inter-dependencies between channels. 
 
 
 
@@ -1564,11 +1621,11 @@ $&\approx s $\label{speed}
 
 In Equation \eqref{speed}, ${h}' \cdot {w}' \cdot {n}$ represents  $n$ output feature maps with height ${h}'$, width ${w}'$, and $k \cdot k$, $d \cdot d$ stands for the convolution kernel filter and linear operation kernel size, respectively. And $m$ is the number of intrinsic feature maps, where $m < n$ because we only take few intrinsic feature maps and apply a series of cheap linear operations on each intrinsic feature to generate $s$ ghost features. It is also noteworthy that there are 1 ghost map adopted by identify mapping that indicates $s-1$. In total there are $\frac{n}{s} \cdot(s-1)$  linear operations. This leads to theoretically $s$ speed-up ratio.
 
-More feature maps generated by linear operation based on a set of intrinsic feature maps, instead of generating a lot of redundant data by point-wise convolution which takes huge amount of parameters simultaneously. This also partially explains that our net achieves the best performance on several benchmarks shown in Table 2 and Table 3.
+More feature maps generated by linear operation based on a set of intrinsic feature maps, instead of generating a lot of redundant data by point-wise convolution which takes huge amount of parameters simultaneously. This also partially explains that our net achieves the best performance on several benchmarks shown in Table 6.2 and Table 6.3.
 As far as we deeply analyze each-layer-generated feature map by our net, we can also figure out the second factor: the artifacts appear in the image could also be learned by the neural network, which greatly affects the accuracy of the network, with the combination of AttentionNet segmentation techniques in cell image pre-processing, we can more focus on object rather than artifacts.
 
 
-\begin{table}[h]
+\begin{table}[t]
 \centering
 \begin{tabular}{@{}llll@{}}
 \toprule
@@ -1582,7 +1639,7 @@ Ghost Net\cite{19} & 5.18                                                       
 \end{table}
 
 
-\begin{table}[h]
+\begin{table}[t]
 \centering
 \begin{tabular}{@{}llll@{}}
 \toprule
@@ -1596,86 +1653,46 @@ Ghost Net\cite{19}                                              & 5.18          
 \caption{\textbf{Comparison of structure and parameters of state-of-the-art methods on Pneumonia dataset}}
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}[t]
 	\begin{center}
-		\begin{subfigure}[b]{0.45\textwidth}
-		    \centering
-			\includegraphics[height= 0.10\textheight]{thesis-template-master/images/hd1 (4400).png}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\includegraphics[height= 0.20\textheight]{thesis-template-master/images/hd1 (4400).png}
 			\caption{}
 			\label{fig:res18}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
-		    \centering
-			\includegraphics[height= 0.10\textheight]{thesis-template-master/images/hd1 (4400) (1).png}
-			\caption{}
-			\label{fig:cellnet}
-		\end{subfigure}
-		
-		\begin{subfigure}[b]{0.45\textwidth}
-		    \centering
-			\includegraphics[height= 0.10\textheight]{thesis-template-master/images/hd1 (4550).png}
-			\caption{}
-			\label{fig:cellnet}
-		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
-		    \centering
-			\includegraphics[height= 0.10\textheight]{thesis-template-master/images/hd1 (4550) (1).png}
-			\caption{}
-			\label{fig:cellnet}
-		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
-		    \centering
-			\includegraphics[height= 0.10\textheight]{thesis-template-master/images/ss2_8 (142).png}
-			\caption{}
-			\label{fig:cellnet}
-		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
-		    \centering
-			\includegraphics[height= 0.10\textheight]{thesis-template-master/images/ss2_8 (142) (1).png}
-			\caption{}
-			\label{fig:cellnet}
-		\end{subfigure}
-		
-		
 		\begin{subfigure}[b]{0.33\textwidth}
-		    \centering
-			\includegraphics[height= 0.20\textheight]{thesis-template-master/images/hd1 (4550)ournetWithcellyolo.jpg}
+			\includegraphics[height= 0.20\textheight]{thesis-template-master/images/hd1 (4400) (1).png}
 			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.33\textwidth}
-		    \centering
-			\includegraphics[height= 0.20\textheight]{thesis-template-master/images/hd1 (4550)resnetWithcellyolo.jpg}
+			\includegraphics[height= 0.20\textheight]{thesis-template-master/images/hd1 (4550).png}
 			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.33\textwidth}
-		    \centering
-			\includegraphics[height= 0.20\textheight]{thesis-template-master/images/hd1 (4550)vggnetWithcellyolo.jpg}
+			\includegraphics[height= 0.20\textheight]{thesis-template-master/images/hd1 (4550) (1).png}
 			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
-	\caption{The illustration of the necessity of Ghost-Module and AttentionNet. (a)-(f) implying the performances of AttentionNet. After AttentionNet segmentation, artifacts will be removed and only morphological characteristics of the objects stay. The second row are saliency map of cell (d) after ResNet18\cite{20} (h), our Net (g) and VGG16 net \cite{23} (i). Leading  STOA  algorithms, such ResNet18 and VGG16 net, are  more focus  these  non  ROI  features,  such  as  the  debris  feature  outside the ROI. Those leading networks pay more attention to those debris information leads to worse classification performance.}
+	\caption{The illustration of the necessity of Ghost-Module and AttentionNet. (a)-(d) implying the performances of AttentionNet. After AttentionNet segmentation, artifacts will be removed and only morphological characteristics of the objects stay. Leading  STOA  algorithms, such ResNet18 and VGG16 net, are  more focus  these  non  ROI  features,  such  as  the  debris  feature  outside the ROI. Those leading networks pay more attention to those debris information leads to worse classification performance.}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[t]
 	\begin{center}
-		\begin{subfigure}[b]{0.49\textwidth}
-			\includegraphics[height= 0.25\textheight]{thesis-template-master/images/Inkedfirst Conv1 of resnet18 with pretrain weights on coviddataset_LI.jpg}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\includegraphics[height= 0.20\textheight]{thesis-template-master/images/Inkedfirst Conv1 of resnet18 with pretrain weights on coviddataset_LI.jpg}
 			\caption{}
 			\label{fig:res18}
 		\end{subfigure}
-		
-		
-		\begin{subfigure}[b]{0.49\textwidth}
-			\includegraphics[height= 0.25\textheight]{thesis-template-master/images/Inkedfirst Conv1 of resnet18 with pretrain weights on penudataset_LI.jpg}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\includegraphics[height= 0.20\textheight]{thesis-template-master/images/Inkedfirst Conv1 of resnet18 with pretrain weights on penudataset_LI.jpg}
 			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
-		
-		\begin{subfigure}[b]{0.49\textwidth}
-			\includegraphics[height= 0.25\textheight]{thesis-template-master/images/cellnetnecc3.jpg}
+		\begin{subfigure}[b]{0.33\textwidth}
+			\includegraphics[height= 0.20\textheight]{thesis-template-master/images/cellnetnecc3.jpg}
 			\caption{}
 			\label{fig:cellnet}
 		\end{subfigure}
@@ -1713,19 +1730,14 @@ To verify the effectiveness of the proposed novel Ghost module and CellNet archi
 
 
 
-\begin{figure}[h]
-\centering
-\includegraphics[height=200pt, width=0.9\textwidth]{thesis-template-master/images/Cifar-12-06-2020.png}
-\label{fig}
-\centering
-\caption{Comparison of state-of-art methods for training on benchmark CIFAR-10 Dataset. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy ) than both ResNet and GhostNet, it is illustrated by both the standard derivation, namely the stability, and the final converged accuracy.}
-\end{figure}
+
 CIFAR-10 dataset\cite{21} consists of 60,000 $32 \times 32$ color images in 10 classes, with 50,000 training images and 10,000 test images. A common data augmentation scheme including random crop\cite{22} and mirroring\cite{19} is adopted as well. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy  ) than both ResNet18 and GhostNet, with the least  weights, namely $1/7$ weights than VGG16 \cite{23}. 
 
 
-
 On benchmark Pneumonia Dataset\cite{38}. The Pneumonia / Normal classification val accuracy of our Net converges into nearly 91.785\% better than GhostNet and ResNet18. In addition, after around 80 epochs the accuracy of our Net converges into nearly 91.785\%, comparing to  Inception V3 after 7,000 epochs reaches 88.0\%\cite{38}.
-\begin{figure}[h]
+
+\begin{comment}
+\begin{figure}[t]
 \centering
 \includegraphics[height=200pt, width=0.9\textwidth]{thesis-template-master/images/Pneumonia_TimeSeries-1.png}
 \label{fig}
@@ -1733,22 +1745,17 @@ On benchmark Pneumonia Dataset\cite{38}. The Pneumonia / Normal classification v
 \caption{ Comparison of state-of-art methods for training on Pneumonia Dataset. Benchmark Pneumonia Dataset contains 5,856 Xray/CT images. Considering the fact that Our Net has only 8 Novel Ghostmodule layers and 2.91 millions of weights, outperforms both ResNet18, GhostNet and InceptionV3 net from Accuracy and Complexity perspective views.}
 \end{figure}
 
+
+\end{comment}
+
 \begin{figure}[h]
 \centering
-\includegraphics[height=200pt, width=0.9\textwidth]{thesis-template-master/images/COVID-19_TimeSeries-1.png}
+\includegraphics[width=0.9\textwidth]{thesis-template-master/images/COVID-19_TimeSeries-1.png}
 \label{fig}
 \centering
 \caption{ Comparison of state-of-art methods for training on COVID-19 Dataset.  The weights of our models is 2.91 million, comparing to DenseNet121 7.98 millions of weights, MobileNet V2 3.4 millions of weights and 301 millions of FLOPs. Considering the fact of the higher complexity and parameter amount of other SOTA Nets, our Net is very competitive on classification tasks for the biomedical dataset. }
 \end{figure}
 
-
-\begin{figure}[h]
-\includegraphics[height=240pt,width=0.9\textwidth]{thesis-template-master/images/BarDiagram_Bold.png}
-\label{fig}
-\centering
-\caption{Graphical summary of composition of COVID-19 Xray/CT images. Based on initial COVID-19 Image Data Collection \cite{37}, we additionally collected and sorted nearly 2,000 CT/Xray images, with wide range in gender, age, survival condition and country/places from newest publications and CDC public sources\cite{36}\cite{37}\cite{38}. }
-%\caption{Graphical summary of Alex Net\cite{31}, Squeeze net\cite{24}, ResNet18\cite{20}, MobieNetv2\cite{30}, Our Net, Ghost Net\cite{19}, DenseNet121\cite{32}, and Vgg11\cite{23} performance on COVID-19 dataset. }
-\end{figure}
 The 2019 novel corona virus (COVID-19) brings huge challenge to our life and we are facing an increasingly disrupted challenging time. In order to help the medical scientists, we made this COVID-19 dataset. Based on initial COVID-19 Image Data Collection\cite{37}, which contains only 123 frontal view X-rays. We additionally collected data from newest publications and  assembled medical images from websites and publications such as European Journal of Radiology\cite{36}, and collected nearly 1583 healthy Lung CT images as comparative data from recently available resources and publications\cite{37} \cite{38}. COVID-19 Dataset contains nearly 2,000 Xray/CT images we sampled from newest publications. Our Net achieves 3rd place classification performance among these state-of-art models while least weights and computational cost.
 
 
@@ -1761,13 +1768,192 @@ What's more, we completed an AI-assisted diagnostic in a real-world medical scen
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 \section{CellNet Software}
 \label{sec:ipsum}
- 
+With help of the power of Qt and the high development efficiency of Python, using PyQt/PySide for desktop development will be a wonderful plus for  demostatie our cellnet software.
+the current Qt/PyQt/PySide based GUI development common development methods are list follow:QWidget + qss, QtWebkit + html + css + js and Qt Quick. All these three technologies can efficiently, quickly and perfectly develop the cross-platform desktop software. Qt's official development method is Qt Quick, which uses the json like language qml for rapid development. it is easy to learn, expansible and wildly used in  Ubutun, Linux Deepin and other Linux desktop application development. It enable the developer for rapid development framework, and putting more effort into amplifying the corresponding business logic and easy to quickly build the framework Prototypes. Therefore, we have developed a  software based on PyQt5 QFramer.
 
-\subsection{Dolor sit} % (fold)
+\subsection{Proposed software architecture} % (fold)
 \label{sub:dolor_sit}
+We designed this function pytotypes based on cellnet, meanwhile we integrated more than 10 current state of arte classification networks in order to better demonstrate the real-world efficacy of cellnet.
+
+In addition, with the permission of our lab supervisor, we attended the Deecamp 2020 AI Camp, where we further explored and developed our existing cellnet software, and integrated melanoma data sets and datsets of 6 dermatological diseases, as well as collected and expanded covid-19NLP data sets. The Bert Neural Network developed by Google is used for this part of the prediction work since our network is specifically designed based on photographic type input and Bert is a very well-known neural network for handling text-based input.
+
+It is gratifying to note that our cellnet-based design did well at  Deecamp 2020.
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.3\textheight]{thesis-template-master/images/2020DeeCamp_ppt_tcy (1).pdf}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Proposed software structure diagram.
+In order to better demonstrate the diagnostic performance of our model, we selected the classic  medical benchmark datasets from competitions on kaggle, such as the melanoma dataset, the diabetic retinopathy dataset, the actini keratosis, vascular lesion dataset, dermatofibroma dataset, squamous cell carcinoma dataset and so on. Meanwhile, we selected nearly 11  representative classification networks, enable users to choose the diagnostic network that fits their customer dataset. In addition, we inherit not only the computer vision classification network, but also the classic classification network of NLP. It is worth noting that we develop desktop applications and open APIs to facilitate a better user experience, and our computing power is jointly provided by ETH Leonhard and Megengine.}
+\end{figure}
+
+\subsection{Class diagram} % (fold)
+\label{sub:amet}
+With our main.py we can quickly train different models on the dataset to get the optimal weights, and then integrate the weights into the software. Pyqt provides a large quantity of uml-type development functions, which facilitates the efficient design of the interface. we use a total of nine object classes, including Qlabel, Qwidget, QPushbutton. As shown in figure 6.7, the large number of non-functional buttons are designed for GUI purposes only and do not involve the design of functions, which saves a lot of time in software development. What we really need to put effort into is the functionality of the following types of objects: Qpushbutton, Qslider and Qcheckbox.
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.7\textheight]{thesis-template-master/images/tempsnip.png}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software. The page is named accordingly, and the diagnosis of sezary sydrom is in page 5 out of 8 Pages. As illustrated, we have a large quantity of labels to be displayed for logos, copyright and other graphic infos, with each button named according to the actual function it has, such as next, the default button is used for the page turnover, cellyolo is used for the cell segmentation, prediction is used for diagnostics of the cell, compare is used to evaluate the accuracy of different networks on this dataset, user can upload new images via input buton, and we use the the best cellnet weights file to output the probability of the category.}
+\end{figure}
+
+\subsection{User Interface} % (fold)
+\label{sub:amet}
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet1page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\end{figure}
 
 
-\subsection{Amet} % (fold)
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet2page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\end{figure}
+
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet4-3page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\end{figure}
+
+
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet4-4page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software. }
+\end{figure}
+
+
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-1page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\end{figure}
+
+
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-2page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software. }
+\end{figure}
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-3page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\end{figure}
+
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet6-1page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software. .}
+\end{figure}
+
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet7-2page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\end{figure}
+
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet7-3page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software. }
+\end{figure}
+
+
+\subsection{Function design} % (fold)
+\label{sub:amet}
+
+
+\begin{algorithm}[h]
+  \caption{K‐means++ Clustering in ground truth boxes.}
+  \label{alg:Framwork}
+  \begin{algorithmic}[1]
+    \Require
+    image folder path:$Path$
+    \Ensure
+     $pathlist$, $predictionlabellist$ and $targetlabellist$
+  
+    \If inputcheck buttion is checked 
+      \State  read image from the globrec function and list image path into a sorted list:
+      mypictures \gets globrec($Path$)
+      \State  calculate the lenght of the image list:
+      lenght of mypictures \gets len($mypictures$)
+      \State  enable the QtWidgets to send a message box to give the user hins
+      box  \gets QtWidgets.QMessageBox()
+      \State  enable the Qtexteditor to read for the future output results:
+      \set hins buttons = \True 
+      \State  calculate the category possibility using the model trained $Cellnet$ and best weight:$pt$:where Precision ,$Recall
+      
+      $predictionlabellist$, $targetlabellist$,$Precision$,$Recall$ \gets Cellnet($Path$,$pt$)
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    \Else
+      \State $I \gets 0$
+      
+      
+      
+      
+      
+    \EndIf
+    \Return $T_{i}=(w^{i},h^{i}),i \in K$.
+  \end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Test cases} % (fold)
 \label{sub:amet}
