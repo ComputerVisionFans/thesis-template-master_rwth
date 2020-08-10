@@ -79,7 +79,7 @@ We also produced the first COVID-19 Chest Xray/CT Dataset containing nearly 2,00
 %We empirically evaluate our proposed DualConvNet architecture on three publicly available benchmarks for 3D scene segmentation. We achieve competitive results on the ScanNet v2 [DCS+17], as well as the Stanford Large-Scale 3D Indoor Spaces Dataset (S3DIS) [ASZ+16]. Among graph convolutional approaches, we define a new stateof-the-art on both datasets. Moreover, on the recently published Matterport3D benchmark [CDF+17], we can report overall state-of-the-art results. We summarize the main contributions of this thesis as follows: 1 DualConvNet - our novel family of multiscale convolutional architectures - combines Euclidean and geodesic features for 3D semantic scene segmentation. 2 For creating mesh-centric multi-scale architectures, we extend two well-established mesh simplification algorithms as means of (un-)pooling operations. 3 Random Edge Sampling (RES) is a novel sampling method for sampling neighborhoods which guarantees an upper limit for the predefined expected size.
 %Reducing the size of the neighborhood allows us to train networks with substantially fewer neighborhood sizes. However, we infer on test examples with larger sample sizes for better neighborhood approximations. 4 We conclude our work with a thorough ablation study which experimentally proves our claim that Euclidean and geodesic convolutions give a consistent benefit, independent of the pooling method and the notion of the neighborhood used in the architecture.
 
-
+\begin{comment}
 \chapter{Related Work}
 \label{sec:examples}
 This chapter will demonstrate some fun \LaTeX\ stuff.
@@ -131,6 +131,345 @@ This will help you keep an overview on the places in the text you have to work o
 
 \subsection{Amet} % (fold)
 \label{sub:amet}
+
+\end{comment}
+
+
+
+
+
+\chapter{Related Work}
+
+\section{Learning on Sezary Syndrome}
+\subsection{ The introduction of Sezary Syndrome } % (fold)
+Sezary Syndrom is an aggressive cutaneous T cell lymphoma that is characterized by the presence of tumor T cells with abnormal nucleus morphology in the peripheral blood. The smooth and precise detection of malignant cells in the blood of patients with SS is of significant diagnostic, prognostic and therapeutic value and is essential for disease monitoring under treatment (Guenova et al. 2016; Weng et al., 2013; Guenova et al., 2013).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Morphological identification of tumor T cells in the blood is still the gold standard. However, this method is highly subjective, with low throughput and low sensitivity. It also poses severe technical problems, which have not been validated in a multicentre prospective international study (Scarisbrick et al. 2018). The severe limitations of manual microscopic identification of tumor T cells have fed to the implementation of flow cytometry-based diagnostic assays. Currently, the loss of cell surface markers, such as CD26, CD27, and CD7, on malignant T lymphocytes remains one of the most consistent features and is routinely used in the diagnostic workup (Novelli et al. 2015). However, their specificity and especially sensitivity, must be interpreted with caution (Nagler et al. 2012). A ubiquitously expressed, single clear-cut diagnostic marker allowing for the diagnosis of cutaneous T-cell lymphoma is yet to be discovered (DeSimone et al. 2015).
+
+
+
+\subsection{ Diagnosis on Sezary syndrome}
+
+Although Sezary syndrome (SS) outlines as an advanced stage of cutaneous T-cell lymphoma, it gives a challenge even for the most experienced dermatologic clinicians. SS is defined clinically by erythroderma, but can also be identified in the presence of specific histologic and peripheral blood findings. Erythrodermic cutaneous T-cell lymphoma can imitate several nonmalignant disorders with erythroderma, including pityriasis rubra pilaris, psoriasis, atopic dermatitis, and graft-versus-host diseases. nagier 
+ 
+ Because the histology of SS is often nonspecific and rarely pathognomonic, which makes the diagnosis more difficult. Peripheral blood studies in patients with erythroderma are usually informative in the diagnosis of SS. 
+
+Peripheral blood abnormalities consist of elevated CD4/CD8 ratio, aberrant CD26, CD27 and CD7 expression, and T-cell clonality. these can be used for helping diagnosis.  nagier
+
+The survey conducted  that ratio of CD4:CD8 is often increased in patients with SS, and the clonal proliferation of CD4 cells in CTCL leads to a CD4:CD8 ratio of 10 or more in about 80\% of patients with SS. 12 
+
+On the other hand, the use of the CD4:CD8 ratio for the diagnosis has the shortcomings that patients with benign inflammatory erythroderma have also been found to have ratios that are significantly higher than those of healthy control subjects patients, with some patients having CD4:CD8 ratios more significant than 10. 13 14
+Besides, an elevated CD4:CD8 ratio is neither sensitive  6 15  nor specific for CTCL(cutaneous T-cell lymphoma). As a result, the ISCL(International Society of Cutaneous Lymphoma) uses CD4:CD8 greater than 10 as a diagnostic criterion for SS, but requires additional hematologic abnormalities if skin and lymph node biopsy specimens are nondiagnostic.   nagier 
+
+
+CD7 is a glycoprotein that is normally expressed in 80\% to 90\% of CD$4 ^{+}$ T cells, virtually all CD$8 ^{+}$T  cells. 15  CD7 may pay a role in T-cell activation and/or adhesion, but its natural ligand has not been identified.18 19
+
+
+
+CD26 is a glycosylated transmembrane protein that maintains proteolytic enzyme activity (dipeptidyl peptidase IV) and is expressed on the
+majority of circulating T cells.  CD26 is expressed on 80\% to 90\% of CD3 CD4 T cells in healthy individuals' peripheral blood. 28 29
+
+\begin{figure}[t]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+		    \centering
+			\includegraphics[width=\textwidth]{thesis-template-master/images/cd164.png}
+			\label{fig:cellnet}
+            \caption{}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\textwidth}
+		    \centering
+			\includegraphics[width=\textwidth]{thesis-template-master/images/sezary and cd164.png}
+			\label{fig:cellnet}
+            \caption{}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{CD164 expression is increased on CD4+ T cells from patients with Sézary syndrome (SS)}.  Increased expression of CD164 may be a promising diagnostic parameter on Malignant T Cells in Sézary Syndrome, image citated from emma
+(b) Flow cytometric analysis of CD164 expression in blood CD4+ T cells from healthy donors (nml), control population of patients with inflammatory skin disease (ISD; psoriasis) and from patients with SS. (a)Representative example of CD164 expression limited to CD4+ CD26- T cells in the blood of a patient with SS (plot gated on CD4)}
+\end{figure}
+
+Emmanuella's group study was conducted following the Declaration of Helsinki's principles and was approved by the Institutional Review Board of the University of Zurich.  Peripheral blood from the patients with SS and psoriasis was obtained from the University of Zürich Biobank, Blood from healthy individuals was obtained as discarded tissue from the University Hospital Zurich's blood bank. The project aimed to confirm CD164 as a potential marker for malignant T cells in the blood of patients with SS.
+
+Malignant T cells in CTCL are typically memory T cells. Subsets of memory T cells can be differentiated in part by CD27 expression. 31 33 CD27 belongs to the tumor necrosis factor/nerve growth factor receptor family. nagier
+
+Although diagnostically invaluable, these peripheral blood studies have limitations of their own, and their diagnostic specificity must be interpreted with caution, particularly when only small numbers of cells are phenotypically abnormal.    nagier
+
+
+Logically, T-cell clonality could be useful in diagnosing SS because neoplasia is the result of a clonal expansion of an abnormal cell. This is supported by many studies finding dominant T-cell clones in the peripheral blood of patients with SS. However, the diagnostic significance of a dominant T-cell clone in the blood is still controversial, particularly in erythrodermic patients. nagier
+
+
+Computer vision approaches have been widely developed to automatically annotate cell types to single-cell images generated from imaging flow cytometry experiments. Increasingly, these approaches are based on deep learning paradigms that have emerged as a disruptive alternative to engineering-based techniques. Deep learning systems rely on multi-layered neural networks that can extract increasingly complex, task-related features directly from the data. 
+Recent developments in neural network architecture design and training have enabled researchers to solve previously intractable learning tasks in the field of computer vision. As a result, deep learning-based approaches have become very successful in addressing a wide range of biomedical image analysis tasks such as detection of skin cancers from photographic images (Esteva et al. 2017), detection of pneumonia on chest X-rays (Rajpurkar et al. 2017), detection of breast cancer metastases in histopathology images (Liu et al. 2017) and many others (Angermueller et al. 2016). 
+
+The above approaches are only of limited use in deriving a morphological signature in a diagnostic trial since they require a cell type annotation for every single-cell image.
+
+Diagnostic trials provide disease annotations at the level of patient samples that give rise to a collection of single-cell images if processed via imaging flow cytometry, Multiple instance learning (or weakly supervised learning) is an extension of supervised learning that deals with this situation.  In multiple instance learning, disease annotations (e.g. healthy/diseased) are provided for a group of observations (single cell Images) but not for individual observations. Multiple instance learning is particularly appealing for biomedical image analysis, since typically clinical annotations-characterize a group of observations. Multiple instance learning has been successfully applied to cancer detection in histopathology images (Hou et al. 2015; Campanella et al., 2018), where only the whole slide-level information (about presence/absence of cancer in the whole slide) is provided. It has also been applied to the analysis of fluorescence microscopy images from high content screening experiments (Kraus, et al. 2015), where the group label characterizes the majority of cells in the entire microscopy image. Recently developed CellCnn for detecting rare diseases, it associates cell populations from single-cell mass cytometry data. CellCnn implements a multiple instance learning approaches to define proteomic profiles of cell subpopulations associated with disease stâtus (Arvanlti and Claassen 2017). Using CellCnn, we identified paracrine signaling-, AlIDS onset- and rare CMV infection-associated cell subsets in peripheral blood and sporadic leukemic blast populations in minimal residual disease-like situations with frequencies as low as 0.01\%. CellCnn, in its current form has been demonstrated on 30+ dimensional single cell proteomic data and constitutes the basis for our technology prototype to define morphological signatures of disease-associated cell subpopulations from imaging flow cytometry measurements.
+
+
+
+\section{Learning on Image Segmentation Techniques }
+
+Here, we learn and compare various techniques for image segmentation techniques. As the results are depicted in Table 1,  the survey of image segmentation techniques highlighted the hierarchical framework in image segmentation techniques and how they are used to improve the quality of recognition. Segmentation based on active contour models conveys that refinement of the boundary was an essential process in segmentation. Grouping of pixels of image conducts for the development of fuzzy-based and K- means clustering method. The kernel metric approaches, in addition to clustering, eliminate the need for prediction number of clusters. K-means based segmentation techniques are applied in various real-world scenarios, such as brain MRI images and tumor segmentation. The Texture Based Encoding Segmentation (TBES) models maintained the reduction of coding length. The uniformity nature of maximum likelihood regions provides a way to use an angular-based texture pattern and intensity deviation matrix to improve the quality of segmentation. 
+
+\subsection{ K-Means clustering based Image Segmentation }
+Clustering approach assumes that each region in the image forms a separate cluster in the feature space. Those kind of approaches can be generally broken into two steps: 1) Categorize the points in the feature space into clusters; 2) Map the clusters back to the spatial domain to form separate regions. The biggest advantages led to straight forward for classification and easy for implementation. but under the circumstances of  determination of number of clusters will be become problematic and usually led to different segmentation results given different initally k clustering center. besides, the features are often image dependent and it remains unclear that how to select the best feature set so as to obtain satisfactory segmentation results. 
+
+Moverover, it does not get benifit from the spatical informations, Recently studies  includes the local and spatial informatin in A2DKM to determine the number of clusters, and given comparative analysis on  memory consumption of AFKM and Automated 2 Dimensional K means (A2DKM). citate Yusoff et al.
+
+
+in  advanced K means they trying to detects the range and range of Tumor in brain images and allows the accurate detection, reproducible and less execution time, as they mainly work on the brain MR image and using the Tumor shape and Tumor postion as evalution measurament. 
+
+comparing to Graph based K-means clustering, where the application Prim’s algorithm and Lloyd algorithm constructs the Minimum Spanning Tree (MST) and generalized cluster centroids to determine the number of clusters and location of cluster centroids. 
+
+Ferrer's stuies approved the concept of the generalized median graph seems to be more adequate to represent the data of each cluster.  Given a set of graphs, the generalized median graph [6] is defined as the graph that has the minimum sum of distances to all graphs in the set. It can be seen as the representative of the set.  In their this paper  for the first time, the use of the generalized median graph as the representative of a cluster in a graph-based version of the k-means algorithm. 
+
+
+
+\subsection{ Level Set based Image Segmentation }
+Level set methods consider the topological changes to describe the curves. cite from D The evolving curve in image segmentation stopped at an object boundary by following two ways, namely, application of edge-stopping function and minimization of the energy function.
+The energy function depends upon the various parameters such as length , area , inside   and outside   region of curve represented as 
+E = μ⋅C+v⋅Cin +F(Cin)+F(Cout)
+
+The segmentation process involves the more than one two regions to be segmented. Hence, multilevel set multi-phase
+model [18] included in the level set energy function as
+$E(φ,c,b)=∫∑ei(x)Mi(φ(x))dx$
+
+$ei =∫K(y−x)I(x)−b(y)ci2dy$
+Here K represents the kernel function defined by (14). The energy minimization with respect to  φ,c,b  carried out to predict the optimal cluster center and boundary.
+
+
+Level set formulation utilizes the local criterion function that defines the partition energy for simultaneous image segmentation and analysis the performance with presence of intensity inhomogeneity. li et al
+
+Gaussian filter effectively smoothens the initial pixel wise probabilistic values. Local classifiers and boundary refinement methods are usually used for effective refinement process.
+
+Level set formulation extends the segmentation application to localization of optical disk in retinal images [21], tracking of non-linear shapes [20] and liver tumor [17]segmentation. Level set models excludes the information other the boundary and the intensity inhomogeneity.
+
+
+\subsection{ Active Contour based Image Segmentation }
+
+The active contour-based image segmentation utilizes the contour models to carry out the boundary regions. Here, the most time will be spent in boundary refinement to obtain a precise segmented boundary. Hence it becomes a critical process in the contour model. We went thought three essential techniques used for the boundary refinement analysis: Constrained Active  Contour, where boundary refinement tool presented in a constrained active contour can produce the smooth and accurate boundary contour; Convex energy function, where a convex optimization function with local Gaussian distributing fitting term with spatially variations of means and variances presented and the energy function formulated; unsupervised segmentation benefits a novel active contour-based model to segment the protein spots in two-dimensional images with essential issues such as noise, streaks, and multiplets.
+
+
+\subsection{ Convolutional Networks based Image Segmentation }
+
+The convolutional networks are frequently be applied to classification tasks, producing a single class label of an image. However, especially for biomedical image processing, we are more desired for the output includes localization information,  namely, to assign each pixel a class label. \cite{unet} Moreover, unwell distributed data are more common in biomedical tasks, and small or dirty data problems occur more often. 
+
+Comparing to fully convolutional network, where supplementing a usual contracting network by successive layers and replacing the pooling operators with upsampling operators,  U-net tasks are very little training data available, furthermore the separation of touching objects of the same class. To overcome those challenges, the U-net consists of a contracting path (left side) and an expansive path (right side). 
+
+\begin{figure}[t]
+\begin{center}
+\centering
+\includegraphics[width=\textwidth]{thesis-template-master/images/unet.png}
+\label{fig:cellnet}
+\end{center}
+\caption{\textbf{U-net architecture (example for 32x32 pixels in the lowest resolution)\cite{unet} }. Each blue box corresponds to a multi-channel feature map. The number of channels is denoted on top of the box. The x-y-size is provided at the lower left edge of the box. White boxes represent copied feature maps. The arrows denote the different operations.}
+\end{figure}
+
+The contracting path follows the typical architecture of a convolutional network to capture context. It consists of the repeated application of two 3x3 convolutions (unpadded convolutions), each followed by a rectified linear unit (ReLU) and a 2x2 max pooling operation with stride 2 for downsampling \cite{unet}.
+
+Every step in the expansive path consists of an upsampling of the feature map followed by a 2x2 convolution (“up-convolution”) that halves the number of feature channels, a concatenation with the correspondingly cropped feature map from the contracting path, and two 3x3 convolutions, each followed by a ReLU\cite{unet}. The expanding path is to enable precise localization.
+
+To overcome small data problems, they generated smooth deformations using random displacement vectors on a coarse 3 by 3 grid on data and elastic deformations to the available training images\cite{unet}.
+
+As a result, the U-net outperforms the prior best method (a sliding-window convolutional network) on the ISBI challenge and  won the ISBI cell tracking challenge 2015 in these categories by a large margin \cite{unet}
+
+
+
+
+
+
+
+
+
+
+
+\section{Learning on YOLO network}
+
+The objective of the You Only Look Once (YOLO) is to identify which of a known set of objects might be present and to localize their positions within the image by giving an image or a video stream. Prior work on object detection repurposes classifiers to perform detection. As a representative object detection model based on regression, You Only Look Once (YOLO) frames object detection as a regression problem to spatially separated bounding boxes and associated class probabilities \cite{yolov1}.
+
+The first version YOLO network divides the image into an S × S grid ( YOLO chose S=7) and for each grid cell predicts B (YOLO chose B=2) bounding boxes, confidence for those boxes, and C class probabilities \cite{yolov1}. Each bounding box consists of 5 predictions: x, y, w, h, and confidence score \cite{yolov1}, which prevents the YOLO from detecting backgrounds.  If there is no object in the cell, the conﬁdence scores should be zero.  Otherwise, the conﬁdence score will be equal to the intersection over union (IOU) between the predicted box and the ground truth \cite{yolov1}. Therefore,  all these predictions are encoded as an $S × S × (B ∗ 5 + C)$ tensor \cite{yolov1}.
+
+If the center of an object falls into a grid cell, that grid cell is responsible for detecting the object. Each grid cell can detect only one object, so in total, we will drive into 7x7=49 grid cells for each image. For each cell, we predict two boxes (98 boxes in total). The vast majority of these boxes will have shallower confidence and then to get rid of most of them by using NMS \cite{yolov1}.
+
+The reason for using a confidence score equal to the IOU is that we are 100\% sure that there is an object inside the ground truth box, then the higher the IOU, the higher the possibility that an object occurs inside the predicted box.
+
+
+
+\begin{figure}[t]
+\begin{center}
+\centering
+\includegraphics[width=\textwidth]{thesis-template-master/images/yolomodel.png}
+\label{fig:cellnet}
+\end{center}
+\caption{\textbf{YOLO model\cite{yolov1} }.  YOLO was trained to detect 20 different classes of objects.  For any grid cell the model will calculate 20 conditional class probabilities one for each class, while each grid cell gives us a choice between two bounding boxes. The final detection scores encode both the probability of that class appearing in the box and how well the predicted box fits the object.}
+\end{figure}
+
+
+The GoogLeNet model for image classification inspires the original  YOLO network architecture, it has 24 convolutional layers followed by two fully connected layers. Instead of the inception modules used by GoogLeNet, YOLO uses $1 \mutil 1 $reduction layers, followed by $3 \mutil 3 $convolutional layers. The final layer predicts both class probabilities and bounding box coordinates.
+
+
+\subsection{ Real-Time Object Detection }
+
+You only look once (YOLO)  predicts object class and location with exceeding fast speed, namely, on a Titan X GPU, its third version can run at 45 frames per second without any batch processing. Furthermore, YOLO achieves a higher mean average precision (mAP) than other real‐time systems. Since the whole detection pipeline is a single network, it can be optimized end-to-end directly on detection performance \cite{18}.
+
+%As a single neural network, YOLO is extremely simple, which can concurrently predict bounding boxes coordinates and associated class probabilities from full images in one evaluation.
+
+To push the boundaries of fast object detection, the  Fast YOLO \cite{yolov1} uses a neural network with fewer convolutional layers (9 instead of 24) and fewer filters in those layers.
+
+Some obvious drawbacks lead to Incremental Network Based on YOLO, such as YOLOv2, YOLOV3, YOLOv4, SSPYOLO, TFYOLO and YOLOtiny-v3.
+
+Firstly, YOLO prophesies multiple bounding boxes per grid cell. At training time, only one bounding box predictor is responsible for each object based on which prediction has the highest current IOU with the ground truth. It leads to specialization between the bounding box predictors.
+
+Secondly, since in the first YOLO network, they used $7x7$ grid, and any grid can detect only one object. The maximum number of objects the model can detect is 49. if a grid cell contains more than one object, the model will not be able to detect all of them is the problem of close object detection that first YOLO suffers from. Those lead to struggles with small objects that appear in groups as well, such as flocks of birds. Furthermore, the first YOLO  learns to predict bounding boxes from pre-trained Imagenet data, and it is not well generalized to objects in new or unusual aspect ratios or configurations. 
+
+Last but not least, loss function applied treats errors the same in small bounding boxes versus large bounding boxes. A small error in a large box is generally benign, but a small error in a small box has a much more significant effect on IOU \cite{yolov1}.
+
+
+
+\subsection{ Improved Incremental Network Based on YOLO }
+
+
+Here, we will go through all the improved incremental networks based on the original YOLO. To eliminate the Yolo's drawbacks on the areas mentioned above, Redmon et al. contributed significantly to the Yolov2 \cite{ yolov2} and Yolov3 \cite{yolov3} recent years. 
+
+The original YOLO makes a signiﬁcant number of localization errors and has a relatively low recall. Thus in the second version of YOLO they focused mainly on promoting recall and localization while maintaining classiﬁcation accuracy \ cite{yolov2} 
+By combining batch normalization on all of the convolutional layers in YOLO,  YOLOv2 perceived more than 2\% improvement in mAP.
+
+Secondly, YOLOv2 initially trained the model on images at $224×224$, then ﬁne tuning the classiﬁcation network at the full $448×448$ resolution for ten epochs on ImageNet before training for detection.  It provides the network time to adjust its ﬁlters to work better on higher resolution input. This high-resolution classiﬁcation network produces an increment of nearly 4\% mAP\cite{yolov2}.
+
+In contrast to YOLO (v1) tries to assign the object to the grid cell that contains the middle of the object,  YOLOv2 tried to allow the grid cell to detect more than one object using  $K$ bounding box. To predict $ K$ bounding boxes, YOLOv2 used the idea of Anchor boxes, which we can predict the bounding box relative to it instead of predicting the box relative to all images.   YOLOv2 assigns the predicted bounding box not only to the grid cell but also to one of the anchor boxes, which has the highest IOU with the ground truth box \cite{yolov2}. 
+
+
+\begin{figure}[t]
+\begin{center}
+\centering
+\includegraphics[width=\textwidth]{thesis-template-master/images/yolov3.png}
+\label{fig:cellnet}
+
+\end{center}
+\caption{\textbf{yolov3}. YOLOv3 follows the principle of the coordinate prediction in YOLOv3, for predicting the categories, multi-label and multi-classification are applied instead of the original single label and multi-classification.}
+\end{figure}
+
+Using a softmax for class prediction imposes the assumption that each box has precisely one class, which is often not the case. For this reason, YOLOv3 does not use a softmax. It merely uses independent logistic classiﬁers for any class. Meanwhile, YOLOv3 adopts the binary cross-entropy loss function instead of the multi-class loss function. On a standard computer with GPU, it is easy for YOLOv3 to achieve real-time performance \cite{18}.  
+
+Besides, YOLOv3 achieves better performance on small objects. By using short cut connections allow us to get more ﬁner-grained information from the earlier feature map. However comparing to the previous version, YOLOv3 has worse performance on medium and larger size objects.
+Moreover, in the miniaturized embedded devices, such as Nvida SoM, the conventional YOLOv3 algorithm runs slowly. Nevertheless, the YOLOv3-tiny network can better satisfy real-time requirements based on limited hardware resources with comparable accuracy. Therefore we adopted the principle of coordinate prediction in yolov3 and focused on the improvement of YOLOtiny v3 in this thesis.
+
+\section{Learning on Deep Residual Learning}
+
+Deep residual networks \cite{20} steered the deep learning world when Microsoft Research released a series of ResNets. These networks won 1st-place  in all five main tracks of the ImageNet and COCO 2015 competitions, which embraced image classification, object detection, and semantic segmentation\cite{20}. Various visual recognition tasks and non-visual tasks involving speech and language verified the robustness and superior performance of ResNets， Leading advanced continuing works are purposed based on the concept of residual learning of ResNets\cite{20}.
+
+The baseline of our group's prototype that data-driven learning of characteristic morphologies (possibly of rare cell subsets) indicates the presence of the disease is based on ResNet18\cite{20}. 
+Baseline work of diagnosis of Sezary cells can score 91\% top-1 accuracy with 10,000 training images, which consists of 50,000 HD cells and  50,000 SS cells. However, when it applies to test data set when multiple artifacts appear, most of the attention will be dropped in those areas, which leads to a cliff-like decline on accuracy. It is also the core purpose of this thesis: to achieve more robust detection and classification on small objects and data sets full of noise, such as the Sezary Syndrome dataset.
+
+
+\subsection{ Residual Learning }
+
+
+In ResNet\cite{20}, they explicitly reformulated residual layers and provided extensive evidence showing that these residual networks can solve degradation problem: when the network depth is increasing, the accuracy gets unsurprising saturated and then degrades rapidly \cite{20}.
+More importantly, they evaluated both 18-layer and 34-layer ResNet, and the 34 layer ResNet exhibits considerably lower training error and validation error. The 18-layer ResNet\cite{20} converges much faster while still keep comparable accuracy. 
+
+\begin{figure}[t]
+\begin{center}
+\centering
+\includegraphics[width=\textwidth]{thesis-template-master/images/RES.png}
+\label{fig:cellnet}
+
+\end{center}
+\caption{\textbf{Residual learning: a building block \cite{20}}. Identity shortcut connections add neither extra parameter nor computational complexity, but they can easily enjoy accuracy gains from significantly increased depth.}
+\end{figure}
+
+
+In a standard residual block \cite{20}, they first performed downsampling with a stride of 2, namely, Convolution, BatchNormalization, and  LeakyReLU have applied accordingly, then Conv2D plus BatchNormalization weight layer is adopted as well. For the third step，identity shortcuts are utilized directly when the input and output are of the same dimensions. Otherwise, when the dimensions increase, they acknowledged two options:  still performs identity mapping with extra zero entries padded for increasing the dimensions; projection shortcut is used to match dimensions (done by 1×1 convolutions). For both options, when the shortcuts cover feature maps of two sizes, they are performed with a stride of 2 \cite{20}.
+
+
+\subsection{ Variously increment Improvement }
+
+The authors of residual networks\cite{20} tried to make the model as thin as possible in favor of increasing their depth, having fewer parameters, and even introducing a «bottleneck» block, which makes ResNet blocks even thinner. However, as \cite{wideres}  addressed, the diminishing feature reuse problem will occur, \cite{wideres} declared that the main power of deep residual networks is in residual blocks and that the effect of depth is supplementary (contrary to what was believed). Moreover, \cite{stochasticres} investigated the diminishing feature reuse problem with the idea of randomly disabling residual blocks during training, while this method can be viewed as a special case of dropout\cite{dropout}.
+
+\begin{figure}[t]
+\begin{center}
+\centering
+\includegraphics[width=\textwidth]{thesis-template-master/images/wide.png}
+\label{fig:cellnet}
+\end{center}
+\caption{\textbf{Various residual blocks used in \cite{wideres}}. Batch normalization and ReLU precede
+each convolution (omitted for clarity).}
+\end{figure}
+
+Wide (width refers to the number of channels in a layer) residual networks \cite{wideres} attempt to address the problem of diminishing feature reuse in very deep (thin) residual networks, namely, few residual blocks are learning useful representations or many blocks sharing very little information with a small contribution to the final goal, by increasing the model capacity (number of parameters) and adding additional regularization in the form of dropout \cite{dropout}.
+
+In fact, there is a balance between the depth and width of these networks — if layers are too wide, the model will learn extraneous information (added noise), and if layers are too thin subsequent layers will not have much to learn from (i.e., diminishing feature reuse).
+
+Aggregated Residual Transformations for Deep Neural Networks \cite{aggres} of Facebook AI Research exposes a new dimension called cardinality as an essential network parameter, in addition to depth and width. Cardinality is demonstrated to be more effective than going deeper or broader when increasing model capacity, especially when increasing depth and width leads to diminishing returns.
+
+
+
+
+\section{Learning on Feature Extraction}
+
+The redundancy in feature maps is an important characteristic of those successful CNNs, but has rarely been investigated in neural architecture design. ghostnet \cite{19}  first proposes a novel Ghost module to generate more feature maps from cheap operations. Based on a set of intrinsic feature maps, by applying a series of linear transformations with cheap cost to generate many ghost feature maps that could fully reveal information underlying intrinsic features \cite{19}
+
+Traditional CNNs usually need a largen umber of parameters and floating point operations (FLOPs)to achieve a satisfactory accuracy,e.g. ResNet-50  \cite{20}
+has about 25.6M parameters and requires4.1B FLOPs to process an image of size 224×224.
+
+Experiments conducted on  benchmarks demonstrate those successful CNNs \cite{20}\cite{wideres}\cite{31}\cite{32} generated most of extrated featute maps are similar and. can  be approximately obtained by transforming the each other through cheap operations.\cite{19}
+
+ 
+
+
+\subsection{ Point-wise Convolution }
+
+the most used feature extratcton methods are convolution, specifically the point wise convolution, since the first convolution manipulation been invented and bring the recokder breaking perforamcne through various computer vision tasks, such as image recognition \cite{{g27}}\cite{g12}, object detetion \cite{g42}\cite{g30}, and semantic segmentation\cite{g36}\cite{g3}.
+however when saliency map been bring to visuaislaitzion for the understandable CNN and explainable AI, reseracher proposed a series of methods to investigate compact deep neural  networks, such as network pruning, low-bit quantization and knowledeg distillation to prune the unimportand weights in nerual netowks, and achieve higher  speed-up ratios .
+
+
+\begin{figure}[t]
+\begin{center}
+\centering
+\includegraphics[width=\textwidth]{thesis-template-master/images/ghostpointwise.png}
+\label{fig:cellnet}
+\end{center}
+\caption{\textbf{Visualization of some feature maps generated by the first residual group in ResNet-50 \cite{19}}.  Three similar feature map pair examples are annotated with boxes of the same color. One feature map in the pair can be approximately obtained by transforming the other one through cheap operations (denoted by spanners). Point-wise Convolution can extracte more high level faetures such as edge,  shape color and so on, but large amount of point wise convlustion results inmassive computational costs  and generated a lot of reduandtedn map as well.}
+\end{figure}
+
+
+\subsection{ More Features from Cheap Operation}
+
+
+\begin{figure}[t]
+\begin{center}
+\centering
+\includegraphics[width=\textwidth]{thesis-template-master/images/ghostgener.png}
+\label{fig:cellnet}
+\end{center}
+\caption{\textbf{The feature maps in the 2nd layer of Ghost-VGG-16  \cite{19}}.  The left-top image is the input, the feature maps in the left red box are from the primary convolution, and the feature maps in the right green box are after the depthwise transformation.}
+\end{figure}
+
+MobileNet [21,44] and ShuffleNet [40] have introduced depthwise convolution or shuffle operation to build efficient CNNs  using  smaller  convolution  filters  (floating-numberoperations),
+
+ghostnet supposed that the output feature maps are “ghosts” of a handful of intrinsic feature maps with some cheap transformations, and These intrinsic feature maps are often of smaller size and produced by ordinary convolution filters. by using a primary convolution to generate those intrinsic feature maps and then apply a series of cheap linear operations on each intrinsic feature a  set of ghost features. it is worhy to note that those actions cost less computaiotn power and in needs of less weights. In practice, there could be several different linear operations in a Ghost module, such as customized size linear kernels depth wise convluton, or linear transformations.
+
+
+
+
+The limitation of the original GhostNet \cite{19} is that it still keeps many layers and does not get rid of convolutional manipulation. Moreover, it did not provide further experiments on how well the Ghost module can be generalized and integrated into other leading neural networks.these will be inverstigated in our thesis design.
+
+
+
 
 
 
@@ -1103,7 +1442,7 @@ TN(Noise be detected as Noise)                 & 82/109=0.7523                  
 Image No Label                                 & 300/723=41.49\%                                                                                                     & 33.05\%                                                                                                                             & 47.72\%                                                                                                                                                           \\
 mAP                                            & 0.376                                                                                                               & 0.551                                                                                                                               & 0.551                                                                                                                                                             \\
 Time Cost(s)                                   & 236.344                                                                                                             & 16.344                                                                                                                              & 475.65                                                                                                                                                            \\ \midrule
-\textbf{Evaluation matrix}                     & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +850 train images\\ +Circle detection\\ +YOLOv3 tiny\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +850 train images\\ +26*26, 52*52  YOLOversion\\ +KMean++ clustering\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +1400 train images\\ +26*26, 52*52 YOLOversion\\ +Circle detection\\ +KMean++clustering \\ +GBCIOU\end{tabular}} \\ \midrule
+\textbf{Evaluation matrix}                     & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +850 train images\\ +Circle detection\\ +YOLOv3 tiny\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +850 train images\\ +$26\times26$, $52\times52$  YOLOversion\\ +KMean++ clustering\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}1000 epochs\\ +1400 train images\\ +$26\times26$, $52\times52$ YOLOversion\\ +Circle detection\\ +KMean++clustering \\ +GBCIOU\end{tabular}} \\ \midrule
 TP(HD Cell be detected as Cell)                & 0.95129                                                                                                             & 0.9123                                                                                                                              & 0.8571                                                                                                                                                            \\
 TP(SS Cell be detected as Cell)                & 0.9738                                                                                                              & 0.9117                                                                                                                              & 0.8497                                                                                                                                                            \\
 FP(Noise be detected as Cell)                  & 12                                                                                                                  & 10                                                                                                                                  & 11                                                                                                                                                                \\
@@ -1404,17 +1743,43 @@ SqueezeNet V2 & {\color[HTML]{000000} N/A}                                      
 \chapter{Ablation Study}
 \label{sec:examples}
 
-This paper proposes a unifying approach that is capable of (1) imaging single-cell morphology of hundreds of thousands of peripheral blood cells and (2) data-driven learning of characteristic mythologies (possibly of rare cell subsets) indicative of the presence of the disease.
-
-As we originally designed the unifying approach for Sezary Syndrome, which is an aggressive cutaneous T cell lymphoma that is characterized by presence of tumor T cells with abnormal nucleus morphology in the peripheral blood. Morphological identification of tumor T cells in the blood is currently still the gold standard.
-
-After Image Flow Cytometry there are huge amount of cell images produced from patient as well as healthy data set for comparison. Due to different experimental conditions, such as lighting conditions and different experimental objects, noise deviations are likely to appear on the sampled cell images, moreover, these deviations do not appear in the better quality and pure evaluation data set which leads to higher false negative.
+We conduct a thorough ablation study in order to support our claims that (1)   Diffenent yolo output tensor contributed for  deticting different scaleing object, the yolo output layer we adopted enhandced sezary syndrome cell detection the most;(2) The detection performance of attentionnet  various on different kind of artifacts of sezary syndromes dataset; (3) Cell segmentation performance of attention net  on sezary syndrome satisfied the limited computation resources requirements. 
+(4) Cellnet proved better genelization androbousnesst on sezary syndrome.  we  tested on new set of sezary syndrome cell image, established the comparision experiment between SOTA model, such as ResNet18,ALexNet, GhostNet;(5)It is certainly not just the depth wise convolution that ghostnet employs that performs well, there are also numerous other cheaper linear operations that are recommended to avoid redundancy in the network and consumption of excessive GPU resources.
 
 
 \section{Architectural Design Choices}
 \label{sec:lorem}
 
-We designed the AttentionNet tool, which provides a new intuition for object recognition, cutting out noise artifacts in the image, which can effectively improve the performance of many networks, such as Alexnet and GoogleNet. What’s more, AttentionNet has also pioneered automatic labeling. Instead of manually labeling a large amount of data. Using AttentionNet, it is possible to automatically label an object with an accuracy of 88.64\% in 0.25 seconds. For training such a segmentor, our suggestion is to choose representative data that is small and refined, and a large amount of data will lose accuracy because of the impression of noise data. So far, we recommend training AttentionNet with a 1: 1 ratio, which means 50\% manually labeled data and 50\% pseudo labeled data.
+We designed the AttentionNet tool, which provides a new intuition for object recognition, cutting out noise artifacts in the image, which can effectively improve the performance of many networks, such as Alexnet and GoogleNet. What’s more, AttentionNet has also pioneered automatic labeling. Instead of manually labeling a large amount of data. Using AttentionNet, it is possible to automatically label an object with an accuracy of 88.64\% in 0.25 seconds. 
+
+%For training such a segmentor, our suggestion is to choose representative data that is small and refined, and a large amount of data will lose accuracy because of the impression of noise data. So far, we recommend training AttentionNet with a 1: 1 ratio, which means 50\% manually labeled data and 50\% pseudo labeled data.
+
+In the previous chapter, we have evaluated the architecture agnostic components of our
+CellNet. In this chapter, however, we give more details about our architectural design
+choices on AttentionNet: We show the impact of the number and size of yolo output tensor for the AttentionNet architecture as well as comparing different ghost module applied in Ghostnet \cite{19} and our cellnet.
+
+
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{subfigure}[b]{0.49\textwidth}
+			\includegraphics[width=\textwidth]{thesis-template-master/images/2 tensor cellyolo ROC.png}
+			\caption{$13 \times 13$, $26 \times 26$ tensor Cellyolo PR }
+			\label{fig:res18}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.49\textwidth}
+		    \centering
+			\includegraphics[width=\textwidth]{thesis-template-master/images/52 tensor cellyolo ROC.png}
+			\caption{$52 \times 52$, $26 \times 26$tensor Cellyolo PR }
+			\label{fig:cellnet}
+		\end{subfigure}
+	\end{center}
+	\caption{\textbf{ROC curve on val sub-dataset of Sezary Syndrom dataset}. (1k training image, 726 test image), in terms of different scale yolo output layers. Note: both measured on on val dataset, not only PR but ROC metrics  show that $13\times13$, $26\times26$ that we adoptedare more suitable for sezary syndromes cell detection.}
+\end{figure}
+
+We analyzed specifically the mechanism that led to this result, when the yolo output layer divides the image into the bigger prediction grid cell, which corresponds to ($13\times13$) i.e. divides an image into $13\times13 $ equal parts, the more likely is that mising a cell in the image, since our dataset image is $140\times200$. If too many grid cells are drawn, such as $ 52\times52$, many small grid cells will not be able to cover the whole cell, resulting in a poor final detection performance. On the contrary, the $13\times13$ and $ 26\times26$ yolo output layers we adopted have better performance. The network design architecture can be found in figure2.
+
+
 
 \section{Runtime}
 \label{sec:ipsum}
@@ -1423,8 +1788,28 @@ We designed the AttentionNet tool, which provides a new intuition for object rec
 
 
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=1.2\textwidth]{thesis-template-master/images/duration.pdf}
+
+\label{fig:cost}
+\end{center}
+\caption{\textbf{Time Cost of AttentionNet cell segmentation per image on Goolge Colab}. Overall, the mean runtime for the AttentionNet segmentation on validation set is 0.80s (generated both segmenting image and cell location annotation file) with an average input size of 102,898 wellcell images. We perform this experiment on a  Google Colab Tesla V100 16GB.}
+\end{figure}
+
+
+As indicated from the plot of \cite{Yama, the time cost of making segmentation image and labeling file is twice as only making labeling file. generated segmented cell image file and labeling file on Google GPU  takes average 0.80s, while without segmented image only producing label txt file by our pretrained model only takes 0.40 average second. We perform this experiment on  Google Colab Tesla V100 16GB.
+
+In contrast to Google Colab Tesla, we also generated txt file on local host PC  intel CPU, Although the model detection for each image in  Google Colab is faster than local CPU, but input/output file on cloud is not perfect as writing in local PC, the time cost for label-generation is surprisingly well suit for local PC as well. This will be an good advantage for  label generation. Overall, the mean time cost for the AttentionNet segmentation on validation set is 0.25s (generated only cell location annotation file) with an average input size of 102,898 wellcell images.
+
+
+
 \section{Transfer Learning} % (fold)
 \label{sub:amet}
+
+
+
+
 
 
 \section{Comparison on Linear cheap operations} % (fold)
@@ -1723,8 +2108,6 @@ We proposed the GBCIOU function to ideally find a general intersected box center
 
 
 
-
-
 \subsection{Experiments}
 To verify the effectiveness of the proposed novel Ghost module and CellNet architecture, we conduct experiments on several benchmark visual datasets, including CIFAR-10\cite{21}, phenomenon dataset \cite{38}, and COVID-19 benchmark \cite{36}\cite{37}. 
 
@@ -1770,14 +2153,12 @@ What is more, we completed an AI-assisted diagnostic in a real-world medical sce
 
 
 
-
-
 \section{CellNet Software}
 \label{sec:ipsum}
 With the help of the power of Qt and the high development efficiency of Python, using PyQt/PySide for desktop development will be a wonderful plus for demonstrating our excellent software.
 The current Qt/PyQt/PySide based GUI development common development methods are list follow:QWidget + QSS, QtWebkit + HTML + CSS + js and Qt Quick. All these three technologies can efficiently, quickly, and perfectly develop the cross-platform desktop software. Qt's formal development method is Qt Quick, which uses the JSON like language qml for rapid development. It is easy to learn, expansible, and wildly used in  Ubuntu, Linux Deepin, and other Linux desktop application development. It enables the developer for a rapid development framework and putting more effort into amplifying the corresponding business logic and easy to build the framework Prototypes quickly. Therefore, we have developed software based on PyQt5 QFramer.
 
-\subsection{Proposed software architecture} % (fold)
+\subsection{Software architecture} % (fold)
 \label{sub:dolor_sit}
 We devised this function prototypes based on Cellnet. Meanwhile, we integrated more than ten current state-of-the-art classification networks to better demonstrate the real-world efficacy of Cellnet.
 
@@ -1786,7 +2167,7 @@ In addition, with our lab supervisor's permission, we attended the Deecamp 2020 
 It is gratifying to note that our cellnet-based design did well at  Deecamp 2020.
 \begin{figure}[t]
 \begin{center}
-\includegraphics[height=0.3\textheight]{thesis-template-master/images/2020DeeCamp_ppt_tcy (1).pdf}
+\includegraphics[height=0.35\textheight]{thesis-template-master/images/2020DeeCamp_ppt_tcy (1).pdf}
 \label{fig:cellnet}
 \end{center}
 \caption{ The Proposed software structure diagram.
@@ -1795,22 +2176,27 @@ To better demonstrate our model's diagnostic performance, we selected the classi
 
 \subsection{Class diagram} % (fold)
 \label{sub:amet}
-With our main.py, we can quickly train different models on the Dataset to get the optimal weights and then integrate them into the software. Pyqt provides a large quantity of UML-type development functions, which facilitates the efficient design of the interface. We use a total of nine object classes, including Qlabel, Qwidget, QPushbutton. As shown in figure 6.7, many non-functional buttons are designed for GUI purposes only and do not involve the design of functions, which saves much time in software development and only need to put effort into the functionality of the following types of objects: Qpushbutton, Qslider, and Qcheckbox.
+
 \begin{figure}[t]
 \begin{center}
-\includegraphics[height=0.6\textheight]{thesis-template-master/images/tempsnip.png}
+\includegraphics[height=0.5\textheight]{thesis-template-master/images/tempsnip.png}
 \label{fig:cellnet}
 \end{center}
-\caption{ The Class diagram of the typical page ( Sezary syndrome classification) on CellNet software. The page is named accordingly, and the diagnosis of sezary syndrome is on page 5 out of 8 Pages. As illustrated, we have a large number of labels to be displayed for logos, copyright, and other graphic Infos, with each button named according to the actual function it has, such as next, the default button is used for the page turnover, cellyolo is used for the cell segmentation, the prediction is used for diagnostics of the cell, compare is used to evaluate the accuracy of different networks on this Dataset, user can upload new images via input button, and we use the best Cellnet weights file to output the probability of the category.}
+\caption{ \textbf{The Class diagram of the typical page ( Sezary syndrome classification) on CellNet software}. The page is named accordingly, and the diagnosis of Sezary Syndrome is on page 5 out of 8 Pages. As illustrated, we have a large number of labels for logos, copyright, and other graphic Infos. Each button named according to the underlying function, such as the next and default button for the page turnover. The cellyolo button is used for the cell segmentation; the prediction button gives diagnostics of the cell; the compare button is to evaluate the accuracy of different networks on this Dataset. Users can upload new images via the input button, and we use the best Cellnet weights file to output the possibility of the category.}
 \end{figure}
-
+With our main.py, we can quickly train different models on the Dataset to get the optimal weights and then integrate them into the software. Pyqt provides a large quantity of UML-type development functions, which facilitates the efficient design of the interface. We use a total of nine object classes, including Qlabel, Qwidget, QPushbutton. As shown in figure 6.7, many non-functional buttons are designed for GUI purposes only and do not involve the design of functions, which saves much time in software development and only need to put effort into the functionality of the following types of objects: Qpushbutton, Qslider, and Qcheckbox.
 
 
 \subsection{Function design} % (fold)
 \label{sub:amet}
+Here, we principally introduce the implementation of the prediction function and segmentation function in the software. The prediction function is mainly called by the software's Make a prediction button. We extract the image path that needs to be diagnosed by User input in the software interface, and then we use the best training weight file under the weight folder and combining the model to give a comprehensive judgment finally.
 
 
-\begin{algorithm}[t]
+
+
+
+
+\begin{algorithm}[b]
   \caption{Prediction function used in CellNet software.}
   \label{alg:Framwork}
   \begin{algorithmic}[1]
@@ -1835,6 +2221,20 @@ With our main.py, we can quickly train different models on the Dataset to get th
    \Return  $L_{path}$, $L_{p}$ and $L_{t}$
   \end{algorithmic}
 \end{algorithm}
+
+
+
+It is worth noting that because torchvision PyTorch's custom data loading method, imagefolderdataloader, the path of the image file must be the following type:\newline
+$dataset/train/imageclassname/imagename.jpg$ \newline
+$dataset/val/imageclassname/imagename.jpg$\newline
+The root directory of Dataset must contain two folders, train and val, but the train folder can be empty when used for prediction. The user only needs to place the file under the corresponding class folder and copy the path until the dataset folder and upload it to the software, such as $C:username/pathtodataset/dataset/ $ and can compare the actual prediction result on the screen.
+
+
+
+For the segmentation function, we mainly apply Attention Net. It is worth remarking that here the user only needs to upload the image folder, and the system will automatically generate a new output folder to store the after-segmented cell images, where we use the Attention Net model and the cfg file introduced in Chapter 4, as well as the weight file that has been trained explicitly. After that, the user can see all the evaluation metrics mentioned in Chapter 4, such as mAP and F1 values, on the software interface. 
+It is especially worth noting that the segmentation function is only used in the Sezary Syndrome data set. For other data sets, we did not implement Attention Net for segmentation but used other data augmentation techniques.
+
+
 
 
 \begin{algorithm}[t]
@@ -1866,15 +2266,53 @@ With our main.py, we can quickly train different models on the Dataset to get th
   \end{algorithmic}
 \end{algorithm}
 
+
+
+\subsection{Test cases} % (fold)
+\label{sub:amet}
+
+To better test the real utilization impact and the scalability of the software, we adopted two standard medical data sets to the test cases for our white box testing: melanoma dataset and ISIC2019 skin cancer dataset.
+White-box testing at this level is to test the interactions of interfaces with each other. The unit level of White-box testing ensured that each code was tested and worked accordingly in an isolated environment. The White-box integration level examines the correctness of the behavior in an open environment through the use of white-box testing for any interactions of interfaces that are known to the programmer.
+
+As soon as we had in-depth knowledge of this model and the whole logic behind the software, there is no doubt that we applied the white box testing.
+The connotations of “clear box” and “glass box” appropriately indicate the full visibility of the software product's internal workings, precisely the logic, and structure of the code. 
+
+
+
+
+
+
+\begin{figure}[t]
+\includegraphics[height=0.4\textheight,width=1\textwidth]{thesis-template-master/images/loss_train.png}
+\label{fig:cellnet}
+\caption{ \textbf{Comparison of the training loss with state-of-the-art models based on ISIC2019 eight skin cancer benchmark}. Here, we are facing multiple class classification problems, and most of the skin image contains lots of artifacts, such as hair and different skin color, and different positions of skin image were taken, which affect the classification performance mostly. Compared to the other models, such as ResNet18, the GhostNet, and Alexnet, our Net denotes here as Ghostresnet outperforms other models regarding training loss as it is faster converges into the lower loss. }
+\end{figure}
+
+Skin cancer is the most prevalent type of cancer and melanoma, specifically, is responsible for 75\% of skin cancer deaths. Early and accurate detection can make treatment more effective. The melanoma dataset contains 33,126 dermoscopic training images from over 2,000 patients and all datasets are confirmed with expert agreement.
+
+In order to make expertise more widely available, the International Skin Imaging Collaboration (ISIC) has developed the ISIC Archive, an international repository of dermoscopic images, for clinical training purposes for supporting technical research toward automated algorithmic analysis by hosting the ISIC Challenges.
+The goal for ISIC 2019 is to classify dermoscopic images among eight diagnostic categories: Melanoma, Melanocytic nevus, Basal cell carcinoma, Actinic keratosis, Benign keratosis (solar lentigo / seborrheic keratosis/lichen planus-like keratosis), Dermatofibroma, Vascular lesion, and Squamous cell carcinoma. In total, 25,331 images are available for training across eight different categories. The figures 6.18 and 6.19 further demonstrate the Cellnet model on classification the multiply class tasks, extraordinarily complex scenarios.
+
+\begin{figure}[t]
+\includegraphics[height=0.4\textheight,width=1\textwidth]{thesis-template-master/images/top1acc.png}
+\label{fig:cellnet}
+\caption{ \textbf{Comparison of the val Top-1 accuracy with state-of-the-art models based on ISIC2019 eight skin cancer benchmark}. As it illustrates, most of the state-of-the-art models reach around 75\% to 80\% Top-1 accuracy on this benchmark, considering the unwell distributed training image data from various classes, and the fact that most of the skin image contains lots of artifacts which influence the classification performance mainly. However, our Net denotes here as Ghostresnet outperforms the second position around 2\%.}
+\end{figure}
+
+
+
+
+
 \subsection{User Interface} % (fold)
 \label{sub:amet}
+We have a total of including initial software page, software catalog page, and eight different diagnostic involving interfaces. Because the framework we use is Qdesigner’s agile development, the specific interface design is based on the principle of a fixed screen ratio of the window frame. We simply need to use several plug-ins such as QWidgets and QLabel, to complete an artistic interface design. More critical, we follow the principles from RWTH Aachen HCI chairman Professor Jan Borchers's course Human Machine Interface, and cover 8 of the Gestalt Principles, for example, Group, Similarity, Continuation, Closure, Proximity, Symmetry and order. One of the key ingredients to successful software is the creation of effective, efficient, and visually pleasing displays. In the following functional prototype will further demonstrate how we adopt those theories into real design.
 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet1page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\caption{ \textbf{The title page of CellNet software}. We added our paper's title into CellNet initial page. Besides, we also added the ETH Zurich official logo and the Deecamp2020 logo for its authority. It is worthy to note that all teammates in this competition and  supervisor have also been added to the authorities . I am responsible for all the pages' design and function implementation; other teammates helped in melanoma benchmark collection, result verification, and partially figure plotting.}
 \end{figure}
 
 
@@ -1883,7 +2321,7 @@ With our main.py, we can quickly train different models on the Dataset to get th
 \includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet2page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\caption{ \textbf{The directory page of CellNet software}. To fulfill the Gestalt Principles: Closure, namely, the human eye prefers to see complete shapes; If the visual elements are not complete, the user can perceive a complete shape by filling in missing visual information, we group all the buttons into the same areas. CellNet 2.0 enables 8 dataset analysis and 20+ disease prediction.}
 \end{figure}
 
 
@@ -1892,96 +2330,60 @@ With our main.py, we can quickly train different models on the Dataset to get th
 \includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet4-3page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
-\end{figure}
-
-
-
-\begin{figure}[t]
-\begin{center}
-\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet4-4page.PNG}
-\label{fig:cellnet}
-\end{center}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software. }
-\end{figure}
-
-
-
-\begin{figure}[t]
-\begin{center}
-\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-1page.PNG}
-\label{fig:cellnet}
-\end{center}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
-\end{figure}
-
-
-
-\begin{figure}[t]
-\begin{center}
-\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-2page.PNG}
-\label{fig:cellnet}
-\end{center}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software. }
-\end{figure}
-
-\begin{figure}[t]
-\begin{center}
-\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-3page.PNG}
-\label{fig:cellnet}
-\end{center}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\caption{ \textbf{The COVID-19 dataset page of CellNet software}. Here, we fulfill the Gestalt Principles: Similarity, namely, The human eye tends to build a relationship between similar elements within a design. The similarity is achieved by the all different diagnosis pages style and all the button icons. Besides, Our CellNet can give each CT/Xray image prediction with the accuracy of 94.72\% and 0.18s in standard Window CPU.}
 \end{figure}
 
 
 \begin{figure}[t]
 \begin{center}
-\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet6-1page.PNG}
+\includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-1page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software. .}
+\caption{ \textbf{The Sezary syndrome's segmentation page of CellNet software}. Here, we fulfill the Gestalt Principles: Continuation, namely, The human eye follows the paths, lines, and curves of a design. We arrange the cellyolo (AttentionNet segmentation) and HD/SS cell classification from up to down orderly. Moreover, Our CellNet can give each cell image a segmented image for comparison, with the val mAP of 0.88\%.}
 \end{figure}
 
 
 \begin{figure}[t]
 \begin{center}
-\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet7-2page.PNG}
+\includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-2page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\caption{ \textbf{The Sezary syndrome's Cellnet comparison page of CellNet software}. Here, as it illustrated, 20 Val images only take 7.6s  for prediction with Cellnet. In this test case, our CellNet achieves P 1.0 and R 0.6, which means it is susceptible to the positive category. We were inspired by Ghost Net and ResNet. Here, we also added a comparison with SOTA models. Note: red line denotes as our net. }
+\end{figure}
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-3page.PNG}
+\label{fig:cellnet}
+\end{center}
+\caption{ \textbf{The Sezary syndrome's Cellnet prediction page of CellNet software}. Here, as illustrated, after artifacts elimination for a HD image under Val folder, CellNet gives Healthy prediction with Top-1 accuracy in 95.64\%. Here, we cover lots of gestalt Law, such as Figure/Ground, namely, the human eye isolates shapes from backgrounds.}
 \end{figure}
 
 
 \begin{figure}[t]
 \begin{center}
-\includegraphics[height=0.35\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet7-3page.PNG}
+\includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet6-1page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software. }
+\caption{ \textbf{The Melanoma benchmark classification page of CellNet software}. Here, as illustrated, when the user does not upload an image, they will see the default image from the melanoma dataset, melanoma benchmark contains around 32,156 complex skin images in benign and around 500 in the malignant category.}
 \end{figure}
-
-
-\subsection{Test cases} % (fold)
-\label{sub:amet}
-
-
-In the previous chapter, we have evaluated the architecture agnostic components of our
-method. In this chapter, however, we give more details about our architectural design
-choices: We show the impact of the number of graph levels for the DualConvNet architecture as well as comparing different activation functions in our architecture.
-
 
 
 \begin{figure}[t]
-\includegraphics[height=0.4\textheight,width=1\textwidth]{thesis-template-master/images/loss_train.png}
+\begin{center}
+\includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet7-2page.PNG}
 \label{fig:cellnet}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\end{center}
+\caption{ \textbf{The COVID-NLP syndrome FLU diagnosis page of CellNet software}. Here, we integrated our collect COVID-19 NLP dataset, and each description has a doctor-approved label. Users simply enter the syndrome by one patient or upload multiple patient's syndromes. According to the Gestalt Law of Similarity, the label be present in the right Qwidget, and the possibility be demonstrated below.}
 \end{figure}
+
 
 \begin{figure}[t]
-\includegraphics[height=0.4\textheight,width=1\textwidth]{thesis-template-master/images/top1acc.png}
+\begin{center}
+\includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet7-3page.PNG}
 \label{fig:cellnet}
-\caption{ The Class diagram of typical page ( Sezary syndrome classification) on CellNet software.}
+\end{center}
+\caption{\textbf{The COVID-NLP syndrome COVID diagnosis page of CellNet software}. As it illustrates, in both test cases, the Google research's Bert model we adopted has a rather good classification accuracy on this Dataset, can reach up to Val accuracy0.98.13\%. }
 \end{figure}
-
 
 
