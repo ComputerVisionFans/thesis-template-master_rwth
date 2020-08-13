@@ -38,7 +38,7 @@
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{Typical Cell images on the original Sezary Syndrome data set}. Only Good Cell can provide useful Morphology characteristics for further classification.}
-	\label{fig:lennas}
+	\label{fig:1.1}
 \end{figure}
 
 Sezary Syndrom is an aggressive form of cutaneous T-cell lymphoma characterized by the presence of tumor T-cells with abnormal nucleus morphology in the peripheral blood. The smooth and precise detection of malignant cells in the blood of patients with Sezary Syndrome is of significant diagnostic, prognostic, and therapeutic value. It is essential for disease monitoring under treatment\cite{6}\cite{7}. The severe limitations of manual microscopic identification of tumor T-cells have led to the implementation of flow cytometry-based diagnostic assays. Currently, the loss of cell surface markers, such as CD26, CD27, and CD7, on malignant T lymphocytes remains one of the most consistent features and is routinely used in the diagnostic workup \cite{12}. However, their specificity and especially sensitivity must be interpreted with caution \cite{11}. We plan to circumvent the challenges involving the definition of molecular diagnostic markers and instead aim at re-surging a morphology-based diagnosis of hematological malignancies through an automated procedure, integrating imaging flow cytometry and deep learning as a route to, ultra-high throughput and sensitive diagnosis.
@@ -50,12 +50,12 @@ Sezary Syndrom is an aggressive form of cutaneous T-cell lymphoma characterized 
 	\label{fig:lenna}
 	\end{center}
 	\caption{\textbf{General Workflow of the Proposed Project}. After Image Flow Cytometry (Morphological identification of tumor T-cells in the blood), we can categorize those generated images into six typical classes: lighting artifacts, out of focus cell, debris, contaminated cell, outside FOV cells and multiple cells concatenated together. Using AttentionNet as an automatic detector and segment-or, we can filter out most artifacts in the images and only keep the morphological characteristics of the cell for CellNet classification. CellNet only has eight new Ghost module layers. CellNet software includes a total of 5 interfaces, 25 buttons, ten user prompt functions, and inherits 12 algorithms with the integration of 4 data sets.}
-	\label{fig:lennas}
+	\label{fig:1.2}
 \end{figure}
 
 
 
-In the first step, we develop the CellYolo approach to automatically annotate and segment cell types to single-cell images obtained from imaging flow cytometry experiments. This approach is based on deep learning paradigms that have emerged as a disruptive alternative to engineering-based techniques, which quickly lead to a large amount of raw labeled data, and requires more resources and time. CellYolo, as an efficient and accurate object detector emphasizing a small target, inherited the characteristics of the real-time detection of the YOLO network\cite{33}, while avoiding the low accuracy of the YOLO network in detecting small objects. Inspired by the YOLOv3-tiny network, the K Means++ algorithm is an efficient approach of data pre-processing\cite{18}. Experimental results demonstrate that CellYolo is a cost-efficient solution for practical application( Labeling/Segmenting each image takes only 0.25 seconds in Intel CPU) but also an effective way of improving the accuracy of object classification. We reproduced and integrated nearly 20 classic computer vision algorithms and tested it with/without CellYolo preprocessing. With the help of CellYolo preprocessing, the improvement based on state-of-the-art algorithms in terms of Top-1 Val-acc has been verified.
+In the first step, we develop the AttentionNet approach to automatically annotate and segment cell types to single-cell images obtained from imaging flow cytometry experiments. This approach is based on deep learning paradigms that have emerged as a disruptive alternative to engineering-based techniques, which quickly lead to a large amount of raw labeled data, and requires more resources and time. AttentionNet, as an efficient and accurate object detector emphasizing a small target, inherited the characteristics of the real-time detection of the YOLO network\cite{yolov1}, while avoiding the low accuracy of the YOLO network in detecting small objects. Inspired by the YOLOv3-tiny network\cite{33}, the K Means++ algorithm is an efficient approach of data pre-processing\cite{18}. Experimental results demonstrate that AttentionNet is a cost-efficient solution for practical application( Labeling/Segmenting each image takes only 0.25 seconds in Intel CPU) but also an effective way of improving the accuracy of object classification. We reproduced and integrated nearly 20 classic computer vision algorithms and tested it with/without AttentionNet preprocessing. With the help of AttentionNet preprocessing, the improvement based on state-of-the-art algorithms in terms of Top-1 Val-acc has been verified.
 
 Once segmented, we proposed CellNet for Sezary Syndrom Cell / Healthy Cell classification. We applied a similar Residual layer to forward and enable a deeper neural network and follows the basic architecture of ResNet18 and GhostNet for its superiority \cite{19}\cite{20}. Replaced all the ResNet18 \cite{20} point-wise convolutional layers (in total, 18 layers ) with Ghost Bottleneck \cite{19}. Besides, we adopted the SE layers from Squeeze-and-Excitation Networks \cite{24} to enhance useful features, scaling less inhibiting features map. In each ghost module, we first take point-wise convolution to get a few intrinsic feature maps. We utilized the cheap linear transformation such as depth-wise convolution or affine transformation and wavelet transformation, as suggested by GhostNet\cite{19}, here the depth-wise convolution was used.
 Despite its simplicity (only 8 layers ghost module) and lower parameters(1/4 weights than ResNet18\cite{20}, 1/2 weights than GhostNet\cite{19}), CellNet establishes a new state-of-the-art on Sezary Syndrome Dataset (95.638\% Top-1 accuracy) and CIFar10 ( 90.051\% Top-1 accuracy)\cite{21}. Moreover, the same method is also very competitive against recent leading Supervised approaches on Pneumonia Dataset (91.785\% Top -1 accuracy), where Inception V3 adopted after 7000 epochs reach only 88.0\%\cite{38}.
@@ -175,11 +175,12 @@ CD7 is a glycoprotein that is usually exposed in 80\% to 90\% of CD$4 ^{+}$ T ce
             \caption{}
 		\end{subfigure}
 	\end{center}
-	\caption{\textbf{CD164 expression is increased on CD4+ T cells from patients with Sézary syndrome (SS)}.  Increased expression of CD164 may be a promising diagnostic parameter on Malignant T Cells in Sézary Syndrome, image citated from \cite{emma}
+	\caption{\textbf{CD164 expression is increased on CD4+ T cells from patients with Sézary syndrome (SS)\cite{emma}}.  Increased expression of CD164 may be a promising diagnostic parameter on Malignant T Cells in Sézary Syndrome, image citated from \cite{emma}
 (b) Flow cytometric analysis of CD164 expression in blood CD4+ T cells from healthy donors (nml), control population of patients with inflammatory skin disease (ISD; psoriasis) and patients with SS. (a) Representative example of CD164 expression limited to CD4+ CD26- T cells in the blood of a patient with SS (plot gated on CD4) \cite{emma}.}
+    \label{fig:2.1} 
 \end{figure}
 
-As shown in Figure 2.1, \cite{emma}'s group study was conducted following the declaration of Helsinki's principles and was approved by the Institutional Review Board of the University of Zurich.  They aim to confirm CD164 as a potential marker for malignant T cells in the blood of patients with SS \cite{emma}.
+As shown in \eg\reffig{2.1}, \cite{emma}'s group study was conducted following the declaration of Helsinki's principles and was approved by the Institutional Review Board of the University of Zurich.  They aim to confirm CD164 as a potential marker for malignant T cells in the blood of patients with SS \cite{emma}.
 
 Malignant T cells in CTCL are typically memory T cells. Subsets of memory T cells can be differentiated in part by CD27 expression\cite{nagler-31}\cite{nagler-33}. CD27 belongs to the tumor necrosis factor/nerve growth factor receptor family \cite{nagler}. Although diagnostically invaluable, these peripheral blood studies' diagnostic specificity must be interpreted with caution, particularly when only small numbers of cells are phenotypically abnormal\cite{nagler-6}. Logically, T-cell clonality could be useful in diagnosing SS because neoplasia is the result of a clonal expansion of an abnormal cell\cite{nagler}. However, the diagnostic significance of a dominant T-cell clone in the blood is still controversial, particularly in erythrodermic patients. 
 
@@ -236,9 +237,10 @@ Comparing to fully convolutional network, where supplementing a usual contractin
 \label{fig:cellnet}
 \end{center}
 \caption{\textbf{U-net architecture (example for 32x32 pixels in the lowest resolution)\cite{unet}}. Each blue box corresponds to a multi-channel feature map. The number of channels is denoted on top of the box. The x-y-size is provided at the lower left edge of the box. White boxes represent copied feature maps. The arrows denote the different operations.}
+\label{fig:2.2}
 \end{figure}
 
-As shown in Figure 2.2, the contracting path follows the typical architecture of a convolutional network to capture context. It consists of the repeated application of two $3\times3$ convolutions (unpadded convolutions), each followed by a rectified linear unit (ReLU) and a $2\times2$ max pooling operation with stride 2 for downsampling \cite{unet}. Every step in the expansive path consists of an upsampling of the feature map followed by a $2\times2$ convolution ("up-convolution") that halves the number of feature channels, a concatenation with the correspondingly cropped feature map from the contracting path, and two $3\times3$ convolutions, each followed by a ReLU\cite{unet}. The expanding path is to enable precise localization.
+As shown in \eg\reffig{2.2}, the contracting path follows the typical architecture of a convolutional network to capture context. It consists of the repeated application of two $3\times3$ convolutions (unpadded convolutions), each followed by a rectified linear unit (ReLU) and a $2\times2$ max pooling operation with stride 2 for downsampling \cite{unet}. Every step in the expansive path consists of an upsampling of the feature map followed by a $2\times2$ convolution ("up-convolution") that halves the number of feature channels, a concatenation with the correspondingly cropped feature map from the contracting path, and two $3\times3$ convolutions, each followed by a ReLU\cite{unet}. The expanding path is to enable precise localization.
 
 To overcome small data problems, they generated smooth deformations using random displacement vectors on a coarse 3 by 3 grid on data and elastic deformations to the available training images\cite{unet}. As a result, the U-net outperforms the prior best method (a sliding-window convolutional network) on the ISBI challenge and  won the ISBI cell tracking challenge 2015 in these categories by a large margin \cite{unet}
 
@@ -247,7 +249,7 @@ To overcome small data problems, they generated smooth deformations using random
 
 The objective of the You Only Look Once (YOLO)\cite{yolov1} is to identify which of a known set of objects might be present and to localize their positions within the image by giving an image or a video stream. Prior work on object detection repurposes classifiers to perform detection. As a representative object detection model based on regression, You Only Look Once (YOLO) frames object detection as a regression problem to spatially separated bounding boxes and associated class probabilities \cite{yolov1}.
 
-The first version YOLO network divides the image into an $S \times S$ grid ( YOLO chose S=7) and for each grid cell predicts B bounding boxes (YOLO chose B=2), confidence for those boxes, and C class probabilities \cite{yolov1}. Each bounding box consists of 5 predictions: x, y, w, h, and confidence score \cite{yolov1}, which prevents the YOLO from detecting backgrounds.  If there is no object in the cell, the conﬁdence scores should be zero.  Otherwise, the conﬁdence score will be equal to the intersection over union (IOU) between the predicted box and the ground truth. Therefore,  all these predictions are encoded as an $S × S × (B ∗ 5 + C)$ tensor \cite{yolov1}.
+The first version YOLO network\cite{yolov1} divides the image into an $S \times S$ grid ( YOLO chose S=7) and for each grid cell predicts B bounding boxes (YOLO chose B=2), confidence for those boxes, and C class probabilities \cite{yolov1}. Each bounding box consists of 5 predictions: x, y, w, h, and confidence score \cite{yolov1}, which prevents the YOLO from detecting backgrounds.  If there is no object in the cell, the conﬁdence scores should be zero.  Otherwise, the conﬁdence score will be equal to the intersection over union (IOU) between the predicted box and the ground truth. Therefore,  all these predictions are encoded as an $S × S × (B ∗ 5 + C)$ tensor \cite{yolov1}.
 
 If the center of an object falls into a grid cell, that grid cell is responsible for detecting the object. Each grid cell can detect only one object, so in total, we will drive into $7\times 7=49$ grid cells for each image. For each cell, it predicts two boxes (98 boxes in total). The vast majority of these boxes will have shallower confidence and then to get rid of most of them by using NMS \cite{yolov1}.
 
@@ -261,7 +263,8 @@ The reason for using a confidence score equal to the IOU is that we are 100\% su
 \includegraphics[width=\textwidth]{thesis-template-master/images/yolomodel.png}
 \label{fig:cellnet}
 \end{center}
-\caption{\textbf{YOLO model\cite{yolov1} }. YOLO was trained to detect 20 different classes of objects.  For any grid cell the model will calculate 20 conditional class probabilities one for each class, while each grid cell gives us a choice between two bounding boxes. The final detection scores encode both the probability of that class appearing in the box and how well the predicted box fits the object.}
+\caption{\textbf{YOLO model\cite{yolov1}}. YOLO\cite{yolov1} was trained to detect 20 different classes of objects. For any grid cell the model will calculate 20 conditional class probabilities one for each class, while each grid cell gives us a choice between two bounding boxes. The final detection scores encode both the probability of that class appearing in the box and how well the predicted box fits the object.}
+\label{fig:2.3}
 \end{figure}
 
 
@@ -274,11 +277,11 @@ You only look once (YOLO) predicts object class and location with exceeding fast
 
 %As a single neural network, YOLO is extremely simple, which can concurrently predict bounding boxes coordinates and associated class probabilities from full images in one evaluation.
 
-To push the boundaries of fast object detection, the  Fast YOLO \cite{yolov1} uses a neural network with fewer convolutional layers (9 instead of 24) and fewer filters in those layers. Some obvious drawbacks lead to Incremental Network Based on YOLO, such as YOLOv2\cite{yolov2}, YOLOV3\cite{33}, TFYOLO and YOLOtiny-v3\cite{18}.
+To push the boundaries of fast object detection, the  Fast YOLO \cite{yolov1} uses a neural network with fewer convolutional layers (9 instead of 24) and fewer filters in those layers. Some obvious drawbacks lead to Incremental Network Based on YOLO\cite{yolov1}, such as YOLOv2\cite{yolov2}, YOLOv3\cite{33}, TF-YOLO and YOLOv3-Tiny\cite{18}.
 
-Firstly, YOLO prophesies multiple bounding boxes per grid cell. At training time, only one bounding box predictor is responsible for each object, based on which prediction has the highest current IOU with the ground truth. That leads to specialization between the bounding box predictors.
+Firstly, YOLO\cite{yolov1} prophesies multiple bounding boxes per grid cell. At training time, only one bounding box predictor is responsible for each object, based on which prediction has the highest current IOU with the ground truth. That leads to specialization between the bounding box predictors.
 
-Secondly, since in the first YOLO network, they used $7\times7$ grid, and any grid can detect only one object. The maximum number of objects the model can detect is 49. When a grid cell contains more than one object, the model will not be able to detect all of them is the problem of close object detection that first YOLO suffers from. Those lead to struggles with small objects that appear in groups as well, such as flocks of birds\cite{yolov1}. Furthermore, the first YOLO  learns to predict bounding boxes from pre-trained ImageNet data, and it is not well generalized to objects in new or unusual aspect ratios or configurations\cite{18}. 
+Secondly, since in the first YOLO network, they used $7\times7$ grid, and any grid can detect only one object\cite{yolov1}. The maximum number of objects the model can detect is 49. When a grid cell contains more than one object, the model will not be able to detect all of them is the problem of close object detection that first YOLO suffers from. Those lead to struggles with small objects that appear in groups as well, such as flocks of birds\cite{yolov1}. Furthermore, the first YOLO  learns to predict bounding boxes from pre-trained ImageNet data, and it is not well generalized to objects in new or unusual aspect ratios or configurations\cite{18}. 
 
 Last but not least, loss function applied treats errors the same in small bounding boxes versus large bounding boxes\cite{yolov1}. A small error in a large box is generally benign, but a small error in a small box has a much more significant effect on IOU \cite{yolov1}.
 
@@ -304,6 +307,7 @@ In contrast to YOLOv1 \cite{ yolov1} tries to assign the object to the grid cell
 
 \end{center}
 \caption{\textbf{The architecture of YOLOv3}. YOLOv3\cite{33} follows the principle of the coordinate prediction in YOLOv2\cite{yolov2}, for predicting the categories, multi-label and multi-classification are applied instead of the original single label and multi-classification.}
+\label{fig:2.4}
 \end{figure}
 
 Using a softmax for class prediction imposes the assumption that each box has precisely only one class. For this reason, YOLOv3 \cite{33} does not use a softmax. It merely uses independent logistic classiﬁers for any class. Meanwhile, YOLOv3\cite{33} adopts the binary cross-entropy loss function instead of the multi-class loss function. On a standard computer with GPU, it is easy for YOLOv3 to achieve real-time performance \cite{18}.  
@@ -330,9 +334,9 @@ More importantly, they evaluated both 18-layer and 34-layer ResNet, and the 34 l
 \centering
 \includegraphics[width=0.7\textwidth]{thesis-template-master/images/RES.png}
 \label{fig:cellnet}
-
 \end{center}
 \caption{\textbf{Residual learning: a building block \cite{20}}. Identity shortcut connections add neither extra parameter nor computational complexity, but they can easily enjoy accuracy gains from significantly increased depth.}
+\label{fig:2.5}
 \end{figure}
 
 In a standard residual block \cite{20}, they first performed downsampling with a stride of 2, namely, Convolution, BatchNormalization, and  LeakyReLU have applied accordingly, then Conv2D plus BatchNormalization weight layer is adopted as well. For the third step，identity shortcuts are utilized directly when the input and output are of the same dimensions. Otherwise, when the dimensions increase, they acknowledged two options:  still performs identity mapping with extra zero entries padded for increasing the dimensions; projection shortcut is used to match dimensions (done by 1×1 convolutions). For both options, when the shortcuts cover feature maps of two sizes, they are performed with a stride of 2 \cite{20}.
@@ -350,11 +354,12 @@ The authors of residual networks\cite{20} tried to make the model as thin as pos
 \end{center}
 \caption{\textbf{Various residual blocks used in \cite{wideres}}. Batch normalization and ReLU precede
 each convolution (omitted for clarity).}
+\label{fig:2.6}
 \end{figure}
 
 Wide (width refers to the number of channels in a layer) residual networks \cite{wideres} attempt to address the problem of diminishing feature reuse in very deep (thin) residual networks, namely, few residual blocks are learning useful representations or many blocks sharing very little information with a small contribution to the final goal, by increasing the model capacity (number of parameters) and adding additional regularization in the form of dropout \cite{dropout}.
 
-In fact, as Figure 2.6 shows, there is a balance between the depth and width of these networks: if layers are too wide, the model will learn extraneous information (added noise); if layers are too thin,  subsequent layers will not have much to learn from (i.e., diminishing feature reuse).
+In fact, as \eg\reffig{2.6} shows, there is a balance between the depth and width of these networks: if layers are too wide, the model will learn extraneous information (added noise); if layers are too thin,  subsequent layers will not have much to learn from (i.e., diminishing feature reuse).
 
 Aggregated Residual Transformations for Deep Neural Networks \cite{aggres} of Facebook AI Research exposes a new dimension called cardinality as an essential network parameter, in addition to depth and width. Cardinality is demonstrated to be more effective than going deeper or broader when increasing model capacity, especially when increasing depth and width leads to diminishing returns\cite{aggres}.
 
@@ -382,6 +387,7 @@ However, when the saliency map begins for the understandable CNN and explainable
 \label{fig:cellnet}
 \end{center}
 \caption{\textbf{Visualization of some feature maps generated by the first residual group in ResNet-50 \cite{19}}.  Three similar feature map pair examples are annotated with boxes of the same color. One feature map in the pair can be approximately obtained by transforming the other one through cheap operations (denoted by spanners). Point-wise convolution can extract more high-level features such as edge, shape, color, but a large amount of point-wise convolution results in massive computational costs  and generated much redundant map.}
+\label{fig:2.7}
 \end{figure}
 
 
@@ -395,6 +401,7 @@ However, when the saliency map begins for the understandable CNN and explainable
 \label{fig:cellnet}
 \end{center}
 \caption{\textbf{The feature maps in the 2nd layer of Ghost-VGG-16  \cite{19}}.  The left-top image is the input, the feature maps in the left red box are from the primary convolution, and the feature maps in the right green box are after the depthwise transformation.}
+\label{fig:2.8}
 \end{figure}
 
 MobileNet \cite{30} and ShuffleNet \cite{29} have introduced depthwise convolution or shuffle operation to build efficient CNNs using  smaller convolution  filters  (floating-number operations).
@@ -519,12 +526,13 @@ claims about the combination of only $13 \times 13$, $26 \times 26$ YOLO scale o
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{Precision-Recall curve on val dataset of Sezary Syndrom dataset in terms of different scale YOLO output layers.}. ,  Note: both measured on on val dataset: 1k training image, 726 test image.}
+	\label{fig:3.1}
 \end{figure}
 
 
 \subsection{K‐means++ Clustering in Pre-processing}
 
-K‐means++ clustering is an approach commonly used to adaptive partition a dataset into groups. It is necessary to specify the number of cluster centers in advance. The K‐means++ algorithm generally uses the Euclidean distance to measure the distance between two points. Instead of using the prior nine boxes given by YOLOv3\cite{33} trained on the COCO dataset, for our customer dataset, it is noteworthy that give the prior knowledge of the ground truth box. Utilizing a small subset of the manually annotated cell, we can improve $GIOU$(ground truth box position, prediction box location) scores. It will lead to better class scores and, in the final, achieve higher accuracy (see Figure3.3).
+K‐means++ clustering is an approach commonly used to adaptive partition a dataset into groups. It is necessary to specify the number of cluster centers in advance. The K‐means++ algorithm generally uses the Euclidean distance to measure the distance between two points. Instead of using the prior nine boxes given by YOLOv3\cite{33} trained on the COCO dataset, for our customer dataset, it is noteworthy that give the prior knowledge of the ground truth box. Utilizing a small subset of the manually annotated cell, we can improve $GIOU$(ground truth box position, prediction box location) scores. It will lead to better class scores and, in the final, achieve higher accuracy (see \eg\reffig{3.3}).
 
 
 \begin{figure}[h]
@@ -546,7 +554,8 @@ K‐means++ clustering is an approach commonly used to adaptive partition a data
 			
 		\end{subfigure}
 	\end{center}
-	\caption{\textbf{the illumination of K-means++ applied in prior box acknowledgment}. (a) the dot represents the ground truth box$(w,h)$ ;(b) the six prior boxes clustered by K-Means++,  input by manually labeled ground truth boxes;(c)  the blue dotted line box represents the prediction box, and the smaller solid line box stands for bounding box predicted by grid cell.  Ground truth box as anchor box input could give the network the firsthand knowledge of cell size to help more accurate prediction.}
+	\caption{\textbf{The illustrations of K-means++ applied in prior box acknowledgment}. (a) the dot represents the ground truth box$(w,h)$ ;(b) the six prior boxes clustered by K-Means++,  input by manually labeled ground truth boxes;(c)  the blue dotted line box represents the prediction box, and the smaller solid line box stands for bounding box predicted by grid cell.  Ground truth box as anchor box input could give the network the firsthand knowledge of cell size to help more accurate prediction.}
+	\label{fig:3.2}
 \end{figure}
 
 The main steps of the K‐means++ method are as follows in Algorithm 1.
@@ -578,6 +587,7 @@ The main steps of the K‐means++ method are as follows in Algorithm 1.
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{The comparison on cell segmentation  performance between With / Without K-means++ cluster}. As (a) and (b) show clearly, the K-means++ cluster helps not only the score of the cell  and the degree of polymerization. }
+	\label{fig:3.3}
 \end{figure}
 
 
@@ -674,7 +684,7 @@ In YOLO\cite{yolov1}, the author did find the square root of the width and heigh
   \end{algorithmic}
 \end{algorithm}
 
-The bounding box is generally composed of the upper left and lower right corners of the coordinates, denoted as ($x_{1}, y_{1}, x_{2}, y_{2}$). Note that this is actually a vector, and vector distances are generally can be measured by either the $ L_{1}$ norm or the $ L_{2}$ norm. However, it was found that the values of both IOU and GIOU are very different, indicating that the use of the $L$ paradigm to measure the distance between the prediction and the real ground truth is inappropriate, as shown in  Figure 3.4.
+The bounding box is generally composed of the upper left and lower right corners of the coordinates, denoted as ($x_{1}, y_{1}, x_{2}, y_{2}$). Note that this is actually a vector, and vector distances are generally can be measured by either the $ L_{1}$ norm or the $ L_{2}$ norm. However, it was found that the values of both IOU and GIOU are very different, indicating that the use of the $L$ paradigm to measure the distance between the prediction and the real ground truth is inappropriate, as shown in  \eg\reffig{3.4}.
 
 
 
@@ -688,6 +698,7 @@ The bounding box is generally composed of the upper left and lower right corners
 	\end{center}
 	\caption{\textbf{Two sets of examples with the bounding box}.
 boxes represented by two corners  ($x_{1}, y_{1}, x_{2}, y_{2}$)  for first row, center and size  ($x_{c}, y_{c}, w, h$). for second row. For all three cases in each set  $ L_{1}$ norm distance, and the $ L_{2}$ norm distance, between the representation of two rectangles are exactly same value, but their IOU and GIOU values are very different.}
+    \label{fig:3.4}
 \end{figure}
 
 The IOU is commonly used in academia to measure the similarity between two boundaries, but we found that there are two obvious drawbacks to using IOU, making it less suitable for the loss function.
@@ -814,6 +825,7 @@ Finally, we utilize the cross-entropy loss to generate the class label.
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{Experiments on GBCIOU for multiple predictions occur in same cell images.}(a),(d) and(g) stand for original cell bounding box detection, especially multiple cells overlapping or present in the same frame.(b),(e) and (h) represents with  GBCIOU circle segmentation, contrast to (c),(f) and(i) without GBCIOU. With help of GBCIOU, it obtains the best segmentation performance on cell.}
+	\label{fig:3.5}
 \end{figure}
 
 Using the cvfillPoly function, we can easily classify the cell image into unaffected polygonal areas and achieve high-speed segmentation once we obtain the output from the AttentionNet network for bounding box detection, namely ($x_{1}$, $y_{1}$, $x_{2}$, $y_{2}$). However, it has undeniable shortcomings that the shape of the segmentation does not perfectly approximate the ground truth of the cell. To overcome this problem, we proposed a $ HSV $ space mask threshold method, It quietly converted to $ HSV $ space and used a threshold to eliminate the outside part of the central circle of box detection.  For the common challenge of the YOLO original version\cite{yolov1}: when multiple objects are standing in the same area or overlapping in the central point, it will become much more challenging to draw the correct prediction and always leads to wrong labeling. If multiple cells occur and one cell has a more competitive confidence score than another during circle detection, that will lead to either non-labeled or partly labeled problem.
@@ -847,6 +859,7 @@ As shown in Table 3.2, the first layer of CellNet is a standard convolutional la
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{The comparison between ResNet18 \cite{20} and CellNet}. Despite its simplicity (only eight layers ghost module) and lower parameters ( $1/4$ weights than ResNet18 \cite{20}), inside G-bottleneck adopted residual function for deeper gradient forward.}
+	\label{fig:3.6}
 \end{figure}
 
 
@@ -869,6 +882,7 @@ As shown in Table 3.2, the first layer of CellNet is a standard convolutional la
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{The normal Convolutional layer in \cite{26}\cite{27}\cite{28}}. As it illustrated that to extract the same amount of feature map, there are much more redundant output feature maps by taking point-wise convolution, especially for the small target objects or less informative images.}
+	\label{fig:3.7}
 \end{figure}
 
 
@@ -883,6 +897,7 @@ As shown in Table 3.2, the first layer of CellNet is a standard convolutional la
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{The ghost module layer in \cite{19}}. We only take point-wise convolution once to get a few intrinsic feature maps, and then we utilized the cheap linear transformation to generate a ghost map with a lower cost.}
+	\label{fig:3.8}
 \end{figure}
 
 Unlike the Ghost module applied in GhostNet\cite{19}, we designed two kinds of new Ghost Modules for feature extraction and adopted the SE layers from Squeeze-and-Excitation Networks \cite{24} for enhancing useful features and balancing less inhibiting feature map. The first novel Ghost module inside Gbneck acts as an expansion layer, increasing the number of channels, while the second Ghost module reduces the number of channels to match the short-cut path. Then the inputs and the outputs of these two Ghost modules are concatenated by short-cut. We adopted batch normalization (BN) and ReLU non-linearity right after each layer as well\cite{19}, except that ReLU was not used after the second Ghost module, as suggested by MobileNetV2\cite{30}. In each novel Ghost Module, we only take point-wise convolution once to get a few intrinsic feature maps, then we utilized the cheap linear transformation such as depth-wise convolution or affine transformation and wavelet transformation, as suggested by GhostNet\cite{19}, here the depth-wise convolution was used.
@@ -903,6 +918,7 @@ Unlike the Ghost module applied in GhostNet\cite{19}, we designed two kinds of n
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{Two kind of Gbnecks we proposed for feature extraction}.We implement Stride = 1 to keep the output channel of the feature map, and Stride = 2 reduces the output channel while extracting information without losing much information. SE = 0 denotes not applying the SE layer.  The short-cut is used to correlate between the inputs and outputs of these two Ghost modules, as suggested by GhostNet, we achieve in the short-cut of Stride=2 G-bneck by a downsampling layer only single connection in short-cut of Stride =1 G-bneck.}
+	\label{fig:3.9}
 \end{figure}
 
 
@@ -958,7 +974,7 @@ layer & Type    & Filters & Size/Stride           & Input      & Output     & \m
 
 
 \end{tabular}}
-\caption{\textbf{CellNet Network Structure}. G-bneck denotes novel Ghostbottleneck. \#Expan means expansion size.}
+\caption{\textbf{CellNet Network Structure}. G-bneck denotes novel Ghostbottleneck that we designed. We use 8 Ghostbottleneck in corresponding to ResNet18 \cite{20} 16 feature extraction layers of point-wise convolution. We adopted 1:0:1:0:1:0 frequency of SE layer \cite{24} in corresponding to the stride frequency of 1:2:1:2:1:2 to satisfied that the re-scaling of less weight ghost map already executed before decrease of output channel.\#Expan means expansion size. }
 \end{table}
 
 
@@ -994,21 +1010,21 @@ layer & Type    & Filters & Size/Stride           & Input      & Output     & \m
 
 \chapter{Experiments}
 \label{sec:examples}
-In this chapter, we put the focus on experimentally evaluating our proposed two architectures. At the very beginning, we will introduce the standard evaluation metrics,such as Confusion Matrix, F1 Score, Area Under the ROC curve(AUC – ROC), Top-1 accuracy, mAP,  weights and FLOPs and so on. 
+In this chapter, we focus on experimentally evaluating our proposed two architectures. At the very beginning, we will introduce the standard evaluation metrics, such as Confusion Matrix, F1 Score, Area Under the ROC curve(AUC – ROC), Top-1 accuracy, mAP,  weights and FLOPs and so on. 
 
-Followed by qualitative and quantitative results on two well-established benchmark data sets(Cifar-10 for the approved classification task, Pneumonia dataset for biomedical classification task), we also contribute to the work of the establishing the first-ever Sezary Syndrome dataset benchmark, including the data acquisition, handling, aggregating and pre-processing with our AttentionNet to classifier data into the individual and corresponding folder. Among the well-established benchmark, we also made the COVID-19 X-ray/CT image dataset while participating in the Kaggle challenge fighting against the COVID-19. We then report new state-of-the-art results on all these four data sets. We also provide detailed descriptions of the training and testing pipeline, including data pre-processing, training tricks and strategies, and network architectures used to obtain the final scores.
+Followed by qualitative and quantitative results on two well-established benchmark data sets ( Cifar-10 \cite{21} for the approved classification task, Pneumonia dataset \cite{38} for biomedical classification task), we also contribute to the work of the establishing the first-ever Sezary Syndrome dataset benchmark, including the data acquisition, handling, aggregating and pre-processing with our AttentionNet to classifier data into the corresponding folder. Among the well-established benchmark, we also made the COVID-19 X-ray/CT image dataset while participating in the Kaggle challenge fighting against the COVID-19. We then report a state-of-the-art result on all these four data sets. We also provide detailed descriptions of the training and testing pipeline, including data pre-processing, training tricks and strategies, and network architectures used to obtain the final scores.
 
 \section{Evaluation Metrics}
 \label{sec:lorem}
-In order to quantitatively evaluate the performance of a model, we define Evaluation metrics suit for our cases.
+In order to quantitatively evaluate the performance of the model, we define Evaluation metrics suit for our cases.
 
-To start with our AttentionNet,  as described in chapter 3, the AttentionNet is based on classification task and follows the superiority of the architecture of Yolov3- tiny, therefore, there is generally established metric for evaluation, such as Confusion Matrix Precision and Recall, F1 Score, mAP,  the IOU and  Classification Loss. To compare our methods on the new dataset we established, we, therefore, adopted most of those evaluation schemes from the original YOLOv3. Moreover, combining Area Under the ROC curve leads to conclusive quality metrics paying attention to various aspects. 
-In further, we acknowledge the resources limitation and time cost for software application in real scenarios usages, we then analyzed the time cost in different GPU avail-abilities and computation FLOPs.
+To start with our AttentionNet,  as described in chapter 3, the AttentionNet is based on classification task and follows the superiority of the architecture of Yolov3- tiny \cite{18}, therefore, there is generally established metric for evaluation, such as Confusion Matrix Precision and Recall, F1 Score, mAP,  the IOU and  Classification Loss. To compare our methods on the new dataset we established, we, therefore, adopted most of those evaluation schemes from the original YOLOv3\cite{33}. Moreover, combining Area Under the ROC curve leads to conclusive quality metrics paying attention to various aspects. 
+In further, we acknowledge the resources limitation and time cost for software application in real scenarios usages, we then analyzed the time cost in different GPU availability and computation FLOPs.
 
 
 \subsection{Confusion Matrix}
 To make quantitative statements about the model of the CellNet, we mainly appropriated the  Confusion Matrix (TP, TN, FP, FN, Sensitivity, Accuracy), time complexity, weights of parameters, and the computation complexity FLOPs. 
-Evaluation metrics are the means to perform this comparison, which is presented in the following paragraphs. The notation is adopted from Zhao et al.
+Evaluation metrics are the means to perform this comparison, which is presented in the following paragraphs.
 
 A confusion matrix is an $N \times N $ matrix, where $ N $ is the number of predicted classes. Because we possess a binary classification problem, we set then the $N=2$, and hence we get a $2 \times 2$ matrix. Here are a few definitions:
 
@@ -1103,6 +1119,7 @@ The specificity of a test, also referred to as the true negative rate (TNR), is 
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{ROC (Receiver operating characteristic) curve}. $x$ axis in ROC curve represents FPR, or 1-TNR, or 1-Specificity. The higher the FPR, the more actual negative categories in the predicted positive category. On the other hand, $y$ axis in the ROC curve represents TPR or, by other words, Sensitivity. The higher the TPR, the more actual positive categories in the predicted positive category.}
+	\label{fig:4.1}
 \end{figure}
 Our idea objective will be TPR=1 and FPR=0, which is the (0,1) point in the figure, so the closer the ROC curve is to the (0,1) point, the better it deviates from the diagonal of 45 degrees, and the higher the Sensitivity and Specificity, the more effective.
 The numerator and denominator of both x and y-axis will change on a similar scale in the response rate shift.
@@ -1143,7 +1160,7 @@ Tiger                & \{Cat\}         & Tiger               & \{Cat, Tiger\}   
 \end{table}
 
 
-As Table illustrates, we will obtain an accuracy of 50\%, when we are taking the Top 1 accuracy into evaluation metrics, which is not satisfying as soon as we take into consideration of the accuracy where target class matches with any one of the two most probable classes predicted by the model, as the second column demonstrated, we will be getting an accuracy of 83\%, which is a significant increase compared to the previous one. It is the basic intuition behind the Top N accuracy, which is especially applicable for the mutil-class objects prediction tasks.
+As Table 4.2 illustrates, we will obtain an accuracy of 50\%, when we are taking the Top 1 accuracy into evaluation metrics, which is not satisfying. As soon as we take into consideration of the accuracy where target class matches with any one of the two most probable classes predicted by the model, as the second column demonstrated, we will be getting an accuracy of 83\%, which is a significant increase compared to the previous one. It is the basic intuition behind the Top N accuracy, which is especially applicable for the mutil-class objects prediction tasks.
 
 
 
@@ -1161,6 +1178,7 @@ As Table illustrates, we will obtain an accuracy of 50\%, when we are taking the
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{Wellcell dataset on Sezary dataset}. In total we had Well cell data:$HD16:49787+ HD17:37009+SS1:5250+SS2:10852= 102,898$.}
+	\label{fig:4.2}
 \end{figure}
 
 \begin{figure}[h]
@@ -1172,10 +1190,11 @@ As Table illustrates, we will obtain an accuracy of 50\%, when we are taking the
 		\end{subfigure}
 	\end{center}
 	\caption{\textbf{Noise dataset of Sezary Syndrome}.We had noise data: 12,695.}
+	\label{fig:4.3}
 \end{figure}
 
 \subsection{The introduction of Sezary Syndrome Dataset}
-Sezary syndrome is an aggressive form of cutaneous T-cell lymphoma, which is a group of disorders that occur when T-cells (a type of white blood cell) become cancerous and affect the skin\cite{Alain}. Moreover, it corresponds to 3\% of all cutaneous lymphomas, and it is characterized by a triad of manifestations: erythroderma with pruritus, limphonodomegalia, and atypical circulating lymphocytes (referred to as Sézary or Lutzner cells). Associated clinical manifestations include lagophthalmos, alopecia, palmoplantar hyperkeratosis, and onycodystrophy.\cite{Yamashita}
+Sezary syndrome is an aggressive form of cutaneous T-cell lymphoma, which is a group of disorders that occur when T-cells (a type of white blood cell) become cancerous and affect the skin\cite{Alain}. Moreover, it corresponds to 3\% of all cutaneous lymphomas, and it is characterized by a triad of manifestations: erythroderma with pruritus, limphonodomegalia, and atypical circulating lymphocytes (referred to as Sézary or Lutzner cells). Associated clinical manifestations include lagophthalmos, alopecia, palmoplantar hyperkeratosis, and onycodystrophy \cite{Yamashita}.
 
 
 \begin{figure}[ht]
@@ -1217,11 +1236,11 @@ Sezary syndrome is an aggressive form of cutaneous T-cell lymphoma, which is a g
 			\label{fig:Good Cell}
 		\end{subfigure}
 	\end{center}
-	\caption{\textbf{Meaningless noise images from Sezary Syndrome data set}.  The six typical noise images introduced in Figure 1.1. In total, we had noise data: 12,695.}
-	\label{fig:lennas}
+	\caption{\textbf{Meaningless noise images from Sezary Syndrome data set}.  The six typical noise images introduced in \eg\reffig{1.1}. In total, we had noise data: 12,695.}
+	\label{fig:4.4}
 \end{figure}
 
-Sezary syndrome symptoms are described by a widespread red rash that may reach most of the body, malignant T cells (called Sezary cells) in the blood, and abnormally expanded lymph nodes. Additional symptoms may include severe itchiness, scaling plus peeling of the skin, fever, weight loss, hair loss, outward turning of the eyelids (ectropion). According to \cite{10.1182/blood-2004-09-3502}\cite{20001195667}, the presence of the Sezary syndrome is aggressive with a median survival of 1–5 years. Moreover, the exact cause of Sezary syndrome is currently undiscovered. Medication differs based on the types and symptoms present in each person and the severity of the condition.\cite{Yamashita}.
+Sezary syndrome symptoms are described by a widespread red rash that may reach most of the body, malignant T cells (called Sezary cells) in the blood, and abnormally expanded lymph nodes. Additional symptoms may include severe itchiness, scaling plus peeling of the skin, fever, weight loss, hair loss, outward turning of the eyelids (ectropion). According to \cite{10.1182/blood-2004-09-3502}\cite{20001195667}, the presence of the Sezary syndrome is aggressive with a median survival of 1 to 5 years. Moreover, the exact cause of Sezary syndrome is currently undiscovered. Medication differs based on the types and symptoms present in each person and the severity of the condition.\cite{Yamashita}.
 
 A diagnosis of Sezary syndrome is often suspected in people with particular types and symptoms. Additional testing can then be ordered to confirm the diagnosis. It may include: A skin biopsy, A complete blood count, Peripheral blood smear, Immunophenotyping, T-cell receptor (TCR) gene rearrangement test, and Flow cytometry \cite{Alain}.
 
@@ -1261,10 +1280,10 @@ A diagnosis of Sezary syndrome is often suspected in people with particular type
 		
 	\end{center}
 	\caption{\textbf{Well cell images from Sezary Syndrome data set}. Only Well cell images from the Sezary Syndrome data set can be analyzed in the classification task. As shown in the figure, the morphological characteristics can be even hardly distinguished by experts, which partly explains the unsatisfied classification accuracy of the neural network. In total, we had well cell data: 102,898.}
-	\label{fig:lennas}
+	\label{fig:4.5}
 \end{figure}
 
-Based on the previously manually folder-labeled image, we manipulated the second round of filtering, because of the impurity of the data set. Because we do not allow the cell folder contains noise data, so we manually checked for the whole data set again and deleted those raw images, the following data is the newest version of the folder(Seen figure 4.2 and figure 4.3). 
+Based on the previously manually folder-labeled image, we manipulated the second round of filtering, because of the impurity of the data set. Because we do not allow the cell folder contains noise data, so we manually checked for the whole data set again and deleted those raw images, the following data is the newest version of the folder(Seen \eg\reffig{4.2} and \eg\reffig{4.3}). 
 
 
 
@@ -1306,20 +1325,20 @@ Configuration hyperparameter         & Value                                    
 
 \subsubsection{Implementation and Hyper-parameters}
 
-\textbf{Preparing dataset.}  Ere begins to train; we prepare the data for object detection. We used the LabelImg tool to formulate the expert-defined good cell/noise contours. In this tool, we can make our data in two different formats: XML and txt. For the suggestion of original yolov3, we used txt format. We further wrote a function (xmltotxt.py) that can convert the XML format to txt format. 
+\textbf{Preparing dataset.}  Ere begins to train; we prepare the data for object detection. We used the LabelImg tool to formulate the expert-defined good cell/noise contours. In this tool, we can make our data in two different formats: XML and txt. For the suggestion of original YOLOv3\cite{33}, we used txt format. We further wrote a function (xmltotxt.py) that can convert the XML format to txt format. 
 
-Machine learning training procedure involves the principal splitting the data randomly into two sets. Using our (filtertrainandtest.py) script, we can split the test/ train data set into user-defined distribution. Train set: this is the part of the data on which we train the model. Test set: this is the part of the data on which we test our model. Typically, this is 70\%/30\% of the data. No image should be part of both the train and the test set.
+Machine learning training procedure involves the principal splitting the data randomly into two sets. Using our (filtertrainandtest.py) script, we can split the test / train data set into user-defined distribution. Train set: this is the part of the data on which we train the model. Test set: this is the part of the data on which we test our model. Typically, this is 70\%/30\% of the data. No image should be part of both the train and the test set.
 
 Then we create two files noted train.txt and test.txt. These files must save the path of train and test images in the data set line by line. Train.txt should have the formal: $(data/images/imagenames.png)$, and Test.txt should have the formal $(data/images/imagenames.png)$.
 
 Because of supervised-learning, we should additionally generate (./image) and (. /labels) folder accordingly. Moreover, the label file and the image should have an identical filename. It can be guarantee by our script (xmltotxt.py).
 
-\textbf{Preparing AttentionNet configuration files}. YOLOv3 needs certain specific files to know how and what to train. We must create these three files(.data, .names, and .cfg) and we explained those configuration hyperparameters in the above table 4.3\\
+\textbf{Preparing AttentionNet configuration files}. YOLOv3 \cite{33} needs certain specific files to know how and what to train. We must create these three files(.data, .names, and .cfg) and we explained those configuration hyperparameters in the above Table 4.3.\\
 
 
 
 \subsubsection{Evaluated performances}
-We train 1000 epochs and input 857 instance level-labeled images, set up 772(90\%) image for train set, and 85 images for the test. For Training image: 772 images consists of 274 noise images, 144 HD Cell images, and 439 SS cell images. Val image: 85 images. In addition, we test the trained model on 723 new images as well.
+We train 1000 epochs and input 857 instance level labeled images, set up 772(90\%) image for train set, and 85 images for the test. For Training image: 772 images consists of 274 noise images, 144 HD Cell images, and 439 SS cell images. Val image: 85 images. In addition, we test the trained model on 723 new images as well.
 
 
 \begin{table}[t]
@@ -1344,7 +1363,7 @@ Image No Label                                 & 1.93\%                         
 mAP                                            & 0.881                                                                                                               & 0.7255                                                                                                                              & 0.53                                                                                                                                                              \\
 Time Cost(s)                                   & 15.674                                                                                                              & 284.467                                                                                                                             & 266.36                                                                                                                                                            \\ \bottomrule
 \end{tabular}}
-\caption{\textbf{Evaluation different design on Sezary Syndrome Dataset}}
+\caption{\textbf{Evaluation of different designs on Sezary Syndrome Dataset}}
 \end{table}
 
 
@@ -1363,7 +1382,8 @@ Time Cost(s)                                   & 15.674                         
 		
 	\end{center}
 	\caption{ \textbf{Detection Performance on val dataset with AttentionNet best weight}. As seen, the well cells are well recognized and ideally located as well. The main problem lay on the noise data, as we have seen the recognition is well-done even for different scale artifacts.}
-	\label{fig:lennas}
+	\label{fig:4.7}
+	
 \end{figure}
 
 \begin{figure}[h]
@@ -1371,7 +1391,7 @@ Time Cost(s)                                   & 15.674                         
 \includegraphics[width=\textwidth]{thesis-template-master/images/cellyolo best weight based on manually labeled 1500 images.png}
 \label{fig:cellnet}
 \end{center}
-\caption{\textbf{The demonstration of train performance of CellYolo best weight based on manually labeled 1500 images}. The P-value is nearly 85\%, and the F1 value is also quite well, the mAP@0.5 reaches nearly 88\%.}
+\caption{\textbf{The demonstration of train performance of AttentionNet best weight based on manually labeled 1500 images}. The P-value is nearly 85\%, and the F1 value is also quite well, the mAP@0.5 reaches nearly 88\%.}
 \end{figure}
 
 \begin{figure}[t]
@@ -1409,11 +1429,11 @@ Time Cost(s)                                   & 15.674                         
 		\end{subfigure}
 	\end{center}
 	\caption{ \textbf{Segmentation performance with AttentionNet best weight, GBCIOU and Circle segmentation}. The confidence score reaches up to 0.86 out of 1, and the segmentation performance for both well cell and noise close semantic level.}
-	\label{fig:lennas}
+	\label{fig:4.8}
 \end{figure}
 
 As table 4.4 illustrates, we conduct a thorough evaluation study on different design to support our claims that
-(1)We achieve the current best weight based on 1000 epochs with nearly manually labeled 850 representative Noise and Well cell images, add Circle detect and segmentation in the final phase, and use YOLOv3-tiny two YOLO output layers architecture;
+(1)We achieve the current best weight based on 1000 epochs with nearly manually labeled 850 representative Noise and Well cell images, add Circle detect and segmentation in the final phase, and use YOLOv3-tiny \cite{18} two YOLO output layers architecture;
 (2)The quantity of training image does not play a key role, but the training epochs contribute to the overall  performance;
 (3)YOLO output tensors as a means of different target detectors individually contribute to classification and detection performance of different customer dataset;
 (4)The combinations of different functions we designed, including GBCIOU or KMeans++ in pre-processing and novel architecture, enable us efficiently detect noise/well cell and final finishing segmentation at a very lower time cost.
@@ -1427,7 +1447,7 @@ Here, we will give complete information on which models we derive from our propo
 We train the network end-to-end by minimizing the cross-entropy loss using the SGD optimizer with an initial learning rate of 0.1 and setting the learning rate to the initial LR decayed by 10 every 30 epochs and weight-decay of 1e-4  with a batch size of 256.
 
 \begin{table}[b]
-\scalebox{0.5}{
+\scalebox{0.55}{
 \begin{tabular}{@{}ccl@{}}
 \toprule
 \textbf{Hyperparameter}                      & \textbf{Value}                                                                                                              & \textbf{Annotation}                                                                                                                                                                                                                                                                                                                                                                                       \\ \midrule
@@ -1455,20 +1475,21 @@ We train the network end-to-end by minimizing the cross-entropy loss using the S
 
 \end{table}
 \subsubsection{Evaluated performances}
-ResNet18\cite{20} and ShuffleNetv2 \cite{29} were verified as so far the most representative best performance on Sezary Syndrome Dataset. However, Our Net can achieve higher classification performance (e.g., 95.638\% top-1 accuracy ) than ResNet 18, ShuffleNet V2, and GhostNet, while fewer weights and computational cost.
+ResNet18\cite{20} and ShuffleNetv2 \cite{29} were verified as so far the most representative best performance on Sezary Syndrome Dataset. However, Our Net can achieve higher classification performance (e.g., 95.638\% top-1 accuracy ) than ResNet 18\cite{20}, ShuffleNet V2\cite{29}, and GhostNet\cite{19}, while fewer weights and computational cost.
 
 
 
 
 \begin{figure}[t]
 \begin{center}
-\includegraphics[height=0.33\textheight]{thesis-template-master/images/cellnetnecc3.jpg}
+\includegraphics[height=0.25\textheight]{thesis-template-master/images/cellnetnecc3.jpg}
 \label{fig:cellnet}
 \end{center}
 \caption{\textbf{The illustration of the necessity of Ghost-Module and CellNet}. There is a visualization of feature maps after ResNet18\cite{20} 1st convolutional layer. Especially for Sezary Syndrome Dataset, after the first layer of point-wise convolution, there are many redundant feature maps (see the same color marked). There is no need to operate point-wise convolution one by one because all the valid information is within the Circle after AttentionNet segmentation.}
+\label{fig:4.9}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[b]
 	\begin{center}
 		\begin{subfigure}[b]{0.25\textwidth}
 		    \centering
@@ -1489,7 +1510,8 @@ ResNet18\cite{20} and ShuffleNetv2 \cite{29} were verified as so far the most re
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
-	\caption{\textbf{The illustration of the necessity of Ghost-Module and AttentionNet}. After AttentionNet segmentation, artifacts will be removed, and only morphological characteristics of the objects stay. There are saliency map of cell (d) after ResNet18\cite{20} (a), our Net (b) and VGG16 net \cite{23} (c). Leading  STOA  algorithms, such as ResNet18 and VGG16 Net, are more focused on non  ROI  features,  such as the debris feature outside the ROI. Those leading networks pay more attention to that debris information that leads to worse classification performance.}
+	\caption{\textbf{The illustration of the necessity of Ghost-Module and AttentionNet}. After AttentionNet segmentation, artifacts will be removed, and only morphological characteristics of the objects stay. There are saliency map of segmented cell  after ResNet18\cite{20} (b), our Net (a) and VGG16 net \cite{23} (c). Leading  STOA  algorithms, such as ResNet18 and VGG16 Net, are more focused on non  ROI  features,  such as the debris feature outside the ROI. Those leading networks pay more attention to that debris information that leads to worse classification performance.}
+	\label{fig:4.10}
 \end{figure}
 
 \begin{table}[h]
@@ -1510,7 +1532,8 @@ Shuffle Net v2\cite{29} & {\color[HTML]{CB0000} 1.4}                            
 \includegraphics[height=200pt,width=0.9\textwidth]{thesis-template-master/images/Sesary_TimeSeries-12-06-2020.png}
 \label{fig:cellnet}
 \end{center}
-\caption{\textbf{ResNet18 [17] and shuffleNetv2 [25]  Our Net performance on Sezary SyndromeDataset}. Our Net achieves higher classification performance (e.g., 95.638\% top-1 accuracy ) than ResNet 18 , ShuffleNet V2, and GhostNet, while fewer weights and computational cost.}
+\caption{\textbf{ResNet18 \cite{20}, ShuffleNetv2 \cite{29},GhostNet \cite{19} and Our Net performance on Sezary SyndromeDataset}. Our Net achieves higher classification performance (e.g., 95.638\% top-1 accuracy ) than ResNet 18\cite{20} , ShuffleNet V2\cite{29}, and GhostNet\cite{19}, while fewer weights and computational cost.}
+\label{fig:4.11}
 \end{figure}
 
 
@@ -1519,9 +1542,9 @@ Shuffle Net v2\cite{29} & {\color[HTML]{CB0000} 1.4}                            
 \label{sec:ipsum}
 The author in \cite{38} built the standard benchmark Pneumonia dataset. It contains nearly 2000 patients CT images, and the training set contains two classes Normal 1341 images and Pneumonia 3875 images, the Val set contains 242 Normal images and 398 Pneumonia images.
 
-On benchmark Pneumonia Dataset\cite{38}, the Pneumonia / Normal classification Top 1 Val accuracy of our Net converges into nearly 91.785\% better than GhostNet and ResNet18. Besides, after around 80 epochs, the accuracy of our Net converges into nearly 91.785\% compared to  Inception V3 after 7,000 epochs reach 88.0\%\cite{38}.
+On benchmark Pneumonia Dataset\cite{38}, the Pneumonia / Normal classification Top 1 Val accuracy of our Net converges into nearly 91.785\% better than GhostNet\cite{19} and ResNet18\cite{20}. Besides, after around 80 epochs, the accuracy of our Net converges into nearly 91.785\% compared to  Inception V3 after 7,000 epochs reach 88.0\%\cite{38}.
 
-\begin{table}[h]
+\begin{table}[t]
 \centering
 \begin{tabular}{@{}llll@{}}
 \toprule
@@ -1536,18 +1559,19 @@ Ghost Net\cite{19}                                              & 5.18          
 \end{table}
 
 
-\begin{figure}[b]
+\begin{figure}[t]
 \centering
 \includegraphics[height=200pt,width=0.9\textwidth]{thesis-template-master/images/Pneumonia_TimeSeries-1.png}
 \label{fig}
 \centering
-\caption{ \textbf{Comparison of state-of-art methods for training on Pneumonia Dataset}.  Considering the fact that Our Net has only 8 Novel Ghostmodule layers and 2.91 millions of weights, outperforms both ResNet18, GhostNet, and InceptionV3 Net from Accuracy and Complexity perspective views.}
+\caption{ \textbf{Comparison of state-of-the-art  methods for training on Pneumonia Dataset}.  Considering the fact that Our Net has only 8 Novel Ghostmodule layers and 2.91 millions of weights, outperforms both ResNet18\cite{20}, GhostNet\cite{19}, and InceptionV3 Net\cite{38} from Accuracy and Complexity perspective views.}
+\label{fig:4.12}
 \end{figure}
 
 
 \section{Cifar-10 Dataset} % (fold)
 \label{sub:amet}
-To verify the proposed Our*Net architecture's effectiveness and generalization, we conduct experiments on several benchmark visual datasets, including CIFAR-10. Moreover, we compare the performance with several so far best representative state-of-the-art models.
+To verify the proposed Our Net architecture's effectiveness and generalization, we conduct experiments on several benchmark visual datasets, including CIFAR-10\cite{21}. Moreover, we compare the performance with several so far best representative state-of-the-art models.
 \begin{table}[t]
 \centering
 \begin{tabular}{@{}llll@{}}
@@ -1558,7 +1582,7 @@ ResNet18\cite{20}   & 11                                                        
 Ghost Net\cite{19} & 5.18                                                        & 88.238                                                        & 141                                                       \\
 *our      & {\color[HTML]{CB0000} \textbf{2.91}}                        & {\color[HTML]{333333} \textbf{92.45}}                         & {\color[HTML]{CB0000} \textbf{41.7}}                      \\ \bottomrule
 \end{tabular}
-\caption{\textbf{Comparison of structure and parameters of state-of-the-art methods on Cifar10 dataset}}
+\caption{\textbf{Comparison of structure and parameters of state-of-the-art methods on Cifar10 dataset \cite{21}}}
 \end{table}
 CIFAR-10 dataset\cite{21} consists of 60,000 $32 \times 32$ color images in 10 classes, with 50,000 training images and 10,000 test images. A common data augmentation scheme including random crop\cite{22} and mirroring\cite{19} is adopted as well. Our Net can achieve higher classification performance  (e.g.  92.45\%  Top-1  accuracy  ) than both ResNet18 and GhostNet, with the least  weights, namely $1/7$ weights than VGG16 \cite{23}. 
 
@@ -1567,10 +1591,9 @@ CIFAR-10 dataset\cite{21} consists of 60,000 $32 \times 32$ color images in 10 c
 \includegraphics[height=0.3\textheight]{thesis-template-master/images/cifardataset.png}
 \label{fig:cellnet}
 \end{center}
-\caption{\textbf{Demonstration of CIFAR-10 dataset}. CIFAR-10 dataset consists of 60,000  32 × 32 color images in 10 classes, with 50,000 training images and 10,000 test images. Note: as those images are  32 × 32, we do not apply AttentionNet pre-processing. Indeed, a common data augmentation scheme, including random crop and mirroring, is adopted during experiments.}
+\caption{\textbf{Demonstration of CIFAR-10 datasetc}. CIFAR-10 dataset\cite{21} consists of 60,000  $32 \times 32$ color images in 10 classes, with 50,000 training images and 10,000 test images. Note: as those images are  $32 \times 32$, we do not apply AttentionNet pre-processing. Indeed, a common data augmentation scheme, including random crop and mirroring, is adopted during experiments.}
+\label{fig:4.13}
 \end{figure}
-
-
 
 
 \begin{figure}[t]
@@ -1578,7 +1601,8 @@ CIFAR-10 dataset\cite{21} consists of 60,000 $32 \times 32$ color images in 10 c
 \includegraphics[height=200pt,width=0.7\textwidth]{thesis-template-master/images/Cifar-12-06-2020.png}
 \label{fig:cellnet}
 \end{center}
-\caption{\textbf{Comparison of state-of-art methods on CIFAR10 Dataset}.  ResNet won first place in the ILSVRC 2015 classification competition with a top-5 error rate of 3.57\%, Converges faster than other models, and solved the degradation problem. For the Cifar10 dataset, Our Net achieves a better classification performance than ResNet18, and recently CVPR 2020 published GhostNet.}
+\caption{\textbf{Comparison of state-of-art methods on CIFAR10 Dataset\cite{21}}.  ResNet\cite{20} won first place in the ILSVRC 2015 classification competition with a top-5 error rate of 3.57\%, converges faster than other models, and solved the degradation problem. For the Cifar10 dataset\cite{21}, Our Net achieves a better classification performance than ResNet18, and recently CVPR 2020 published GhostNet\cite{19}}
+\label{fig:4.14}
 \end{figure}
 
 
@@ -1588,14 +1612,15 @@ CIFAR-10 dataset\cite{21} consists of 60,000 $32 \times 32$ color images in 10 c
 The 2019 novel coronavirus (COVID-19) brings a considerable challenge to our life, and we are facing an increasingly disrupted challenging time. In order to help the medical scientists, we made this COVID-19 dataset. Based on initial COVID-19 Image Data Collection\cite{37}, which contains only 123 frontal view X-rays. We additionally collected data from newest publications and assembled medical images from websites and publications such as the European Journal of Radiology\cite{36}, and collected nearly 1583 healthy Lung CT images as comparative data from recently available resources and publications\cite{37} \cite{38}.
 
 
-Bilateral multiple lobular and subsegmental areas of consolidation constitute the typical findings in chest CT images of the intensive care unit (ICU) patients on admission Huang 2020. In comparison, non-ICU patients show bilateral ground-glass opacity and subsegmental areas of consolidation in their chest CT images Huang 2020. In those patients, succeeding chest CT images reveal bilateral ground-glass opacity with resolved consolidation Huang 2020.
+Bilateral multiple lobular and subsegmental areas of consolidation constitute the typical findings in chest CT images of the intensive care unit (ICU) patients on admission \cite{huang}. In comparison, non-ICU patients show bilateral ground-glass opacity and subsegmental areas of consolidation in their chest CT images \cite{huang}. In those patients, succeeding chest CT images reveal bilateral ground-glass opacity with resolved consolidation \cite{huang}.
 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[height=200pt,width=0.9\textwidth]{thesis-template-master/images/covidlungandhealthylung.JPG}
 \label{fig:cellnet}
 \end{center}
-\caption{\textbf{COVID infected patient’s lung (second row) and normal healthy lung (first row)}. While the diagnosis is confirmed using polymerase chain reaction (PCR), infected patients with pneumonia may present on chest X-ray and computed tomography (CT) images with a pattern that is moderately characteristic for the human eye.}
+\caption{\textbf{COVID infected patient’s lung (second row) and normal healthy lung (first row)\cite{huang}}. While the diagnosis is confirmed using polymerase chain reaction (PCR), infected patients with pneumonia may present on chest X-ray and computed tomography (CT) images with a pattern that is moderately characteristic for the human eye\cite{huang}}
+\label{fig:4.15}
 \end{figure}
 
 
@@ -1604,7 +1629,8 @@ Bilateral multiple lobular and subsegmental areas of consolidation constitute th
 \includegraphics[height=200pt,width=0.8\textwidth]{thesis-template-master/images/COVID-19_TimeSeries-1.png}
 \label{fig}
 \centering
-\caption{ \textbf{Comparison of state-of-art methods for training on COVID-19 Dataset}.  Our models' weights are 2.91 million, compared to DenseNet121 7.98 million of weights, MobileNet V2 3.4 million of weights, and 301 millions of FLOPs. Considering the fact of the higher complexity and parameter amount of other SOTA Nets, our Net is quite competitive on classification tasks for the biomedical dataset. }
+\caption{ \textbf{Comparison of state-of-art methods for training on COVID-19 Dataset}. Our models' weights are 2.91 million, compared to DenseNet121\cite{32} 7.98 million of weights, MobileNet V2\cite{30} 3.4 million of weights, and 301 millions of FLOPs. Considering the fact of the higher complexity and parameter amount of other SOTA Nets, our Net is quite competitive on classification tasks for the biomedical dataset. }
+\label{fig:4.16}
 \end{figure}
 
 \begin{table}[h]
@@ -1612,16 +1638,17 @@ Bilateral multiple lobular and subsegmental areas of consolidation constitute th
 \begin{tabular}{@{}llll@{}}
 \toprule
 Model         & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Weights\\ (million)\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Top-1 Val Acc.\\ (\%)\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}FLops\\ (million)\end{tabular}} \\ \midrule
-ResNet-18     & 11                                                                              & 94.389                                                                            & 180                                                                           \\
-GhostNet      & 5.18                                                                            & 92.739                                                                            & 141                                                                           \\
+ResNet-18\cite{20}     & 11                                                                              & 94.389                                                                            & 180                                                                           \\
+GhostNet \cite{19}     & 5.18                                                                            & 92.739                                                                            & 141                                                                           \\
 *our          & {\color[HTML]{CB0000} \textbf{2.91}}                                            & 94.719                                                                            & 41.7                                                                          \\
-MobileNet V2  & 3.4                                                                             & 95.38                                                                             & 301                                                                           \\
-Vgg11\_BN     & 13.28                                                                           & 87.129                                                                            & 132.87                                                                        \\
-DenseNet121   & 7.98                                                                            & {\color[HTML]{CB0000} \textbf{95.71}}                                             & 283                                                                           \\
-AlexNet       & 60.95                                                                           & 0                                                                                 & 727                                                                           \\
-SqueezeNet V2 & {\color[HTML]{000000} N/A}                                                      & 0                                                                                 & {\color[HTML]{CB0000} \textbf{40}}                                            \\ \bottomrule
+MobileNet V2\cite{30}  & 3.4                                                                             & 95.38                                                                             & 301                                                                           \\
+Vgg11\_BN  \cite{23}   & 13.28                                                                           & 87.129                                                                            & 132.87                                                                        \\
+DenseNet121  \cite{32} & 7.98                                                                            & {\color[HTML]{CB0000} \textbf{95.71}}                                             & 283                                                                           \\
+AlexNet   \cite{31}    & 60.95                                                                           & 0                                                                                 & 727                                                                           \\
+SqueezeNet V2 \cite{24} & {\color[HTML]{000000} N/A}                                                      & 0                                                                                 & {\color[HTML]{CB0000} \textbf{40}}                                            \\ \bottomrule
 \end{tabular}
 \caption{\textbf{Comparison of structure and parameters of state-of-the-art methods on COVID-19 dataset}}
+
 \end{table}
 
 \begin{figure}[b]
@@ -1629,6 +1656,7 @@ SqueezeNet V2 & {\color[HTML]{000000} N/A}                                      
 \label{fig}
 \centering
 \caption{\textbf{Graphical summary of composition of COVID-19 Xray/CT images}. Based on initial COVID-19 Image Data Collection \cite{37}, we additionally collected and sorted nearly 2,000 CT/Xray images with a large-scale range in gender, age, survival status, and country/places from the latest publications and CDC public sources\cite{36}\cite{37}\cite{38}. }
+\label{fig:4.17}
 %\caption{Graphical summary of Alex Net\cite{31}, Squeeze net\cite{24}, ResNet18\cite{20}, MobieNetv2\cite{30}, Our Net, Ghost Net\cite{19}, DenseNet121\cite{32}, and Vgg11\cite{23} performance on COVID-19 dataset. }
 \end{figure}
 
@@ -1661,10 +1689,11 @@ In the previous chapter, we have evaluated the architecture agnostic components 
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
-	\caption{\textbf{ROC curve of AttentionNet on Sezary Syndrom dataset in terms of different scale Yolo output layers}. Note: both measured on Val dataset: 1k training image, 726 test image. Not only PR in Figure 3.1, but ROC metrics show that $13\times13$, $26\times26$ we adopted are more suitable for Sezary Syndromes cell detection.}
+	\caption{\textbf{ROC curve of AttentionNet on Sezary Syndrom dataset in terms of different scale Yolo output layers}. Note: both measured on Val dataset: 1k training image, 726 test image. Not only PR in \eg\reffig{3.1}, but ROC metrics show that $13\times13$, $26\times26$ we adopted are more suitable for Sezary Syndromes cell detection.}
+	\label{fig:5.1}
 \end{figure}
 
-As shown in Figure 5.1, we interpret here the mechanism that led to this result. When the Yolo output layer divides the image into more giant prediction grid cells, which corresponds to ($13\times13$), i.e., segments an image into $13\times13 $ equal parts, the less likely to miss a cell in the image since our dataset image is $140\times200$. On the contrary, when too many smaller grid cells are drawn, such as $ 52\times52$, those grid cells will not be able to cover the whole cell, resulting in poor final detection performance. The combination of $13\times13$ and $ 26\times26$ Yolo output layers we adopted achieves better performance. 
+As shown in \eg\reffig{5.1}, we interpret here the mechanism that led to this result. When the Yolo output layer divides the image into more giant prediction grid cells, which corresponds to ($13\times13$), i.e., segments an image into $13\times13 $ equal parts, the less likely to miss a cell in the image since our dataset image is $140\times200$. On the contrary, when too many smaller grid cells are drawn, such as $ 52\times52$, those grid cells will not be able to cover the whole cell, resulting in poor final detection performance. The combination of $13\times13$ and $ 26\times26$ Yolo output layers we adopted achieves better performance. 
 
 \section{Runtime}
 \label{sec:ipsum}
@@ -1675,9 +1704,10 @@ As shown in Figure 5.1, we interpret here the mechanism that led to this result.
 \label{fig:cost}
 \end{center}
 \caption{\textbf{Time Cost of AttentionNet cell segmentation per image on Google Colab}. Overall, the mean runtime for the AttentionNet segmentation on the validation set is 0.80s (generated both segmented image and cell location annotation file) with an average input size of 102,898 well cell images. We perform this experiment on a  Google Colab Tesla V100 16GB.}
+\label{fig:5.2}
 \end{figure}
 
-As Figure 5.2 indicates, the time cost of making a segmented image and label file is twice as only making a label file. Generating segmented cell image and label file on Google GPU  takes average 0.80s, while without a segmented image, only producing a label txt file by our trained model only takes 0.40 average second. We perform this experiment on  Google Colab Tesla V100 16GB.
+As \eg\reffig{5.2} indicates, the time cost of making a segmented image and label file is twice as only making a label file. Generating segmented cell image and label file on Google GPU  takes average 0.80s, while without a segmented image, only producing a label txt file by our trained model only takes 0.40 average second. We perform this experiment on  Google Colab Tesla V100 16GB.
 
 In contrast to Google Colab Tesla, we also generated txt file on the localhost PC  intel CPU. Although the detection in  Google Colab is faster than local CPU, input/output file on Google Colab is not perfect as writing in local PC, the time cost for label-generation is surprisingly well suiting for local PC. Overall, the mean time cost on local CPU for the AttentionNet segmentation on the validation set is 0.25s per image (generated only cell location annotation file) with an average input size of 102,898 well cell images.
 
@@ -1685,7 +1715,7 @@ In contrast to Google Colab Tesla, we also generated txt file on the localhost P
 \section{Transfer Learning} % (fold)
 \label{sub:amet}
 
-To further verify the generalization ability of CellNet, we test with our CellNet best weight trained so far on the Non-cerebriform dataset/ cerebriform dataset of Sezary Syndrome. These two datasets are our latest experimental datasets, sezary cells under the cerebriform/non-cerebriform situation. As shown in Figure 5.3, the TP and TN achieved the general highest score on HD/SS folder with a more massive image amount. Moreover, average accuracy reaches up to 99.53\%-96.51\% among HD image, and average accuracy achieves 92.19\%-98.78\% among SS image, but there are some small folders obtain 38.29\%-37.48\% on SS1 and SS2, 40.17\% in SS6B folder as well. 
+To further verify the generalization ability of CellNet, we test with our CellNet best weight trained so far on the Non-cerebriform dataset/ cerebriform dataset of Sezary Syndrome. These two datasets are our latest experimental datasets, sezary cells under the cerebriform/non-cerebriform situation. As shown in \eg\reffig{5.3}, the TP and TN achieved the general highest score on HD/SS folder with a more massive image amount. Moreover, average accuracy reaches up to 99.53\%-96.51\% among HD image, and average accuracy achieves 92.19\%-98.78\% among SS image, but there are some small folders obtain 38.29\%-37.48\% on SS1 and SS2, 40.17\% in SS6B folder as well. 
 
 According to the concept of transfer learning, after further finetuning, basically set the best weight as initial weight, load a subset of the cerebriform/non-cerebriform dataset, and training around 100 epochs with mini batch=679. The accuracy is improved with SS1 and SS2 and SS6B folder, surprisingly up to 64.34\%, 82.64\%, and 96.91\%.
 
@@ -1704,11 +1734,8 @@ According to the concept of transfer learning, after further finetuning, basical
 			\label{fig:cellnet}
 		\end{subfigure}
 	\end{center}
-
-
-
-
 \caption{\textbf{Generalization performance of CellNet on cerebriform/non-cerebriform dataset of Sezary Syndrom}. As shown in the figure, the TP and TN achieved the general highest score on HD/SS folder with a more massive image amount. Moreover, average accuracy can reach up to 99.53\%-96.51\% among HD image, and average accuracy achieves 92.19\%-98.78\% among SS image.}
+\label{fig:5.3}
 \end{figure}
 
 
@@ -2056,25 +2083,25 @@ What is more, we completed an AI-assisted diagnostic in a real-world medical sce
 
 
 
+
 \section{CellNet Software}
 \label{sec:ipsum}
 With the help of the power of Qt and the high development efficiency of Python, using PyQt/PySide for desktop development will be a wonderful plus for demonstrating our excellent software.
-The current Qt/PyQt/PySide based GUI development common development methods are list follow:QWidget + QSS, QtWebkit + HTML + CSS + js and Qt Quick. All these three technologies can efficiently, quickly, and perfectly develop the cross-platform desktop software. Qt's formal development method is Qt Quick, which uses the JSON like language qml for rapid development. It is easy to learn, expansible, and wildly used in  Ubuntu, Linux Deepin, and other Linux desktop application development. It enables the developer for a rapid development framework and putting more effort into amplifying the corresponding business logic and easy to build the framework Prototypes quickly. Therefore, we have developed software based on PyQt5 QFramer.
+The current Qt/PyQt/PySide based GUI development common development methods are list follow: QWidget + QSS, QtWebkit + HTML + CSS + js and Qt Quick. All these three technologies can efficiently,  and quickly develop the cross-platform desktop software. Qt's formal development method is Qt Quick, which uses the JSON like language qml for rapid development. It is easy to learn, expansible, and wildly used in  Ubuntu, Linux Deepin, and other Linux desktop application development. It enables the developer for a rapid development framework and putting more effort into amplifying the corresponding business logic and easy to build the framework Prototypes quickly. Therefore, we have developed software based on PyQt5 QFramer.
 
 \subsection{Software architecture} % (fold)
 \label{sub:dolor_sit}
-We devised this function prototypes based on Cellnet. Meanwhile, we integrated more than ten current state-of-the-art classification networks to better demonstrate the real-world efficacy of Cellnet.
+We devised this function prototypes based on CellNet. Meanwhile, we integrated more than ten current state-of-the-art classification networks to better demonstrate the real-world efficacy of CellNet.
 
-In addition, with our lab supervisor's permission, we attended the Deecamp 2020 AI Camp, where we further explored and developed our existing Cellnet software, and integrated melanoma data sets and datasets of 6 dermatological diseases, as well as collected and expanded COVID-19NLP data sets. The Bert Neural Network developed by Google is used for this part of the prediction work since our network is specifically designed based on photographic type input, and Bert is a highly popular neural network for handling text-based input.
-
-It is gratifying to note that our cellnet-based design did well at  Deecamp 2020.
+In addition, with our lab supervisor's permission, we attended the Deecamp 2020 AI Camp. We further developed our existing CellNet software, and integrated melanoma datasets \cite{melanoma} and datasets of 6 dermatological diseases, as well as collected and expanded COVID-19NLP dataset. The Bert \cite{bert} developed by Google is used for this part of the prediction work since our network is specifically designed based on photographic type input, and Bert is a highly popular neural network for handling text-based input. It is gratifying to note that our CellNet-based Software did well at  Deecamp 2020.
 \begin{figure}[t]
 \begin{center}
 \includegraphics[height=0.35\textheight]{thesis-template-master/images/2020DeeCamp_ppt_tcy (1).pdf}
 \label{fig:cellnet}
 \end{center}
 \caption{ The Proposed software structure diagram.
-To better demonstrate our model's diagnostic performance, we selected the classic medical benchmark datasets from competitions on Kaggle, such as the melanoma dataset, the diabetic retinopathy dataset, the actinic keratosis, vascular lesion dataset, dermatofibroma dataset, squamous cell carcinoma dataset and so on. Meanwhile, we selected nearly 11  representative classification networks, enable users to choose the diagnostic network that fits their customer dataset. Besides, we inherit not only the computer vision classification network but also the classic classification network of NLP. It is worth noting that we develop desktop applications and open APIs to facilitate better user experience, and ETH Leonhard and Megengine jointly provide our computing power.}
+To better demonstrate our model's diagnostic performance, we selected the classic medical benchmark datasets from competitions on Kaggle, such as the melanoma dataset, the diabetic retinopathy dataset, the actinic keratosis, vascular lesion dataset, dermatofibroma dataset, squamous cell carcinoma dataset \cite{ISIC2}\cite{melanoma}. Meanwhile, we selected nearly 11  representative classification networks, enable users to choose the diagnostic network that fits their customer dataset. Besides, we inherit not only the computer vision classification network but also the classic classification network of NLP. It is worth noting that we develop desktop applications and open APIs to facilitate better user experience, and ETH Leonhard and Megengine jointly provide our computing power.}
+\label{fig:6.6}
 \end{figure}
 
 \subsection{Class diagram} % (fold)
@@ -2085,14 +2112,16 @@ To better demonstrate our model's diagnostic performance, we selected the classi
 \includegraphics[height=0.5\textheight]{thesis-template-master/images/tempsnip.png}
 \label{fig:cellnet}
 \end{center}
-\caption{ \textbf{The Class diagram of the typical page ( Sezary syndrome classification) on CellNet software}. The page is named accordingly, and the diagnosis of Sezary Syndrome is on page 5 out of 8 Pages. As illustrated, we have a large number of labels for logos, copyright, and other graphic Infos. Each button named according to the underlying function, such as the next and default button for the page turnover. The cellyolo button is used for the cell segmentation; the prediction button gives diagnostics of the cell; the compare button is to evaluate the accuracy of different networks on this Dataset. Users can upload new images via the input button, and we use the best Cellnet weights file to output the possibility of the category.}
+\caption{ \textbf{The Class diagram of the typical page ( Sezary syndrome classification) on CellNet software}. The page is named accordingly, and the diagnosis of Sezary Syndrome is on page 5 out of 8 Pages. As illustrated, we have many labels for logos, copyright, and other graphic Infos. Each button named according to the underlying function, such as the next and default button for the page turnover. The cellyolo button is used for the cell segmentation; the prediction button gives diagnostics of the cell; the compare button is to evaluate the accuracy of different networks on this Dataset. Users can upload new images via the input button, and we use the best CellNet weights file to output the possibility of the category.}
+\label{fig:6.7}
 \end{figure}
-With our main.py, we can quickly train different models on the Dataset to get the optimal weights and then integrate them into the software. Pyqt provides a large quantity of UML-type development functions, which facilitates the efficient design of the interface. We use a total of nine object classes, including Qlabel, Qwidget, QPushbutton. As shown in figure 6.7, many non-functional buttons are designed for GUI purposes only and do not involve the design of functions, which saves much time in software development and only need to put effort into the functionality of the following types of objects: Qpushbutton, Qslider, and Qcheckbox.
+
+With our main.py, we can quickly train different models on the Dataset to get the optimal weights and then integrate them into the software. PyQt5 provides a large quantity of UML-type development functions, which facilitates the efficient design of the interface. We use a total of nine object classes, including Qlabel, Qwidget, QPushbutton. As shown in \eg\reffig{6.7}, many non-functional buttons are designed for GUI purposes only and do not involve the design of functions, which saves much time in software development and only need to put effort into the functionality of the following types of objects: Qpushbutton, Qslider, and Qcheckbox.
 
 
 \subsection{Function design} % (fold)
 \label{sub:amet}
-Here, we principally introduce the implementation of the prediction function and segmentation function in the software. The prediction function is mainly called by the software's Make a prediction button. We extract the image path that needs to be diagnosed by User input in the software interface, and then we use the best training weight file under the weight folder and combining the model to give a comprehensive judgment finally.
+Here, we principally introduce the implementation of the prediction function and segmentation function in the software. The prediction function is mainly called by the software's Make a prediction button. We extract the image path that needs to be diagnosed by User input in the software interface, and then we use the best training weight file under the weight folder and combining the model to give a comprehensive prediction finally.
 
 
 \begin{algorithm}[b]
@@ -2109,7 +2138,7 @@ Here, we principally introduce the implementation of the prediction function and
       \State  calculate the length of the image list $len_{L_{img}}$: $len_{L_{img}}$ = len($L_{img}$)
       \State  enable the QtWidgets of sending a message box to give the user notification: $box  \gets QtWidgets.QMessageBox()$
       \State  enable the Qtexteditor  hins buttons $hin$ to be ready for the future output results: $ hin = 1$
-      \State  calculate the category possibility using the model trained Cellnet $M$ and best weight: $pt$, Precision $P$ and Recall $R$ are calculated as well: $L_{p}$, $P$, $R$ = $M(Path,pt)$. Here, model $M$ can be other model integrated in software as well such as ResNet18 or GhostNet etc.
+      \State  calculate the category possibility using the model trained CellNet $M$ and best weight: $pt$, Precision $P$ and Recall $R$ are calculated as well: $L_{p}$, $P$, $R$ = $M(Path,pt)$. Here, model $M$ can be other model integrated in software as well such as ResNet18 or GhostNet etc.
       \State  store the target label list: $L_{t}$ = the folder index of $Path$
       \State  store path list: $L_{path}$ = each image name of $Path$
       \State  demonstrate the results by the hins button: $hin  \gets P, R$
@@ -2126,7 +2155,7 @@ Here, we principally introduce the implementation of the prediction function and
 It is worth noting that because torchvision PyTorch's custom data loading method, imagefolderdataloader, the path of the image file must be the following type:\newline
 $dataset/train/imageclassname/imagename.jpg$ \newline
 $dataset/val/imageclassname/imagename.jpg$\newline
-The root directory of Dataset must contain two folders, train and val, but the train folder can be empty when used for prediction. The user only needs to place the file under the corresponding class folder and copy the path until the dataset folder and upload it to the software, such as $C:username/pathtodataset/dataset/ $ and can compare the actual prediction result on the screen.
+The root directory of dataset must contain two folders, train and val, but the train folder can be empty when used for prediction. The user only needs to place the file under the corresponding class folder and copy the path until the dataset folder and upload it to the software, such as $C:username/pathtodataset/dataset/ $ and can compare the prediction result on the screen.
 
 
 For the segmentation function, we mainly apply Attention Net. It is worth remarking that here the user only needs to upload the image folder, and the system will automatically generate a new output folder to store the after-segmented cell images, where we use the Attention Net model and the cfg file introduced in Chapter 4, as well as the weight file that has been trained explicitly. After that, the user can see all the evaluation metrics mentioned in Chapter 4, such as mAP and F1 values, on the software interface. 
@@ -2169,11 +2198,8 @@ It is especially worth noting that the segmentation function is only used in the
 \subsection{Test cases} % (fold)
 \label{sub:amet}
 
-To better test the real utilization impact and the scalability of the software, we adopted two standard medical data sets to the test cases for our white box testing: melanoma dataset and ISIC2019 skin cancer dataset.
-White-box testing at this level is to test the interactions of interfaces with each other. The unit level of White-box testing ensured that each code was tested and worked accordingly in an isolated environment. The White-box integration level examines the correctness of the behavior in an open environment through the use of white-box testing for any interactions of interfaces that are known to the programmer.
-
-As soon as we had in-depth knowledge of this model and the whole logic behind the software, there is no doubt that we applied the white box testing.
-The connotations of “clear box” and “glass box” appropriately indicate the full visibility of the software product's internal workings, precisely the logic, and structure of the code. 
+To better test the real utilization impact and the scalability of the software, we adopted two standard medical data sets to the test cases for our white box testing: melanoma dataset\cite{melanoma} and ISIC2019 skin cancer dataset\cite{ISIC1}\cite{ISIC2}. White-box testing at this level is to test the interactions of interfaces with each other. The unit level of White-box testing ensured that each code was tested and worked accordingly in an isolated environment. The White-box integration level examines the correctness of the behavior in an open environment through white-box testing for any interactions of interfaces known to the programmer. As soon as we had in-depth knowledge of this model and the whole logic behind the software, there is no doubt that we applied the white box testing.
+The connotations of "clear box" and "glass box" appropriately indicate the full visibility of the software product's internal workings, precisely the logic and structure of the code. 
 
 
 
@@ -2183,18 +2209,18 @@ The connotations of “clear box” and “glass box” appropriately indicate t
 \begin{figure}[t]
 \includegraphics[height=0.4\textheight,width=1\textwidth]{thesis-template-master/images/loss_train.png}
 \label{fig:cellnet}
-\caption{ \textbf{Comparison of the training loss with state-of-the-art models based on ISIC2019 eight skin cancer benchmark}. Here, we are facing multiple class classification problems, and most of the skin image contains lots of artifacts, such as hair and different skin color, and different positions of skin image were taken, which affect the classification performance mostly. Compared to the other models, such as ResNet18, the GhostNet, and Alexnet, our Net denotes here as Ghostresnet outperforms other models regarding training loss as it is faster converges into the lower loss. }
+\caption{ \textbf{Comparison of the training loss with state-of-the-art models based on ISIC2019 eight skin cancer benchmark\cite{ISIC1}\cite{ISIC2}}. Here, we are facing multiple class classification problems, and most of the skin image contains lots of artifacts, such as hair and different skin color, and different positions of skin image were taken, which affect the classification performance mostly. Compared to the other models, such as ResNet18\cite{20}, the GhostNet\cite{19}, and Alexnet\cite{33}, our Net denotes here as Ghostresnet outperforms other models regarding training loss as it is faster converges into the lower loss. }
+\label{fig:6.8}
 \end{figure}
 
-Skin cancer is the most prevalent type of cancer and melanoma, specifically, is responsible for 75\% of skin cancer deaths. Early and accurate detection can make treatment more effective. The melanoma dataset contains 33,126 dermoscopic training images from over 2,000 patients and all datasets are confirmed with expert agreement.
-
-In order to make expertise more widely available, the International Skin Imaging Collaboration (ISIC) has developed the ISIC Archive, an international repository of dermoscopic images, for clinical training purposes for supporting technical research toward automated algorithmic analysis by hosting the ISIC Challenges.
-The goal for ISIC 2019 is to classify dermoscopic images among eight diagnostic categories: Melanoma, Melanocytic nevus, Basal cell carcinoma, Actinic keratosis, Benign keratosis (solar lentigo / seborrheic keratosis/lichen planus-like keratosis), Dermatofibroma, Vascular lesion, and Squamous cell carcinoma. In total, 25,331 images are available for training across eight different categories. The figures 6.18 and 6.19 further demonstrate the Cellnet model on classification the multiply class tasks, extraordinarily complex scenarios.
+Skin cancer is the most prevalent type of cancer, and melanoma specifically is responsible for 75\% of skin cancer deaths. Early and accurate detection can make treatment more effective. The melanoma dataset\cite{melanoma} contains 33,126 dermoscopic training images from over 2,000 patients, and all datasets are confirmed with the expert agreement. In order to make expertise more widely available, the International Skin Imaging Collaboration (ISIC)\cite{ISIC2}  has developed the ISIC Archive, an international repository of dermoscopic images, for clinical training purposes for supporting technical research toward automated algorithmic analysis by hosting the ISIC Challenges.
+The goal for ISIC 2019\cite{ISIC2} is to classify dermoscopic images among eight diagnostic categories: Melanoma, Melanocytic nevus, Basal cell carcinoma, Actinic keratosis, Benign keratosis (solar lentigo / seborrheic keratosis/lichen planus-like keratosis), Dermatofibroma, Vascular lesion, and Squamous cell carcinoma. In total, 25,331 images are available for training across eight different categories. The \eg\reffig{6.8} \eg\reffig{6.9} further demonstrate the CellNet model on classification the multiply class tasks, extraordinarily complex scenarios.
 
 \begin{figure}[t]
 \includegraphics[height=0.4\textheight,width=1\textwidth]{thesis-template-master/images/top1acc.png}
 \label{fig:cellnet}
-\caption{ \textbf{Comparison of the val Top-1 accuracy with state-of-the-art models based on ISIC2019 eight skin cancer benchmark}. As it illustrates, most of the state-of-the-art models reach around 75\% to 80\% Top-1 accuracy on this benchmark, considering the unwell distributed training image data from various classes, and the fact that most of the skin image contains lots of artifacts which influence the classification performance mainly. However, our Net denotes here as Ghostresnet outperforms the second position around 2\%.}
+\caption{ \textbf{Comparison of the val Top-1 accuracy with state-of-the-art models based on ISIC2019 eight skin cancer benchmark\cite{ISIC2}}. As it illustrates, most state-of-the-art models reach around 75\% to 80\% Top-1 accuracy on this benchmark, considering the unwell distributed training image data from various classes, and the fact that most of the skin image contains lots of artifacts which influence the classification performance mainly. However, our Net denotes here as Ghostresnet outperforms the second position around 2\%.}
+\label{fig:6.9}
 \end{figure}
 
 
@@ -2203,14 +2229,15 @@ The goal for ISIC 2019 is to classify dermoscopic images among eight diagnostic 
 
 \subsection{User Interface} % (fold)
 \label{sub:amet}
-We have a total of including initial software page, software catalog page, and eight different diagnostic involving interfaces. Because the framework we use is Qdesigner’s agile development, the specific interface design is based on the principle of a fixed screen ratio of the window frame. We simply need to use several plug-ins such as QWidgets and QLabel, to complete an artistic interface design. More critical, we follow the principles from RWTH Aachen HCI chairman Professor Jan Borchers's course Human Machine Interface, and cover 8 of the Gestalt Principles, for example, Group, Similarity, Continuation, Closure, Proximity, Symmetry and order. One of the key ingredients to successful software is the creation of effective, efficient, and visually pleasing displays. In the following functional prototype will further demonstrate how we adopt those theories into real design.
+We have a total of 10 pages, including initial software page, software catalog page, and eight different diagnostic involving interfaces. Because the framework we use is Qdesigner's agile development, the specific interface design is based on the principle of a fixed screen ratio of the window frame. We need to use several plug-ins such as QWidgets and QLabel, to complete an artistic interface design. More critical, we follow the principles from RWTH Aachen HCI chairman Professor Jan Borchers's course Human Machine Interface, and cover 8 of the Gestalt Principles, for example, Group, Similarity, Continuation, Closure, Proximity, Symmetry, and order. One of the key ingredients to successful software is creating effective, efficient, and visually pleasing displays. In the following functional prototype will further demonstrate how we adopt those theories into real design.
 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet1page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ \textbf{The title page of CellNet software}. We added our paper's title into CellNet initial page. Besides, we also added the ETH Zurich official logo and the Deecamp2020 logo for its authority. It is worthy to note that all teammates in this competition and  supervisor have also been added to the authorities . I am responsible for all the pages' design and function implementation; other teammates helped in melanoma benchmark collection, result verification, and partially figure plotting.}
+\caption{ \textbf{The title page of CellNet software}. We added our paper's title into CellNet initial page. Besides, we also added the ETH Zurich official logo and the Deecamp2020 logo for its authority. It is worthy to note that all teammates in this competition and  supervisor have also been added to the authorities. I am responsible for all the pages' design and function implementation; other teammates helped in melanoma benchmark collection, result verification, and partially figure plotting.}
+\label{fig:6.10}
 \end{figure}
 
 
@@ -2220,6 +2247,7 @@ We have a total of including initial software page, software catalog page, and e
 \label{fig:cellnet}
 \end{center}
 \caption{ \textbf{The directory page of CellNet software}. To fulfill the Gestalt Principles: Closure, namely, the human eye prefers to see complete shapes; If the visual elements are not complete, the user can perceive a complete shape by filling in missing visual information, we group all the buttons into the same areas. CellNet 2.0 enables 8 dataset analysis and 20+ disease prediction.}
+\label{fig:6.11}
 \end{figure}
 
 
@@ -2228,7 +2256,8 @@ We have a total of including initial software page, software catalog page, and e
 \includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet4-3page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ \textbf{The COVID-19 dataset page of CellNet software}. Here, we fulfill the Gestalt Principles: Similarity, namely, The human eye tends to build a relationship between similar elements within a design. The similarity is achieved by the all different diagnosis pages style and all the button icons. Besides, Our CellNet can give each CT/Xray image prediction with the accuracy of 94.72\% and 0.18s in standard Window CPU.}
+\caption{ \textbf{The COVID-19 dataset page of CellNet software}. Here, we fulfill the Gestalt Principles: Similarity, namely, The human eye tends to build a relationship between similar elements within a design. The similarity is achieved by all different diagnosis pages style and all the button icons. Besides, Our CellNet can give each CT/Xray image prediction with the accuracy of 94.72\% and 0.18s in standard CPU.}
+\label{fig:6.12}
 \end{figure}
 
 
@@ -2237,7 +2266,8 @@ We have a total of including initial software page, software catalog page, and e
 \includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-1page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ \textbf{The Sezary syndrome's segmentation page of CellNet software}. Here, we fulfill the Gestalt Principles: Continuation, namely, The human eye follows the paths, lines, and curves of a design. We arrange the cellyolo (AttentionNet segmentation) and HD/SS cell classification from up to down orderly. Moreover, Our CellNet can give each cell image a segmented image for comparison, with the val mAP of 0.88\%.}
+\caption{ \textbf{The Sezary syndrome's segmentation page of CellNet software}. Here, we fulfill the Gestalt Principles: Continuation, namely, The human eye follows the paths, lines, and curves of a design. We arrange the cellyolo (i.e., AttentionNet segmentation) and HD/SS cell classification from up to down orderly. Moreover, Our CellNet can give each cell image a segmented image for comparison, with the val mAP of 0.88\%.}
+\label{fig:6.13}
 \end{figure}
 
 
@@ -2246,7 +2276,8 @@ We have a total of including initial software page, software catalog page, and e
 \includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-2page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ \textbf{The Sezary syndrome's Cellnet comparison page of CellNet software}. Here, as it illustrated, 20 Val images only take 7.6s  for prediction with Cellnet. In this test case, our CellNet achieves P 1.0 and R 0.6, which means it is susceptible to the positive category. We were inspired by Ghost Net and ResNet. Here, we also added a comparison with SOTA models. Note: red line denotes as our net. }
+\caption{ \textbf{The Sezary syndrome's CellNet comparison page of CellNet software}. Here, as it illustrated, 20 Val images only take 7.6s  for prediction with CellNet. In this test case, our CellNet achieves P 1.0 and R 0.6, which means it is susceptible to the positive category. We were inspired by GhostNet\cite{19} and ResNet\cite{20}. Here, we also added a comparison with SOTA models. Note: red line denotes as our net. }
+\label{fig:6.14}
 \end{figure}
 
 \begin{figure}[t]
@@ -2254,7 +2285,8 @@ We have a total of including initial software page, software catalog page, and e
 \includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet5-3page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ \textbf{The Sezary syndrome's Cellnet prediction page of CellNet software}. Here, as illustrated, after artifacts elimination for a HD image under Val folder, CellNet gives Healthy prediction with Top-1 accuracy in 95.64\%. Here, we cover lots of gestalt Law, such as Figure/Ground, namely, the human eye isolates shapes from backgrounds.}
+\caption{ \textbf{The Sezary syndrome's CellNet prediction page of CellNet software}. Here, as illustrated, after artifacts elimination for a HD image under Val folder, CellNet gives Healthy prediction with Top-1 accuracy in 95.64\%. Here, we cover lots of Gestalt Law, such as Figure/Ground, namely, the human eye isolates shapes from backgrounds.}
+\label{fig:6.15}
 \end{figure}
 
 
@@ -2263,7 +2295,8 @@ We have a total of including initial software page, software catalog page, and e
 \includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet6-1page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{ \textbf{The Melanoma benchmark classification page of CellNet software}. Here, as illustrated, when the user does not upload an image, they will see the default image from the melanoma dataset, melanoma benchmark contains around 32,156 complex skin images in benign and around 500 in the malignant category.}
+\caption{ \textbf{The Melanoma benchmark \cite{melanoma} classification page of CellNet software}. Here, as illustrated, when the user does not upload an image, they will see the default image from the melanoma dataset. Melanoma benchmark\cite{melanoma}  contains around 32,156 complex skin images in benign and around 500 in the malignant category.}
+\label{fig:6.16}
 \end{figure}
 
 
@@ -2273,6 +2306,7 @@ We have a total of including initial software page, software catalog page, and e
 \label{fig:cellnet}
 \end{center}
 \caption{ \textbf{The COVID-NLP syndrome FLU diagnosis page of CellNet software}. Here, we integrated our collect COVID-19 NLP dataset, and each description has a doctor-approved label. Users simply enter the syndrome by one patient or upload multiple patient's syndromes. According to the Gestalt Law of Similarity, the label be present in the right Qwidget, and the possibility be demonstrated below.}
+\label{fig:6.17}
 \end{figure}
 
 
@@ -2281,7 +2315,7 @@ We have a total of including initial software page, software catalog page, and e
 \includegraphics[height=0.3\textheight,width=0.9\textwidth]{thesis-template-master/images/cellnet7-3page.PNG}
 \label{fig:cellnet}
 \end{center}
-\caption{\textbf{The COVID-NLP syndrome COVID diagnosis page of CellNet software}. As it illustrates, in both test cases, the Google research's Bert model we adopted has a rather good classification accuracy on this Dataset, can reach up to Val accuracy0.98.13\%. }
+\caption{\textbf{The COVID-NLP syndrome COVID diagnosis page of CellNet software}. As it illustrates, in both test cases, the Google research's Bert model\cite{bert} we adopted has a rather good classification accuracy on this Dataset, can reach up to Val accuracy 98.13\%. }
+\label{fig:6.18}
 \end{figure}
-
 
