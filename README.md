@@ -1,1 +1,1 @@
-# thesis-template-master_rwth
+# Master Thesis 
